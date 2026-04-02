@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>BUCKET ASMR - LITE</title>
+<title>BUCKET ASMR LITE</title>
 <style>
   body, html {
     margin: 0; padding: 0; height: 100%;
@@ -23,7 +23,7 @@
 
   h1 { margin:0; font-size:26px; color:#ffb400; text-shadow:0 0 10px #ffb400; margin-bottom: 20px; }
 
-  /* Контейнер для нижних кнопок */
+  /* Контейнер для нижних кнопок (Try Premium тут) */
   .bottom-actions {
     position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
     display: flex; gap: 10px; z-index: 100; align-items: center;
@@ -39,7 +39,6 @@
     transition: transform 0.1s ease-out;
   }
 
-  /* Новая кнопка Try Premium */
   .try-premium-link {
     background: rgba(138, 43, 226, 0.2);
     color: #e0b0ff; padding: 14px 24px; border-radius: 50px;
@@ -98,7 +97,7 @@
 <div class="overlay"></div>
 
 <div class="bottom-actions">
-  <a href="trypremium.html" class="try-premium-link">TRY PREMIUM ⚡</a>
+  <a href="trypremium.html" class="try-premium-link">TRY PREMIUM FOR FREE⚡</a>
   <a href="https://www.patreon.com/posts/bucket-asmr-154613006" target="_blank" id="floatingPremium" class="floating-premium">GET FULL ✨</a>
 </div>
 
@@ -111,10 +110,16 @@
       <li><span>✅</span> <span><b>Full Library Access:</b> Every single sound fully unlocked.</span></li>
       <li><span>✅</span> <span><b>Multi-track mixing:</b> Layer multiple sounds simultaneously.</span></li>
       <li><span>✅</span> <span><b>Smart Randomizer:</b> One-click shuffle (1 to 4 sounds).</span></li>
+      <li><span>✅</span> <span><b>Stay-Awake Session:</b> Screen stays active throughout your listening.</span></li>
+      <li><span>✅</span> <span><b>Battery-Safe Sleep Mode:</b> Deep-dark theme and optimized FX.</span></li>
+      <li><span>✅</span> <span><b>Future-Proof:</b> Regular updates with new triggers.</span></li>
     </ul>
 
+    <p style="font-size: 11px; color: #666; margin-bottom: 15px; line-height: 1.2;">
+      Plus: Magic particles, Custom Speed Control, and more!
+    </p>
+
     <a href="https://www.patreon.com/posts/bucket-asmr-154613006" target="_blank" class="patreon-btn">GET PREMIUM</a>
-    <a href="trypremium.html" style="display: block; color: #e0b0ff; margin-top: 15px; font-size: 12px; text-decoration: none;">TRY Premium For Free</a>
     <button id="laterBtn" onclick="closePaywall()" class="later-btn" style="opacity: 0; pointer-events: none;">Later</button>
   </div>
 </div>
@@ -152,6 +157,8 @@ async function requestWakeLock() {
   if ('wakeLock' in navigator) {
     try { wakeLock = await navigator.wakeLock.request('screen'); } catch (err) {}
   } 
+  const v = document.getElementById('wakeLockVideo');
+  if (v) v.play().catch(() => {});
 }
 
 function startLaterTimer() {
@@ -246,6 +253,12 @@ function animate(){
   requestAnimationFrame(animate);
 }
 animate();
+
+document.addEventListener('visibilitychange', async () => {
+  if (wakeLock !== null && document.visibilityState === 'visible') {
+    wakeLock = await navigator.wakeLock.request('screen');
+  }
+});
 </script>
 </body>
 </html>
