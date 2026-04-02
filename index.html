@@ -23,7 +23,6 @@
 
   h1 { margin:0; font-size:26px; color:#ffb400; text-shadow:0 0 10px #ffb400; margin-bottom: 20px; }
 
-  /* Контейнер для нижних кнопок (Try Premium тут) */
   .bottom-actions {
     position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
     display: flex; gap: 10px; z-index: 100; align-items: center;
@@ -49,7 +48,6 @@
     white-space: nowrap;
   }
 
-  /* Paywall Styling */
   .paywall-modal {
     display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(0,0,0,0.95); z-index: 10000; justify-content: center; align-items: center; backdrop-filter: blur(12px);
@@ -70,6 +68,15 @@
     text-decoration: none; font-weight: bold; margin-top: 10px; font-size: 16px;
     box-shadow: 0 4px 15px rgba(255, 66, 77, 0.3);
   }
+
+  /* Кнопка Try Free внутри модалки */
+  .modal-try-btn {
+    display: none; /* Скрыта по умолчанию */
+    margin-top: 12px; color: #e0b0ff; text-decoration: none;
+    font-size: 14px; font-weight: bold; text-transform: uppercase;
+    border: 1px solid rgba(224, 176, 255, 0.3); padding: 10px; border-radius: 10px;
+    background: rgba(138, 43, 226, 0.1);
+  }
   
   .later-btn { background:none; border:none; color: #555; margin-top: 15px; cursor:pointer; font-size: 13px; transition: opacity 0.8s ease; }
   
@@ -82,9 +89,33 @@
   .locked-ui::after { content: '🔒'; position: absolute; top: -5px; right: -2px; font-size: 10px; }
   
   .sound-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(85px, 1fr)); gap: 15px; width: 100%; max-width: 600px; z-index: 5; }
-  .sound-button { aspect-ratio: 1/1; border-radius: 20px; background: rgba(255,255,255,0.05); color:rgba(255,255,255,0.5); font-weight:bold; cursor:pointer; display:flex; flex-direction: column; justify-content:center; align-items:center; backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.1); font-size: 11px; }
-  .sound-button.active { background: rgba(255, 180, 0, 0.2) !important; color: #ffb400; border-color: #ffb400; box-shadow: 0 0 15px rgba(255, 180, 0, 0.3); }
-  .sound-button.locked { opacity: 0.2; }
+
+  .sound-button { 
+    aspect-ratio: 1/1; border-radius: 20px; 
+    background: rgba(255,255,255,0.05); color:rgba(255,255,255,0.3); 
+    font-weight:bold; cursor:pointer; display:flex; flex-direction: column; 
+    justify-content:center; align-items:center; backdrop-filter: blur(8px); 
+    border: 1px solid rgba(255,255,255,0.1); font-size: 11px;
+    transition: all 0.3s ease;
+  }
+
+  .sound-button.available {
+    background: rgba(255, 255, 255, 0.12);
+    border: 1.5px solid rgba(255, 180, 0, 0.5);
+    color: #ffffff;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3), inset 0 0 10px rgba(255, 180, 0, 0.1);
+  }
+  .sound-button.available span { font-weight: 800; text-shadow: 0 0 5px rgba(0,0,0,0.5); }
+
+  .sound-button.active { 
+    background: rgba(255, 180, 0, 0.3) !important; 
+    color: #ffb400 !important; 
+    border-color: #ffb400 !important; 
+    box-shadow: 0 0 20px rgba(255, 180, 0, 0.4); 
+    transform: scale(1.05);
+  }
+
+  .sound-button.locked { opacity: 0.15; filter: grayscale(1); border: 1px dashed rgba(255,255,255,0.1); }
 </style>
 </head>
 <body>
@@ -120,6 +151,9 @@
     </p>
 
     <a href="https://www.patreon.com/posts/bucket-asmr-154613006" target="_blank" class="patreon-btn">GET PREMIUM</a>
+    
+    <a href="trypremium.html" id="modalTryBtn" class="modal-try-btn">Try For Free ⚡</a>
+
     <button id="laterBtn" onclick="closePaywall()" class="later-btn" style="opacity: 0; pointer-events: none;">Later</button>
   </div>
 </div>
@@ -138,9 +172,10 @@
   </div>
 
   <div id="soundGrid" class="sound-grid">
-    <button class="sound-button" data-file="purplebrush.mp3"><span>Purple Brush</span></button>
-    <button class="sound-button" data-file="choko.mp3"><span>Choco</span></button>
-    <button class="sound-button" data-file="carrot.mp3"><span>Carrot</span></button>
+    <button class="sound-button available" data-file="purplebrush.mp3"><span>Purple Brush</span></button>
+    <button class="sound-button available" data-file="choko.mp3"><span>Choco</span></button>
+    <button class="sound-button available" data-file="carrot.mp3"><span>Carrot</span></button>
+    
     <div class="sound-button locked" onclick="showPaywall()"><span>🔒 locked</span></div>
     <div class="sound-button locked" onclick="showPaywall()"><span>🔒 locked</span></div>
     <div class="sound-button locked" onclick="showPaywall()"><span>🔒 locked</span></div>
@@ -152,6 +187,7 @@ let audioCtx = null, currentAudio = null, currentBtn = null;
 let analyser = null, dataArray = null;
 let sessionLimit = 60000; 
 let wakeLock = null;
+let paywallCount = 0; // Счетчик открытий Paywall
 
 async function requestWakeLock() {
   if ('wakeLock' in navigator) {
@@ -172,6 +208,16 @@ function startLaterTimer() {
 }
 
 function showPaywall() {
+    paywallCount++; // Увеличиваем счетчик при каждом вызове
+    
+    const modalTryBtn = document.getElementById('modalTryBtn');
+    // Показываем кнопку в модалке только со 2-го раза
+    if (paywallCount > 1) {
+        modalTryBtn.style.display = 'block';
+    } else {
+        modalTryBtn.style.display = 'none';
+    }
+
     document.getElementById('paywall').style.display = 'flex';
     if(currentAudio) {
         currentAudio.pause(); currentAudio = null;
@@ -196,11 +242,11 @@ function initAudio() {
 }
 
 window.onload = () => {
-    showPaywall();
+    showPaywall(); // Первый вызов (приветствие) - кнопка Try Free будет скрыта внутри
     setInterval(() => { showPaywall(); }, sessionLimit);
 };
 
-document.querySelectorAll('.sound-button:not(.locked)').forEach(btn => {
+document.querySelectorAll('.sound-button.available').forEach(btn => {
   btn.onclick = () => {
     requestWakeLock();
     initAudio();
