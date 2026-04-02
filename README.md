@@ -1,4 +1,4 @@
-# 🪣 BUCKET ASMR - Lite Edition
+# 🪣 BUCKET ASMR - Lite
 
 Welcome to the Lite version of the BUCKET ASMR web-app. 
 
