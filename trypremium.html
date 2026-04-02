@@ -126,15 +126,15 @@
   }
   .modal-content {
     background: rgba(20, 20, 35, 0.95); border: 1px solid #ffb400;
-    padding: 30px; border-radius: 24px; text-align: center; color: white; max-width: 85%;
+    padding: 25px; border-radius: 24px; text-align: center; color: white; max-width: 85%;
     box-shadow: 0 0 30px rgba(255, 180, 0, 0.2); position: relative;
   }
   .modal-lang-pos { position: absolute; top: 15px; right: 15px; scale: 0.8; }
   .modal-btn {
     background:#ffb400; border:none; padding:12px 30px; border-radius:12px; 
-    font-weight:bold; cursor:pointer; color:black; font-size: 16px; margin-top: 20px;
+    font-weight:bold; cursor:pointer; color:black; font-size: 16px; margin-top: 15px;
   }
-  .hint-text { font-size: 13px; color: #aaa; margin-top: 15px; display: block; line-height: 1.4; }
+  .hint-text { font-size: 13px; color: #aaa; margin-top: 15px; display: block; line-height: 1.4; font-style: italic; }
 </style>
 </head>
 <body class="fancy-bg">
@@ -148,10 +148,10 @@
     <div class="modal-lang-pos">
         <button class="lang-btn-ui lang-switcher-btn">EN</button>
     </div>
-    <h2 style="color: #ffb400; margin-top: 0;">BUCKET ASMR</h2>
-    <p id="welcomeText" style="line-height: 1.5;"></p>
+    <h2 id="modalHeader" style="color: #ffb400; margin-top: 0; font-size: 20px;">BUCKET ASMR</h2>
+    <div id="welcomeText" style="line-height: 1.5;"></div>
     <span id="repairHint" class="hint-text"></span>
-    <button class="modal-btn" id="closeWelcome">OK</button>
+    <button class="modal-btn" id="closeWelcome">OK, START</button>
   </div>
 </div>
 
@@ -184,23 +184,65 @@
 </video>
 
 <script>
-// --- КОНФИГУРАЦИЯ ТЕСТОВОГО ПЕРИОДА ---
-const TRIAL_DURATION = 60000; // 60 секунд
+// --- КОНФИГУРАЦИЯ ТЕСТОВОГО ПЕРИОДА (2 МИНУТЫ) ---
+const TRIAL_DURATION = 120000; // 120 секунд
 const PATREON_URL = "https://www.patreon.com/posts/bucket-asmr-154613006";
 
-const trialMessages = {
-    en: "Welcome to the Premium Test! 🎁 You have about 1 minute to explore all sounds and visual effects. Enjoy!",
-    pt: "Bem-vindo ao Teste Premium! 🎁 Você tem cerca de 1 minuto para explorar todos os sons e efeitos. Aproveite!",
-    ru: "Добро пожаловать в тест Premium-версии! 🎁 У вас есть около минуты для тестирования кнопок и звуков. Приятного прослушивания!",
-    uk: "Вітаємо у тесті Premium-версії! 🎁 У вас є близько хвилини для тестування кнопок та звуків. Приємного прослуховування!"
+const trialContent = {
+    en: {
+        header: "PREMIUM TRIAL ACTIVATED",
+        desc: "You have 2 minutes to explore all features:",
+        features: [
+            "✅ All sounds & triggers unlocked",
+            "✅ Multi-track layering & Smart Shuffle",
+            "✅ Custom Speed Control",
+            "✅ Cosmic visuals & particles",
+            "✅ Stay-Awake & Battery-Safe modes"
+        ],
+        hint: "Redirecting to Patreon in 2 minutes. Enjoy!"
+    },
+    ru: {
+        header: "PREMIUM ТЕСТ АКТИВИРОВАН",
+        desc: "У вас есть 2 минуты, чтобы попробовать всё:",
+        features: [
+            "✅ Вся библиотека звуков открыта",
+            "✅ Мульти-трек микс и Smart Shuffle",
+            "✅ Полная настройка скорости",
+            "✅ Космо-эффекты и частицы",
+            "✅ Режимы Stay-Awake и Sleep Mode"
+        ],
+        hint: "Через 2 минуты вы вернетесь на Patreon. Приятного отдыха!"
+    },
+    uk: {
+        header: "PREMIUM ТЕСТ АКТИВОВАНО",
+        desc: "У вас є 2 хвилини, щоб спробувати все:",
+        features: [
+            "✅ Вся бібліотека звуків відкрита",
+            "✅ Мульти-трек мікс та Smart Shuffle",
+            "✅ Повне налаштування швидкості",
+            "✅ Космо-ефекти та частинки",
+            "✅ Режими Stay-Awake та Sleep Mode"
+        ],
+        hint: "Через 2 хвилини ви повернетесь на Patreon. Насолоджуйтесь!"
+    },
+    pt: {
+        header: "TESTE PREMIUM ATIVADO",
+        desc: "Você tem 2 minutos para explorar tudo:",
+        features: [
+            "✅ Todos os sons desbloqueados",
+            "✅ Mixagem multifaixa e Smart Shuffle",
+            "✅ Controle total de velocidade",
+            "✅ Visuais cósmicos e partículas",
+            "✅ Modos Stay-Awake e Battery-Safe"
+        ],
+        hint: "Redirecionando para o Patreon em 2 minutos. Aproveite!"
+    }
 };
 
 function startTrialTimer() {
     setTimeout(() => {
-        // Останавливаем аудио перед редиректом
         audioElements.forEach(fadeOut);
         if (audioCtx) audioCtx.close();
-        // Переход на Patreon
         window.location.href = PATREON_URL;
     }, TRIAL_DURATION);
 }
@@ -213,7 +255,6 @@ let wakeLock = null;
 
 const langOrder = ['en', 'pt', 'uk', 'ru'];
 let audioElements = [], particles = [], steamParticles = [];
-
 let comet = null;
 let supernova = null;
 let fogParticles = Array.from({length: 5}, () => ({ x: Math.random()*innerWidth, y: Math.random()*innerHeight, r: 150+Math.random()*100, opacity: 0.03 + Math.random()*0.05, vx: Math.random()*0.2 - 0.1 }));
@@ -231,10 +272,10 @@ const sounds = [
 ];
 
 const uiTL = {
-  en: { code: "EN", title: "BUCKET ASMR", play: "Play", pause: "Pause", repair: "REPAIR", repairHint: "Press REPAIR if sounds fail to load.", sleep: "Sleep", speeds: { slow: "Slow", medium: "Medium", fast: "Fast" } },
-  pt: { code: "PT", title: "BALDE ASMR", play: "Tocar", pause: "Pausa", repair: "REPARAR", repairHint: "Pressione REPARAR se os sons não carregarem.", sleep: "Dormir", speeds: { slow: "Lento", medium: "Médio", fast: "Rápido" } },
-  ru: { code: "RU", title: "ВЕДРО АСМР", play: "Играть", pause: "Пауза", repair: "ЧИНИТЬ", repairHint: "Нажмите ЧИНИТЬ, если звуки не загрузились.", sleep: "Сон", speeds: { slow: "Медленно", medium: "Средне", fast: "Быстро" } },
-  uk: { code: "UK", title: "ВІДРО АСМР", play: "Грати", pause: "Пауза", repair: "ЛАГОДИТИ", repairHint: "Натисніть ЛАГОДИТИ, якщо звуки не завантажились.", sleep: "Сон", speeds: { slow: "Повільно", medium: "Середньо", fast: "Швидко" } }
+  en: { code: "EN", title: "BUCKET ASMR", play: "Play", pause: "Pause", repair: "REPAIR", sleep: "Sleep", speeds: { slow: "Slow", medium: "Medium", fast: "Fast" } },
+  pt: { code: "PT", title: "BALDE ASMR", play: "Tocar", pause: "Pausa", repair: "REPARAR", sleep: "Dormir", speeds: { slow: "Lento", medium: "Médio", fast: "Rápido" } },
+  ru: { code: "RU", title: "ВЕДРО АСМР", play: "Играть", pause: "Пауза", repair: "ЧИНИТЬ", sleep: "Сон", speeds: { slow: "Медленно", medium: "Средне", fast: "Быстро" } },
+  uk: { code: "UK", title: "ВІДРО АСМР", play: "Грати", pause: "Пауза", repair: "ЛАГОДИТИ", sleep: "Сон", speeds: { slow: "Повільно", medium: "Середньо", fast: "Швидко" } }
 };
 
 async function requestWakeLock() {
@@ -280,7 +321,6 @@ function handleLoadError(state) {
     state.isLoaded = false;
     state.btn.classList.remove('loading');
     state.btn.classList.add('broken');
-    state.btn.style.setProperty('--load-percent', '0%');
     if (state.retryTimer) clearTimeout(state.retryTimer);
     state.retryTimer = setTimeout(() => { if (!state.isLoaded) smartLoad(state); }, 2000);
 }
@@ -483,27 +523,40 @@ document.getElementById('closeWelcome').onclick = () => {
   initAudioContext(); 
   document.getElementById('welcomeModal').style.display='none'; 
   audioElements.forEach(state => smartLoad(state));
-  // ЗАПУСК ТАЙМЕРА ТЕСТА
   startTrialTimer();
 };
 
 function updateUI(){
-  const t=uiTL[langOrder[langIdx]];
-  document.getElementById('title').innerText=t.title;
-  document.querySelectorAll('.lang-switcher-btn').forEach(btn => btn.innerText = t.code);
-  document.getElementById('randomBtn').innerText=randomActive?t.pause:t.play;
-  document.getElementById('repairBtn').innerText=t.repair;
-  
-  // УСТАНОВКА ТЕКСТА ТЕСТА
-  document.getElementById('welcomeText').innerText = trialMessages[langOrder[langIdx]];
-  
-  document.getElementById('repairHint').innerText=t.repairHint;
-  document.getElementById('speedTrigger').innerText=t.speeds[currentSpeedKey];
-  document.getElementById('sleepBtn').innerText = `${t.sleep}: ${sleepMode ? 'ON' : 'OFF'}`;
-  document.getElementById('sleepBtn').classList.toggle('active', sleepMode);
-  const speedBtns = document.querySelectorAll('#speedDropdown button');
-  speedBtns[0].innerText = t.speeds.fast; speedBtns[1].innerText = t.speeds.medium; speedBtns[2].innerText = t.speeds.slow;
-  audioElements.forEach((el,i)=>el.btn.querySelector('span').innerText=sounds[i].name[langOrder[langIdx]]);
+    const currentLang = langOrder[langIdx];
+    const t = uiTL[currentLang];
+    const trial = trialContent[currentLang];
+
+    document.getElementById('title').innerText = t.title;
+    document.querySelectorAll('.lang-switcher-btn').forEach(btn => btn.innerText = t.code);
+    document.getElementById('randomBtn').innerText = randomActive ? t.pause : t.play;
+    document.getElementById('repairBtn').innerText = t.repair;
+    
+    // Обновление модального окна теста
+    document.getElementById('modalHeader').innerText = trial.header;
+    let featuresHTML = `<p style="font-size:14px; margin-bottom:10px;">${trial.desc}</p>`;
+    featuresHTML += `<ul style="text-align:left; font-size:13px; list-style:none; padding:0; margin:15px 0; color:#ddd; line-height:1.6;">`;
+    trial.features.forEach(f => { featuresHTML += `<li style="margin-bottom:5px;">${f}</li>`; });
+    featuresHTML += `</ul>`;
+    document.getElementById('welcomeText').innerHTML = featuresHTML;
+    document.getElementById('repairHint').innerText = trial.hint;
+    
+    document.getElementById('speedTrigger').innerText = t.speeds[currentSpeedKey];
+    document.getElementById('sleepBtn').innerText = `${t.sleep}: ${sleepMode ? 'ON' : 'OFF'}`;
+    document.getElementById('sleepBtn').classList.toggle('active', sleepMode);
+    
+    const speedBtns = document.querySelectorAll('#speedDropdown button');
+    speedBtns[0].innerText = t.speeds.fast; 
+    speedBtns[1].innerText = t.speeds.medium; 
+    speedBtns[2].innerText = t.speeds.slow;
+    
+    audioElements.forEach((el, i) => {
+        el.btn.querySelector('span').innerText = sounds[i].name[currentLang];
+    });
 }
 window.onclick=()=>document.getElementById('speedDropdown').classList.remove('open');
 updateUI();
