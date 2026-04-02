@@ -23,24 +23,37 @@
 
   h1 { margin:0; font-size:26px; color:#ffb400; text-shadow:0 0 10px #ffb400; margin-bottom: 20px; }
 
-  /* Premium Floating Button */
+  /* Контейнер для нижних кнопок */
+  .bottom-actions {
+    position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+    display: flex; gap: 10px; z-index: 100; align-items: center;
+  }
+
   .floating-premium {
-    position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) scale(1);
-    z-index: 100; background: linear-gradient(45deg, #ffb400, #ff8c00);
-    color: black; padding: 14px 28px; border-radius: 50px;
-    text-decoration: none; font-weight: bold; font-size: 15px;
+    background: linear-gradient(45deg, #ffb400, #ff8c00);
+    color: black; padding: 14px 24px; border-radius: 50px;
+    text-decoration: none; font-weight: bold; font-size: 14px;
     box-shadow: 0 0 20px rgba(255, 180, 0, 0.4);
-    transition: transform 0.1s ease-out;
     white-space: nowrap; border: 2px solid rgba(255,255,255,0.3);
     text-transform: uppercase; letter-spacing: 1px;
+    transition: transform 0.1s ease-out;
+  }
+
+  /* Новая кнопка Try Premium */
+  .try-premium-link {
+    background: rgba(138, 43, 226, 0.2);
+    color: #e0b0ff; padding: 14px 24px; border-radius: 50px;
+    text-decoration: none; font-weight: bold; font-size: 14px;
+    border: 2px solid rgba(224, 176, 255, 0.4);
+    backdrop-filter: blur(10px); text-transform: uppercase;
+    box-shadow: 0 0 15px rgba(138, 43, 226, 0.3);
+    white-space: nowrap;
   }
 
   /* Paywall Styling */
   .paywall-modal {
-    display: flex;
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(0,0,0,0.95); z-index: 10000; justify-content: center; align-items: center; backdrop-filter: blur(12px);
-    display: none; 
   }
   .paywall-content {
     background: linear-gradient(145deg, #141423, #0a0a0f); border: 1px solid #ffb400;
@@ -84,7 +97,10 @@
 <canvas id="stars"></canvas>
 <div class="overlay"></div>
 
-<a href="https://www.patreon.com/posts/bucket-asmr-154613006" target="_blank" id="floatingPremium" class="floating-premium">GET PREMIUM ✨</a>
+<div class="bottom-actions">
+  <a href="trypremium.html" class="try-premium-link">TRY PREMIUM ⚡</a>
+  <a href="https://www.patreon.com/posts/bucket-asmr-154613006" target="_blank" id="floatingPremium" class="floating-premium">GET FULL ✨</a>
+</div>
 
 <div id="paywall" class="paywall-modal">
   <div class="paywall-content">
@@ -95,16 +111,10 @@
       <li><span>✅</span> <span><b>Full Library Access:</b> Every single sound fully unlocked.</span></li>
       <li><span>✅</span> <span><b>Multi-track mixing:</b> Layer multiple sounds simultaneously.</span></li>
       <li><span>✅</span> <span><b>Smart Randomizer:</b> One-click shuffle (1 to 4 sounds).</span></li>
-      <li><span>✅</span> <span><b>Stay-Awake Session:</b> Screen stays active throughout your listening.</span></li>
-      <li><span>✅</span> <span><b>Battery-Safe Sleep Mode:</b> Deep-dark theme and optimized FX.</span></li>
-      <li><span>✅</span> <span><b>Future-Proof:</b> Regular updates with new triggers.</span></li>
     </ul>
 
-    <p style="font-size: 11px; color: #666; margin-bottom: 15px; line-height: 1.2;">
-      Plus: Magic particles, Custom Speed Control, and more!
-    </p>
-
-    <a href="https://www.patreon.com/posts/bucket-asmr-154613006" target="_blank" class="patreon-btn">GO PREMIUM ON PATREON</a>
+    <a href="https://www.patreon.com/posts/bucket-asmr-154613006" target="_blank" class="patreon-btn">GET PREMIUM</a>
+    <a href="trypremium.html" style="display: block; color: #e0b0ff; margin-top: 15px; font-size: 12px; text-decoration: none;">TRY Premium For Free</a>
     <button id="laterBtn" onclick="closePaywall()" class="later-btn" style="opacity: 0; pointer-events: none;">Later</button>
   </div>
 </div>
@@ -135,15 +145,13 @@
 <script>
 let audioCtx = null, currentAudio = null, currentBtn = null;
 let analyser = null, dataArray = null;
-let sessionLimit = 60000; // Порог в 1 минуту
+let sessionLimit = 60000; 
 let wakeLock = null;
 
 async function requestWakeLock() {
   if ('wakeLock' in navigator) {
     try { wakeLock = await navigator.wakeLock.request('screen'); } catch (err) {}
   } 
-  const v = document.getElementById('wakeLockVideo');
-  if (v) v.play().catch(() => {});
 }
 
 function startLaterTimer() {
@@ -159,8 +167,7 @@ function startLaterTimer() {
 function showPaywall() {
     document.getElementById('paywall').style.display = 'flex';
     if(currentAudio) {
-        currentAudio.pause(); 
-        currentAudio = null;
+        currentAudio.pause(); currentAudio = null;
         if(currentBtn) currentBtn.classList.remove('active');
         currentBtn = null;
     }
@@ -181,14 +188,9 @@ function initAudio() {
   }
 }
 
-// Запуск при загрузке
 window.onload = () => {
-    showPaywall(); // Сразу показываем при входе
-    
-    // Запускаем цикл показа каждую минуту
-    setInterval(() => {
-        showPaywall();
-    }, sessionLimit);
+    showPaywall();
+    setInterval(() => { showPaywall(); }, sessionLimit);
 };
 
 document.querySelectorAll('.sound-button:not(.locked)').forEach(btn => {
@@ -196,24 +198,19 @@ document.querySelectorAll('.sound-button:not(.locked)').forEach(btn => {
     requestWakeLock();
     initAudio();
     const file = btn.getAttribute('data-file');
-    
     if (currentBtn === btn) {
         currentAudio.pause(); currentAudio = null; currentBtn = null;
         btn.classList.remove('active'); return;
     }
-    
     if (currentAudio) {
         currentAudio.pause(); if(currentBtn) currentBtn.classList.remove('active');
     }
-    
     const audio = new Audio(`https://raw.githubusercontent.com/bucketasmr/sounds/main/${file}`);
     audio.crossOrigin = "anonymous";
     audio.loop = true;
-    
     const source = audioCtx.createMediaElementSource(audio);
     source.connect(analyser);
     analyser.connect(audioCtx.destination);
-    
     audio.play();
     currentAudio = audio; currentBtn = btn;
     btn.classList.add('active');
@@ -230,7 +227,6 @@ const starsArr = Array.from({length:40}, () => ({ x:Math.random()*innerWidth, y:
 
 function animate(){
   sCtx.clearRect(0,0,innerWidth,innerHeight);
-  
   starsArr.forEach(s=>{ 
     s.a+=s.t; if(s.a>1||s.a<0.1) s.t*=-1; 
     sCtx.beginPath(); sCtx.arc(s.x,s.y,s.r,0,Math.PI*2); 
@@ -242,24 +238,14 @@ function animate(){
     let avg = 0;
     for(let i=0; i<dataArray.length; i++) avg += dataArray[i];
     avg /= dataArray.length;
-    
     const scale = 1 + (avg / 255) * 0.45;
-    floatBtn.style.transform = `translateX(-50%) scale(${scale})`;
-    floatBtn.style.boxShadow = `0 0 ${15 + (avg/6)}px rgba(255, 180, 0, 0.7)`;
+    floatBtn.style.transform = `scale(${scale})`;
   } else {
-    floatBtn.style.transform = `translateX(-50%) scale(1)`;
-    floatBtn.style.boxShadow = `0 0 20px rgba(255, 180, 0, 0.3)`;
+    floatBtn.style.transform = `scale(1)`;
   }
-
   requestAnimationFrame(animate);
 }
 animate();
-
-document.addEventListener('visibilitychange', async () => {
-  if (wakeLock !== null && document.visibilityState === 'visible') {
-    wakeLock = await navigator.wakeLock.request('screen');
-  }
-});
 </script>
 </body>
 </html>
