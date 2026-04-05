@@ -104,6 +104,16 @@
   .active .mute-btn { display: flex; }
   .mute-btn.is-muted { background: #ff5050; border-color: #ff8080; color: white; }
 
+  /* ИНДИКАТОР ЗАГРУЗКИ */
+  .status-dot {
+    position: absolute; bottom: 8px; right: 8px; width: 6px; height: 6px; border-radius: 50%;
+    background: #ff3030; box-shadow: 0 0 5px rgba(255, 48, 48, 0.5);
+    transition: 0.3s; z-index: 10;
+  }
+  .status-dot.ready {
+    background: #00ff88; box-shadow: 0 0 8px rgba(0, 255, 136, 0.6);
+  }
+
   .custom-dropdown { display: none; position: absolute; top: 40px; left: 50%; transform: translateX(-50%); background: #1e1e2d; border-radius: 15px; flex-direction: column; z-index: 3000; overflow: hidden; min-width: 120px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); border: 1px solid rgba(255, 180, 0, 0.3); }
   .custom-dropdown.open { display: flex; }
   .custom-dropdown button { padding: 12px; border: none; background: transparent; color: white; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.1); font-weight: bold; }
@@ -251,13 +261,29 @@ function initSounds() {
     soundsData.forEach((s) => {
         const btn = document.createElement('button');
         btn.className = 'sound-button';
-        btn.innerHTML = `<div class="mute-btn">🔊</div><span>${s.name[langOrder[langIdx]]}</span>`;
+        btn.innerHTML = `
+            <div class="status-dot"></div>
+            <div class="mute-btn">🔊</div>
+            <span>${s.name[langOrder[langIdx]]}</span>
+        `;
         grid.appendChild(btn);
+        
+        const dot = btn.querySelector('.status-dot');
         const audio = new Audio(`https://raw.githubusercontent.com/bucketasmr/sounds/main/${s.file}`);
-        audio.loop = true; audio.setAttribute('playsinline', '');
-        audio.preload = "auto"; // Улучшенная предзагрузка
+        
+        audio.loop = true; 
+        audio.setAttribute('playsinline', '');
+        audio.preload = "auto";
+
+        // ЛОГИКА ИНДИКАЦИИ
+        audio.addEventListener('canplaythrough', () => { dot.classList.add('ready'); });
+        audio.addEventListener('waiting', () => { dot.classList.remove('ready'); });
+        audio.addEventListener('error', () => { dot.classList.remove('ready'); });
+
         const state = { audio, btn, active: false, color: s.color, isMuted: false, fadeInt: null };
+        
         btn.onclick = () => { if(timerActive) state.active ? fadeOut(state) : fadeIn(state); };
+        
         btn.querySelector('.mute-btn').onclick = (e) => {
             e.stopPropagation();
             state.isMuted = !state.isMuted;
@@ -268,8 +294,6 @@ function initSounds() {
     });
 }
 
-// РАЗБЛОКИРОВКА АУДИО (iOS FIX)
-// При любом клике пользователя запускаем все звуки на долю секунды
 function unlockAllAudio() {
     audioElements.forEach(el => {
         el.audio.play().then(() => {
@@ -277,7 +301,7 @@ function unlockAllAudio() {
                 el.audio.pause();
                 el.audio.volume = 0;
             }
-        }).catch(e => console.log("Audio unlock suppressed"));
+        }).catch(e => console.log("Unlock suppressed"));
     });
 }
 
@@ -292,7 +316,7 @@ function switchTab(event, tabId) {
 
 function startTrial() {
     if(timerActive || attempts >= MAX_ATTEMPTS) return;
-    unlockAllAudio(); // Важно для iPhone
+    unlockAllAudio();
     attempts++;
     localStorage.setItem('trial_attempts', attempts);
     document.getElementById('pass-screen').classList.add('hidden');
@@ -315,7 +339,7 @@ function startTrial() {
 
 function retryTrial() {
     if(attempts >= MAX_ATTEMPTS) return;
-    location.reload(); // Перезагрузка - самый надежный способ сбросить потоки на iOS
+    location.reload();
 }
 
 function lockApp() {
@@ -384,7 +408,10 @@ function updateUI() {
     document.getElementById('tabTitleGuide').innerText = t.tabGuide;
     document.getElementById('featuresList').innerHTML = t.features.map(i => `<li>${i}</li>`).join('');
     document.getElementById('guideList').innerHTML = t.guide.map(i => `<li>${i}</li>`).join('');
-    audioElements.forEach((el, i) => { el.btn.querySelector('span').innerText = soundsData[i].name[langOrder[langIdx]]; });
+    audioElements.forEach((el, i) => { 
+        const span = el.btn.querySelector('span');
+        if(span) span.innerText = soundsData[i].name[langOrder[langIdx]]; 
+    });
     document.getElementById('spFast').innerText = t.speeds.fast;
     document.getElementById('spMed').innerText = t.speeds.medium;
     document.getElementById('spSlow').innerText = t.speeds.slow;
@@ -394,7 +421,7 @@ function updateUI() {
 
 function toggleRandom() {
     if (!timerActive) return;
-    unlockAllAudio(); // "Пингуем" аудио при активации рандома
+    unlockAllAudio();
     randomActive = !randomActive; 
     clearTimeout(randomTimer);
     if(randomActive) { runRandom(); } 
@@ -407,14 +434,13 @@ function runRandom() {
     let pool = audioElements.filter(el => !el.isMuted);
     if(pool.length > 0) {
         const shuffled = [...pool].sort(() => 0.5 - Math.random());
-        const count = Math.floor(Math.random() * 3) + 1; // Максимум 3 звука для стабильности
+        const count = Math.floor(Math.random() * 3) + 1;
         const toPlay = shuffled.slice(0, count);
         audioElements.forEach(el => {
             if (toPlay.includes(el)) { if(!el.active) fadeIn(el); } 
             else { if(el.active) fadeOut(el); }
         });
     }
-    // Используем динамическую задержку, чтобы iPhone не "засыпал" на одном интервале
     randomTimer = setTimeout(runRandom, speed * 1000);
 }
 
