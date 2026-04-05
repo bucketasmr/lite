@@ -31,7 +31,7 @@
     position: relative;
   }
 
-  /* СЕКРЕТНЫЕ КЛИКИ (3 тапа) */
+  /* СЕКРЕТНЫЕ КЛИКИ (3 раза) */
   #expired-title, #start-title {
     user-select: none;
     -webkit-user-select: none;
@@ -201,7 +201,7 @@
 const MAX_ATTEMPTS = 5;
 const uiTL = {
   en: { code: "EN", title: "BUCKET ASMR", play: "Play", pause: "Pause", sleep: "Sleep", start: "START TRIAL", expired: "Trial Ended", buy: "GET PREMIUM", attempts: "Used: ", lockDesc: "Get full access on Patreon.", tabFeatures: "Functions", tabGuide: "Guide", features: ["<span>✦</span> <b>Full Library:</b> All current premium sounds.", "<span>✦</span> <b>Stay Awake:</b> Screen won't turn off.", "<span>✦</span> <b>Mixer:</b> Play multiple sounds.", "<span>✦</span> <b>Randomizer:</b> Auto sound switching.", "<span>✦</span> <b>Sleep Mode:</b> Zero light."], guide: ["<b>1. Manual:</b> Click icons to start/stop.", "<b>2. Background:</b> Sound works in background.", "<b>3. Auto:</b> Press <b>PLAY</b> for random mode.", "<b>4. Speed:</b> Use speed menu for rhythm.", "<b>5. Mute:</b> Small icon silences sound."], speeds: { slow: "Slow", medium: "Medium", fast: "Fast" } },
-  pt: { code: "PT", title: "BALDE ASMR", play: "Tocar", pause: "Pausa", sleep: "Dormir", start: "INICIAR TESTE", expired: "Teste Encerrado", buy: "OBTER PREMIUM", attempts: "Usadas: ", lockDesc: "Obtenha acesso total no Patreon.", tabFeatures: "Funções", tabGuide: "Guia", features: ["<span>✦</span> <b>Biblioteca Total:</b> Sons desbloqueados.", "<span>✦</span> <b>Sempre Ativo:</b> A tela não apaga.", "<span>✦</span> <b>Mixer:</b> Vários sons ao mesmo tempo.", "<span>✦</span> <b>Aleatório:</b> Troca automática.", "<span>✦</span> <b>Modo Sono:</b> Luz zero."], guide: ["<b>1. Manual:</b> Clique para iniciar/parar.", "<b>2. Segundo plano:</b> O som continua no fundo.", "<b>3. Auto:</b> Pressione <b>Tocar</b> para modo aleatório.", "<b>4. Velocidade:</b> Mude o ritmo no menu.", "<b>5. Mudo:</b> Use o ícone pequeno."], speeds: { slow: "Lento", medium: "Médio", fast: "Rápido" } },
+  pt: { code: "PT", title: "BALDE ASMR", play: "Tocar", pause: "Pausa", sleep: "Dormir", start: "INICIAR TESTE", expired: "Teste Encerrado", buy: "OBTER PREMIUM", attempts: "Usadas: ", lockDesc: "Obtenha acesso total no Patreon.", tabFeatures: "Funções", tabGuide: "Guia", features: ["<span>✦</span> <b>Biblioteca Total:</b> Sons desbloqueados.", "<span>✦</span> <b>Sempre Ativo:</b> A tela не apaga.", "<span>✦</span> <b>Mixer:</b> Vários sons ao mesmo tempo.", "<span>✦</span> <b>Aleatório:</b> Troca automática.", "<span>✦</span> <b>Modo Sono:</b> Luz zero."], guide: ["<b>1. Manual:</b> Clique para iniciar/parar.", "<b>2. Segundo plano:</b> O som continua no fundo.", "<b>3. Auto:</b> Pressione <b>Tocar</b> para modo aleatório.", "<b>4. Velocidade:</b> Mude o ritmo no menu.", "<b>5. Mudo:</b> Use o ícone pequeno."], speeds: { slow: "Lento", medium: "Médio", fast: "Rápido" } },
   uk: { code: "UK", title: "ВІДРО АСМР", play: "Грати", pause: "Пауза", sleep: "Сон", start: "ПОЧАТИ ТЕСТ", expired: "Час вийшов", buy: "КУПИТИ ПРЕМІУМ", attempts: "Використано: ", lockDesc: "Отримайте повний доступ на Patreon.", tabFeatures: "Функції", tabGuide: "Інструкція", features: ["<span>✦</span> <b>Повна Бібліотека:</b> Всі преміум звуки.", "<span>✦</span> <b>Без Сну:</b> Екран не згасає.", "<span>✦</span> <b>Міксер:</b> Кілька звуків одночасно.", "<span>✦</span> <b>Рандомайзер:</b> Автоматичне перемикання.", "<span>✦</span> <b>Нічний Режим:</b> Темрява для сну."], guide: ["<b>1. Ручний:</b> Натисніть на иконку звуку.", "<b>2. Фон:</b> Працює в фоновому режимі.", "<b>3. Авто:</b> Кнопка <b>ГРАТИ</b> для випадковості.", "<b>4. Швидкість:</b> Налаштуйте темп в меню.", "<b>5. Тиша:</b> Маленька іконка вимикає звук."], speeds: { slow: "Повільно", medium: "Середньо", fast: "Швидко" } },
   ru: { code: "RU", title: "ВЕДРО АСМР", play: "Играть", pause: "Пауза", sleep: "Сон", start: "НАЧАТЬ ТЕСТ", expired: "Время вышло", buy: "КУПИТЬ ПРЕМИУМ", attempts: "Использовано: ", lockDesc: "Получите полный доступ на Patreon.", tabFeatures: "Функции", tabGuide: "Инструкция", features: ["<span>✦</span> <b>Полная библиотека:</b> Все преміум звуки открыты.", "<span>✦</span> <b>Бодрость:</b> Экран не гаснет.", "<span>✦</span> <b>Микшер:</b> Запуск нескольких звуков.", "<span>✦</span> <b>Рандомайзер:</b> Авто-переключение звуков.", "<span>✦</span> <b>Режим Сна:</b> Минимум света."], guide: ["<b>1. Ручной:</b> Нажми на иконку для старта.", "<b>2. Фон:</b> Работает даже на заблокированном экране.", "<b>3. Авто:</b> Кнопка <b>ИГРАТЬ</b> для случайности.", "<b>4. Скорость:</b> Настрой ритм в меню.", "<b>5. Тишина:</b> Маленький значок убирает звук."], speeds: { slow: "Медленно", medium: "Средне", fast: "Быстро" } }
 };
@@ -316,8 +316,9 @@ function fadeIn(el) {
     el.active = true; el.btn.classList.add('active'); el.btn.style.backgroundColor = el.color + "44";
     el.audio.play().catch(()=>{});
     if(!el.isMuted) {
-        let v = 0; const fade = setInterval(() => {
-            if (v < 0.6) { v += 0.05; el.audio.volume = v; } else clearInterval(fade);
+        let v = el.audio.volume;
+        const fade = setInterval(() => {
+            if (v < 0.6) { v += 0.05; el.audio.volume = v; } else { el.audio.volume = 0.6; clearInterval(fade); }
         }, 50);
     }
 }
@@ -370,7 +371,12 @@ function runRandom() {
     
     let pool = audioElements.filter(el => !el.isMuted);
     if(pool.length > 0) {
-        const toPlay = pool.sort(() => 0.5 - Math.random()).slice(0, Math.floor(Math.random()*2)+1);
+        // Перемешиваем массив случайным образом
+        const shuffled = [...pool].sort(() => 0.5 - Math.random());
+        // Выбираем случайное количество звуков от 1 до 4
+        const count = Math.floor(Math.random() * 4) + 1;
+        const toPlay = shuffled.slice(0, count);
+
         audioElements.forEach(el => {
             if (toPlay.includes(el)) {
                 if(!el.active) fadeIn(el);
@@ -379,7 +385,6 @@ function runRandom() {
             }
         });
     }
-    // Используем переменную speed для задержки (speed * 1000 миллисекунд)
     randomTimer = setTimeout(runRandom, speed * 1000);
 }
 
@@ -396,7 +401,6 @@ function setSpeed(v, key) {
     speed = v; 
     toggleDropdown(); 
     updateUI();
-    // Если рандом активен, перезапускаем таймер с новой скоростью
     if(randomActive) {
         clearTimeout(randomTimer);
         runRandom();
