@@ -3,308 +3,206 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>BUCKET ASMR LITE</title>
+<meta name="darkreader-lock">
+<meta name="color-scheme" content="dark">
+<title>BUCKET ASMR | FREE TRIAL</title>
 <style>
+  /* Стили экрана блокировки триала */
+  #trial-expired-screen {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(circle at center, #1a1a2e 0%, #050505 100%);
+    z-index: 100000; display: none; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 20px;
+  }
+  .expired-box {
+    background: rgba(255, 255, 255, 0.05); border: 1px solid #ffb400;
+    padding: 40px 30px; border-radius: 30px; backdrop-filter: blur(20px);
+    box-shadow: 0 0 30px rgba(255, 180, 0, 0.2); width: 300px;
+  }
+  .expired-box h2 { color: #ffb400; margin-bottom: 15px; text-transform: uppercase; }
+  .buy-btn { 
+    background: #ffb400; color: black; border: none; padding: 15px; 
+    border-radius: 12px; font-weight: bold; cursor: pointer; width: 100%; 
+    font-size: 16px; text-decoration: none; display: block; margin-top: 20px;
+  }
+
+  /* Основной интерфейс (копируем твои стили) */
   body, html {
     margin: 0; padding: 0; height: 100%;
-    background: radial-gradient(ellipse at bottom, #050505 0%, #0a0a1f 100%);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: white; overflow: hidden;
+    background: #050505; transition: background 1s ease;
+    font-family: 'Segoe UI', sans-serif; color: white; overflow: hidden;
     touch-action: manipulation; -webkit-user-select: none; user-select: none;
   }
-
-  canvas { position: fixed; top:0; left:0; width:100%; height:100%; pointer-events: none; z-index: 1; }
-  .overlay { position: absolute; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.5); z-index:2; pointer-events: none; }
+  body.fancy-bg { background: radial-gradient(ellipse at bottom, #050505 0%, #0a0a1f 100%); }
+  .overlay { position: absolute; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.4); z-index:3; pointer-events: none; }
+  .container { position: relative; z-index: 10; display:flex; flex-direction: column; align-items:center; padding:20px; height: 100vh; box-sizing: border-box; }
   
-  .container { 
-    position: relative; z-index: 10; 
-    display:flex; flex-direction: column; align-items:center; 
-    padding:20px; height: 100vh; box-sizing: border-box; 
-  }
-
-  h1 { margin:0; font-size:26px; color:#ffb400; text-shadow:0 0 10px #ffb400; margin-bottom: 20px; }
-
-  .bottom-actions {
-    position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-    display: flex; gap: 10px; z-index: 100; align-items: center;
-  }
-
-  .floating-premium {
-    background: linear-gradient(45deg, #ffb400, #ff8c00);
-    color: black; padding: 14px 24px; border-radius: 50px;
-    text-decoration: none; font-weight: bold; font-size: 14px;
-    box-shadow: 0 0 20px rgba(255, 180, 0, 0.4);
-    white-space: nowrap; border: 2px solid rgba(255,255,255,0.3);
-    text-transform: uppercase; letter-spacing: 1px;
-    transition: transform 0.1s ease-out;
-  }
-
-  .try-premium-link {
-    background: rgba(138, 43, 226, 0.2);
-    color: #e0b0ff; padding: 14px 24px; border-radius: 50px;
-    text-decoration: none; font-weight: bold; font-size: 14px;
-    border: 2px solid rgba(224, 176, 255, 0.4);
-    backdrop-filter: blur(10px); text-transform: uppercase;
-    box-shadow: 0 0 15px rgba(138, 43, 226, 0.3);
-    white-space: nowrap;
-  }
-
-  .paywall-modal {
-    display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.95); z-index: 10000; justify-content: center; align-items: center; backdrop-filter: blur(12px);
-  }
-  .paywall-content {
-    background: linear-gradient(145deg, #141423, #0a0a0f); border: 1px solid #ffb400;
-    padding: 25px 20px; border-radius: 30px; text-align: center; color: white; 
-    max-width: 85%; max-height: 90vh; overflow-y: auto;
-    box-shadow: 0 0 40px rgba(255, 180, 0, 0.15);
-  }
+  .title-bar { display:flex; align-items:center; gap:15px; margin-bottom:15px; z-index: 1000; }
+  h1 { margin:0; font-size:24px; color:#ffb400; text-shadow:0 0 10px #ffb400; }
   
-  .premium-list { text-align: left; display: inline-block; margin: 15px 0; padding: 0; list-style: none; }
-  .premium-list li { margin-bottom: 10px; font-size: 14px; line-height: 1.3; color: #ddd; display: flex; align-items: flex-start; gap: 10px; }
-  .premium-list li b { color: #fff; }
-
-  .patreon-btn { 
-    display: block; background: #ff424d; color: white; padding: 16px; border-radius: 14px; 
-    text-decoration: none; font-weight: bold; margin-top: 10px; font-size: 16px;
-    box-shadow: 0 4px 15px rgba(255, 66, 77, 0.3);
+  .live-counter {
+    background: rgba(255, 50, 50, 0.15); border: 1px solid rgba(255, 50, 50, 0.4);
+    padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: bold; color: #ff8080;
+    display: flex; align-items: center; gap: 5px;
   }
+  .live-dot { width: 6px; height: 6px; background: #ff3030; border-radius: 50%; animation: blink 1.5s infinite; }
+  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
-  /* Кнопка Try Free внутри модалки */
-  .modal-try-btn {
-    display: none; /* Скрыта по умолчанию */
-    margin-top: 12px; color: #e0b0ff; text-decoration: none;
-    font-size: 14px; font-weight: bold; text-transform: uppercase;
-    border: 1px solid rgba(224, 176, 255, 0.3); padding: 10px; border-radius: 10px;
-    background: rgba(138, 43, 226, 0.1);
+  .controls { margin-bottom:15px; display:flex; gap:10px; justify-content: center; z-index: 10; }
+  .controls > button { padding:8px 14px; border:none; border-radius:12px; background: rgba(255,255,255,0.15); color:white; font-weight:bold; backdrop-filter: blur(5px); font-size: 13px; }
+  
+  .sound-grid { 
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(85px, 1fr)); 
+    gap: 15px; width: 100%; max-width: 600px; flex-grow: 1; z-index: 5;
   }
-  
-  .later-btn { background:none; border:none; color: #555; margin-top: 15px; cursor:pointer; font-size: 13px; transition: opacity 0.8s ease; }
-  
-  .controls { margin-bottom:15px; display:flex; gap:10px; flex-wrap: wrap; justify-content: center; z-index: 10; }
-  .controls > button, .locked-ui { 
-    padding:8px 14px; border-radius:12px; background: rgba(255,255,255,0.1); color:white; font-weight:bold; font-size: 13px;
-    backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.1); cursor: pointer;
-  }
-  .locked-ui { opacity: 0.4; position: relative; }
-  .locked-ui::after { content: '🔒'; position: absolute; top: -5px; right: -2px; font-size: 10px; }
-  
-  .sound-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(85px, 1fr)); gap: 15px; width: 100%; max-width: 600px; z-index: 5; }
-
   .sound-button { 
-    aspect-ratio: 1/1; border-radius: 20px; 
-    background: rgba(255,255,255,0.05); color:rgba(255,255,255,0.3); 
-    font-weight:bold; cursor:pointer; display:flex; flex-direction: column; 
-    justify-content:center; align-items:center; backdrop-filter: blur(8px); 
-    border: 1px solid rgba(255,255,255,0.1); font-size: 11px;
-    transition: all 0.3s ease;
+    aspect-ratio: 1/1; border: 1px solid rgba(255,255,255,0.05); border-radius: 20px; 
+    background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.3); 
+    display: flex; flex-direction: column; justify-content: center; align-items: center; 
+    backdrop-filter: blur(8px); transition: 0.4s; font-size: 11px; text-align: center; padding: 5px;
   }
-
-  .sound-button.available {
-    background: rgba(255, 255, 255, 0.12);
-    border: 1.5px solid rgba(255, 180, 0, 0.5);
-    color: #ffffff;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3), inset 0 0 10px rgba(255, 180, 0, 0.1);
-  }
-  .sound-button.available span { font-weight: 800; text-shadow: 0 0 5px rgba(0,0,0,0.5); }
-
-  .sound-button.active { 
-    background: rgba(255, 180, 0, 0.3) !important; 
-    color: #ffb400 !important; 
-    border-color: #ffb400 !important; 
-    box-shadow: 0 0 20px rgba(255, 180, 0, 0.4); 
-    transform: scale(1.05);
-  }
-
-  .sound-button.locked { opacity: 0.15; filter: grayscale(1); border: 1px dashed rgba(255,255,255,0.1); }
+  .sound-button.active { color: white; border: 1px solid rgba(255,255,255,0.4); background: rgba(255,180,0,0.1); }
+  .lock-icon { font-size: 18px; margin-bottom: 5px; opacity: 0.6; }
+  
+  canvas { position: fixed; top:0; left:0; width:100%; height:100%; pointer-events: none; }
 </style>
 </head>
-<body>
+<body class="fancy-bg">
 
-<video id="wakeLockVideo" playsinline muted loop style="display:none;">
-  <source src="https://raw.githubusercontent.com/anars/blank-audio/master/250-milliseconds-of-silence.mp3" type="video/mp4">
-</video>
+<div id="trial-expired-screen">
+  <div class="expired-box">
+    <h2>Trial Ended</h2>
+    <p>Your 2-minute session is over. Get Premium for unlimited sleep sounds and full library.</p>
+    <a href="https://www.patreon.com/posts/join-to-unlock-154613006" class="buy-btn">GET FULL ACCESS</a>
+  </div>
+</div>
 
 <canvas id="stars"></canvas>
 <div class="overlay"></div>
 
-<div class="bottom-actions">
-  <a href="trypremium.html" class="try-premium-link">Trial⚡</a>
-  <a href="https://www.patreon.com/posts/bucket-asmr-154613006" target="_blank" id="floatingPremium" class="floating-premium">GET Premium ✨</a>
-</div>
-
-<div id="paywall" class="paywall-modal">
-  <div class="paywall-content">
-    <h2 style="color: #ffb400; margin-top:0; font-size: 22px;">Premium benefits</h2>
-    <p style="font-size: 14px; color: #aaa;">The ultimate ASMR experience!</p>
-    
-    <ul class="premium-list">
-      <li><span>✅</span> <span><b>Full Library Access:</b> Every single sound fully unlocked.</span></li>
-      <li><span>✅</span> <span><b>Future-Proof:</b> Regular updates with new triggers.</span></li>
-      <li><span>✅</span> <span><b>Battery-Safe Sleep Mode:</b> Deep-dark theme and optimized FX.</span></li>
-      <li><span>✅</span> <span><b>Smart Randomizer:</b> One-click shuffle (1 to 4 sounds).</span></li>
-      <li><span>✅</span> <span><b>Multi-track mixing:</b> Layer multiple sounds simultaneously.</span></li>
-      <li><span>✅</span> <span><b>Stay-Awake Session:</b> Screen stays active throughout your listening.</span></li>
-    </ul>
-
-    <p style="font-size: 11px; color: #666; margin-bottom: 15px; line-height: 1.2;">
-      Plus: Magic particles, Custom Speed Control, and more!
-    </p>
-
-    <a href="https://www.patreon.com/posts/bucket-asmr-154613006" target="_blank" class="patreon-btn">GET PREMIUM ✨</a>
-    
-    <a href="trypremium.html" id="modalTryBtn" class="modal-try-btn">Trial ⚡</a>
-
-    <button id="laterBtn" onclick="closePaywall()" class="later-btn" style="opacity: 0; pointer-events: none;">Later</button>
-  </div>
-</div>
-
 <div class="container">
-  <div style="width: 100%; display: flex; justify-content: flex-end; padding-bottom: 10px;">
-    <div onclick="showPaywall()" style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.3); width: 35px; height: 35px; border-radius: 50%; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px); font-weight: bold; font-size: 18px;">?</div>
+  <div class="title-bar">
+    <h1>BUCKET TRIAL</h1>
+    <div class="live-counter">
+      <div class="live-dot"></div>
+      <span id="online-count">1</span> FREE
+    </div>
   </div>
-  
-  <h1>BUCKET ASMR <span style="font-size: 12px; opacity: 0.5;">LITE</span></h1>
 
   <div class="controls">
-    <button class="locked-ui" onclick="showPaywall()">Play All</button>
-    <button class="locked-ui" onclick="showPaywall()">Sleep: OFF</button>
-    <button class="locked-ui" onclick="showPaywall()">Fast</button>
+    <button id="trial-timer-display">Time: 02:00</button>
+    <button style="background: #ffb400; color: black;" onclick="window.open('https://www.patreon.com/posts/join-to-unlock-154613006')">UPGRADE</button>
   </div>
-
-  <div id="soundGrid" class="sound-grid">
-    <button class="sound-button available" data-file="purplebrush.mp3"><span>Purple Brush</span></button>
-    <button class="sound-button available" data-file="choko.mp3"><span>Choco</span></button>
-    <button class="sound-button available" data-file="carrot.mp3"><span>Carrot</span></button>
-    
-    <div class="sound-button locked" onclick="showPaywall()"><span>🔒 locked</span></div>
-    <div class="sound-button locked" onclick="showPaywall()"><span>🔒 locked</span></div>
-    <div class="sound-button locked" onclick="showPaywall()"><span>🔒 locked</span></div>
-  </div>
+  
+  <div id="soundGrid" class="sound-grid"></div>
 </div>
 
 <script>
-let audioCtx = null, currentAudio = null, currentBtn = null;
-let analyser = null, dataArray = null;
-let sessionLimit = 60000; 
-let wakeLock = null;
-let paywallCount = 0; // Счетчик открытий Paywall
+// --- КОНФИГУРАЦИЯ ТРИАЛА ---
+const TRIAL_TIME = 120; // 2 минуты в секундах
+const PREMIUM_URL = "https://www.patreon.com/posts/join-to-unlock-154613006";
 
-async function requestWakeLock() {
-  if ('wakeLock' in navigator) {
-    try { wakeLock = await navigator.wakeLock.request('screen'); } catch (err) {}
-  } 
-  const v = document.getElementById('wakeLockVideo');
-  if (v) v.play().catch(() => {});
+// Звуки (три бесплатных, остальные закрыты)
+const sounds = [
+  { "file": "purplebrush.mp3", "name": "Purple Brush", "color": "#9664ff", "locked": false },
+  { "file": "pinksoftbrush.mp3", "name": "Soft Brush", "color": "#ffb6c1", "locked": false },
+  { "file": "wood.mp3", "name": "Wood Tap", "color": "#ffff00", "locked": false },
+  { "file": "strawberry.mp3", "name": "Strawberry", "color": "#ff69b4", "locked": true },
+  { "file": "wax.mp3", "name": "Wax", "color": "#ffa500", "locked": true },
+  { "file": "choko.mp3", "name": "Choco", "color": "#8b4513", "locked": true }
+];
+
+let audioElements = [];
+let timeLeft = TRIAL_TIME;
+let timerStarted = false;
+
+// ПРОВЕРКА: не закончился ли триал раньше?
+if (localStorage.getItem('trial_expired') === 'true') {
+    document.getElementById('trial-expired-screen').style.display = 'flex';
 }
 
-function startLaterTimer() {
-    const laterBtn = document.getElementById('laterBtn');
-    laterBtn.style.opacity = "0";
-    laterBtn.style.pointerEvents = "none";
-    setTimeout(() => {
-        laterBtn.style.opacity = "1";
-        laterBtn.style.pointerEvents = "auto";
-    }, 5000); 
-}
-
-function showPaywall() {
-    paywallCount++; // Увеличиваем счетчик при каждом вызове
+function startTimer() {
+    if (timerStarted) return;
+    timerStarted = true;
     
-    const modalTryBtn = document.getElementById('modalTryBtn');
-    // Показываем кнопку в модалке только со 2-го раза
-    if (paywallCount > 1) {
-        modalTryBtn.style.display = 'block';
-    } else {
-        modalTryBtn.style.display = 'none';
-    }
-
-    document.getElementById('paywall').style.display = 'flex';
-    if(currentAudio) {
-        currentAudio.pause(); currentAudio = null;
-        if(currentBtn) currentBtn.classList.remove('active');
-        currentBtn = null;
-    }
-    startLaterTimer();
+    const countdown = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay();
+        
+        if (timeLeft <= 0) {
+            clearInterval(countdown);
+            endTrial();
+        }
+    }, 1000);
 }
 
-function closePaywall() {
-    requestWakeLock(); 
-    document.getElementById('paywall').style.display = 'none';
+function updateTimerDisplay() {
+    const mins = Math.floor(timeLeft / 60);
+    const secs = timeLeft % 60;
+    document.getElementById('trial-timer-display').innerText = `Time: ${mins}:${secs < 10 ? '0' : ''}${secs}`;
 }
 
-function initAudio() {
-  if (!audioCtx) {
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    analyser = audioCtx.createAnalyser();
-    analyser.fftSize = 32;
-    dataArray = new Uint8Array(analyser.frequencyBinCount);
-  }
+function endTrial() {
+    // Останавливаем все звуки
+    audioElements.forEach(el => {
+        el.audio.pause();
+        el.audio.volume = 0;
+    });
+    // Сохраняем метку в браузере
+    localStorage.setItem('trial_expired', 'true');
+    // Показываем экран блокировки
+    document.getElementById('trial-expired-screen').style.display = 'flex';
 }
 
-window.onload = () => {
-    showPaywall(); // Первый вызов (приветствие) - кнопка Try Free будет скрыта внутри
-    setInterval(() => { showPaywall(); }, sessionLimit);
-};
-
-document.querySelectorAll('.sound-button.available').forEach(btn => {
-  btn.onclick = () => {
-    requestWakeLock();
-    initAudio();
-    const file = btn.getAttribute('data-file');
-    if (currentBtn === btn) {
-        currentAudio.pause(); currentAudio = null; currentBtn = null;
-        btn.classList.remove('active'); return;
-    }
-    if (currentAudio) {
-        currentAudio.pause(); if(currentBtn) currentBtn.classList.remove('active');
-    }
-    const audio = new Audio(`https://raw.githubusercontent.com/bucketasmr/sounds/main/${file}`);
-    audio.crossOrigin = "anonymous";
-    audio.loop = true;
-    const source = audioCtx.createMediaElementSource(audio);
-    source.connect(analyser);
-    analyser.connect(audioCtx.destination);
-    audio.play();
-    currentAudio = audio; currentBtn = btn;
-    btn.classList.add('active');
-  };
-});
-
-const sCan = document.getElementById('stars'), sCtx = sCan.getContext('2d');
-const floatBtn = document.getElementById('floatingPremium');
-
-function res() { sCan.width = innerWidth; sCan.height = innerHeight; }
-window.onresize = res; res();
-
-const starsArr = Array.from({length:40}, () => ({ x:Math.random()*innerWidth, y:Math.random()*innerHeight, r:Math.random()*1.2, a:Math.random(), t:Math.random()*0.005 }));
-
-function animate(){
-  sCtx.clearRect(0,0,innerWidth,innerHeight);
-  starsArr.forEach(s=>{ 
-    s.a+=s.t; if(s.a>1||s.a<0.1) s.t*=-1; 
-    sCtx.beginPath(); sCtx.arc(s.x,s.y,s.r,0,Math.PI*2); 
-    sCtx.fillStyle=`rgba(255,255,255,${Math.abs(s.a)})`; sCtx.fill(); 
-  });
-
-  if (analyser && currentAudio && !currentAudio.paused) {
-    analyser.getByteFrequencyData(dataArray);
-    let avg = 0;
-    for(let i=0; i<dataArray.length; i++) avg += dataArray[i];
-    avg /= dataArray.length;
-    const scale = 1 + (avg / 255) * 0.45;
-    floatBtn.style.transform = `scale(${scale})`;
+// Рендер кнопок
+const grid = document.getElementById('soundGrid');
+sounds.forEach((s) => {
+  const btn = document.createElement('button');
+  btn.className = 'sound-button';
+  
+  if (s.locked) {
+      btn.innerHTML = `<div class="lock-icon">🔒</div><span>Premium</span>`;
+      btn.onclick = () => { window.open(PREMIUM_URL, '_blank'); };
   } else {
-    floatBtn.style.transform = `scale(1)`;
+      btn.innerHTML = `<span>${s.name}</span>`;
+      
+      const audio = new Audio(`https://raw.githubusercontent.com/bucketasmr/sounds/main/${s.file}`);
+      audio.loop = true;
+      audio.setAttribute('playsinline', '');
+      
+      const state = { audio, btn, active: false };
+      
+      btn.onclick = () => {
+          startTimer(); // Запуск таймера при первом клике
+          if (state.active) {
+              state.audio.pause();
+              btn.classList.remove('active');
+          } else {
+              state.audio.play().catch(()=>{});
+              btn.classList.add('active');
+          }
+          state.active = !state.active;
+      };
+      audioElements.push(state);
   }
-  requestAnimationFrame(animate);
-}
-animate();
-
-document.addEventListener('visibilitychange', async () => {
-  if (wakeLock !== null && document.visibilityState === 'visible') {
-    wakeLock = await navigator.wakeLock.request('screen');
-  }
+  grid.appendChild(btn);
 });
+
+// Звезды (твой код)
+const canvas = document.getElementById('stars'), ctx = canvas.getContext('2d');
+function resize() { canvas.width = innerWidth; canvas.height = innerHeight; }
+window.onresize = resize; resize();
+const starsArr = Array.from({length: 50}, () => ({ x: Math.random() * innerWidth, y: Math.random() * innerHeight, r: Math.random() * 1.5, a: Math.random(), s: Math.random() * 0.01 }));
+function draw() {
+    ctx.clearRect(0,0,innerWidth,innerHeight);
+    starsArr.forEach(s => {
+      s.a += s.s; if(s.a > 1 || s.a < 0) s.s *= -1;
+      ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+      ctx.fillStyle = `rgba(255,255,255,${Math.abs(s.a)})`; ctx.fill();
+    });
+    requestAnimationFrame(draw);
+}
+draw();
 </script>
 </body>
 </html>
