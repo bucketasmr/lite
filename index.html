@@ -31,7 +31,22 @@
     position: relative;
   }
 
-  /* ИНДИКАТОР ПОПЫТОК */
+  /* МОДАЛЬНОЕ ОКНО */
+  .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 100001; justify-content: center; align-items: center; backdrop-filter: blur(12px); }
+  .modal-content { background: linear-gradient(145deg, #141423, #0a0a0f); border: 1px solid #ffb400; padding: 25px; border-radius: 30px; text-align: left; color: white; max-width: 85%; width: 400px; max-height: 85vh; overflow-y: auto; box-shadow: 0 0 40px rgba(255, 180, 0, 0.2); position: relative; }
+  .modal-tabs { display: flex; gap: 10px; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
+  .tab-btn { background: none; border: none; color: #666; font-weight: bold; cursor: pointer; font-size: 14px; padding: 5px 0; position: relative; }
+  .tab-btn.active { color: #ffb400; }
+  .tab-btn.active::after { content: ''; position: absolute; bottom: -11px; left: 0; width: 100%; height: 2px; background: #ffb400; }
+  .help-section { display: none; }
+  .help-section.active { display: block; }
+  .help-list { list-style: none; padding: 0; margin: 0; }
+  .help-list li { margin-bottom: 12px; font-size: 13px; line-height: 1.4; color: #ddd; display: flex; align-items: flex-start; gap: 8px; }
+  .help-list li b { color: #ffb400; }
+  .help-list li span { color: #ffb400; }
+  .modal-btn { background:#ffb400; border:none; padding:14px; border-radius:15px; font-weight:bold; cursor:pointer; color:black; font-size: 15px; width: 100%; margin-top: 15px; }
+
+  /* ПОПЫТКИ */
   .attempt-badge {
     position: absolute; top: -15px; left: 50%; transform: translateX(-50%);
     background: #ff3030; color: white; padding: 4px 15px; border-radius: 20px;
@@ -63,7 +78,8 @@
   .live-dot { width: 6px; height: 6px; background: #ff3030; border-radius: 50%; animation: blink 1.5s infinite; }
   @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
-  .lang-btn-ui { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.4); padding: 6px 12px; border-radius: 10px; color: white; cursor: pointer; font-weight: bold; font-size: 12px; }
+  #helpBtn { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.3); width: 32px; height: 32px; border-radius: 50%; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px); font-weight: bold; font-size: 16px; }
+  .lang-btn-ui { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.4); padding: 6px 12px; border-radius: 10px; color: white; cursor: pointer; font-weight: bold; font-size: 12px; min-width: 40px; }
 
   .controls { margin-bottom:15px; display:flex; gap:10px; flex-wrap: wrap; justify-content: center; align-items: center; z-index: 10; }
   .controls > button { padding:8px 14px; border:none; border-radius:12px; background: rgba(255,255,255,0.15); color:white; cursor:pointer; font-weight:bold; backdrop-filter: blur(5px); font-size: 13px; transition: 0.3s; }
@@ -95,9 +111,11 @@
 
   .select-trigger { padding: 8px 14px; border-radius: 12px; background: rgba(255, 255, 255, 0.15); color: white; cursor: pointer; font-weight: bold; font-size: 13px; min-width: 90px; text-align: center; }
   .custom-select-container { position: relative; }
-  .custom-dropdown { display: none; position: absolute; top: 40px; left: 50%; transform: translateX(-50%); background: #1e1e2d; border-radius: 15px; flex-direction: column; z-index: 3000; overflow: hidden; min-width: 120px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+  .custom-dropdown { display: none; position: absolute; top: 40px; left: 50%; transform: translateX(-50%); background: #1e1e2d; border-radius: 15px; flex-direction: column; z-index: 3000; overflow: hidden; min-width: 120px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); border: 1px solid rgba(255, 180, 0, 0.3); }
   .custom-dropdown.open { display: flex; }
-  .custom-dropdown button { padding: 12px; border: none; background: transparent; color: white; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.1); font-weight: bold; }
+  .custom-dropdown button { padding: 12px; border: none; background: transparent; color: white; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.1); font-weight: bold; transition: 0.2s; }
+  .custom-dropdown button:hover { background: rgba(255, 180, 0, 0.1); }
+  .custom-dropdown button:last-child { border-bottom: none; }
 
   canvas { position: fixed; top:0; left:0; width:100%; height:100%; pointer-events: none; }
 </style>
@@ -121,6 +139,26 @@
   </div>
 </div>
 
+<div id="welcomeModal" class="modal">
+  <div class="modal-content">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+        <h2 style="color: #ffb400; margin: 0; font-size: 20px;">BUCKET ASMR</h2>
+        <button class="lang-btn-ui" id="modalLangBtn" style="scale: 0.8;">EN</button>
+    </div>
+    <div class="modal-tabs">
+        <button class="tab-btn active" onclick="switchTab(event, 'tab-features')" id="tabTitleFeatures">Functions</button>
+        <button class="tab-btn" onclick="switchTab(event, 'tab-guide')" id="tabTitleGuide">Guide</button>
+    </div>
+    <div id="tab-features" class="help-section active">
+        <ul class="help-list" id="featuresList"></ul>
+    </div>
+    <div id="tab-guide" class="help-section">
+        <ul class="help-list" id="guideList"></ul>
+    </div>
+    <button class="modal-btn" id="closeWelcome" onclick="closeHelp()">OK</button>
+  </div>
+</div>
+
 <canvas id="stars"></canvas>
 
 <div class="container">
@@ -130,6 +168,7 @@
       <div class="live-dot"></div>
       <span id="online-count">124</span> LIVE
     </div>
+    <div id="helpBtn" onclick="showHelp()">?</div>
     <button id="langBtn" class="lang-btn-ui">EN</button>
   </div>
 
@@ -151,15 +190,81 @@
 </div>
 
 <script>
-// --- КОНФИГУРАЦИЯ ТРИАЛА ---
 const MAX_ATTEMPTS = 5;
 
-// --- ПЕРЕВОДЫ ---
 const uiTL = {
-  en: { code: "EN", title: "BUCKET ASMR", play: "Play", pause: "Pause", sleep: "Sleep", start: "START TRIAL", expired: "Trial Ended", buy: "GET PREMIUM", attempts: "Used: ", speeds: { slow: "Slow", medium: "Medium", fast: "Fast" } },
-  pt: { code: "PT", title: "BALDE ASMR", play: "Tocar", pause: "Pausa", sleep: "Dormir", start: "INICIAR TESTE", expired: "Teste Encerrado", buy: "OBTER PREMIUM", attempts: "Usadas: ", speeds: { slow: "Lento", medium: "Médio", fast: "Rápido" } },
-  uk: { code: "UK", title: "ВІДРО АСМР", play: "Грати", pause: "Пауза", sleep: "Сон", start: "ПОЧАТИ ТЕСТ", expired: "Час вийшов", buy: "КУПИТИ ПРЕМІУМ", attempts: "Використано: ", speeds: { slow: "Повільно", medium: "Середньо", fast: "Швидко" } },
-  ru: { code: "RU", title: "ВЕДРО АСМР", play: "Играть", pause: "Пауза", sleep: "Сон", start: "НАЧАТЬ ТЕСТ", expired: "Время вышло", buy: "КУПИТЬ ПРЕМИУМ", attempts: "Использовано: ", speeds: { slow: "Медленно", medium: "Средне", fast: "Быстро" } }
+  en: { 
+    code: "EN", title: "BUCKET ASMR", play: "Play", pause: "Pause", sleep: "Sleep", start: "START TRIAL", expired: "Trial Ended", buy: "GET PREMIUM", attempts: "Used: ", lockDesc: "Get full access on Patreon.", tabFeatures: "Functions", tabGuide: "Guide",
+    features: [
+        "<span>✦</span> <b>Full Library:</b> All current premium sounds unlocked.", 
+        "<span>✦</span> <b>Stay Awake:</b> Screen won't turn off automatically.", 
+        "<span>✦</span> <b>Mixer:</b> Play multiple sounds at the same time.", 
+        "<span>✦</span> <b>Randomizer:</b> Automatic sound switching.", 
+        "<span>✦</span> <b>Sleep Mode:</b> Zero light for deep relaxation."
+    ],
+    guide: [
+        "<b>1. Manual:</b> Click icons to start/stop specific sounds.", 
+        "<b>2. Background:</b> Sound works even on locked screen.", 
+        "<b>3. Auto:</b> Press <b>PLAY</b> for random switching.", 
+        "<b>4. Speed:</b> Use the speed menu to change rhythm.", 
+        "<b>5. Mute:</b> Use small icons on active tiles to silence."
+    ],
+    speeds: { slow: "Slow", medium: "Medium", fast: "Fast" } 
+  },
+  pt: { 
+    code: "PT", title: "BALDE ASMR", play: "Tocar", pause: "Pausa", sleep: "Dormir", start: "INICIAR TESTE", expired: "Teste Encerrado", buy: "OBTER PREMIUM", attempts: "Usadas: ", lockDesc: "Obtenha acesso total no Patreon.", tabFeatures: "Funções", tabGuide: "Guia",
+    features: [
+        "<span>✦</span> <b>Biblioteca Total:</b> Todos os sons premium desbloqueados.", 
+        "<span>✦</span> <b>Sempre Ativo:</b> A tela não apaga durante o uso.", 
+        "<span>✦</span> <b>Mixer:</b> Toque vários sons ao mesmo tempo.", 
+        "<span>✦</span> <b>Aleatório:</b> Troca automática de sons.", 
+        "<span>✦</span> <b>Modo Sono:</b> Luz zero para relaxamento profundo."
+    ],
+    guide: [
+        "<b>1. Manual:</b> Clique nos ícones para iniciar/parar.", 
+        "<b>2. Segundo plano:</b> O som continua na tela bloqueada.", 
+        "<b>3. Auto:</b> Pressione <b>Tocar</b> para troca aleatória.", 
+        "<b>4. Velocidade:</b> Mude o ritmo no menu de velocidade.", 
+        "<b>5. Mudo:</b> Use o ícone pequeno para silenciar."
+    ],
+    speeds: { slow: "Lento", medium: "Médio", fast: "Rápido" } 
+  },
+  uk: { 
+    code: "UK", title: "ВІДРО АСМР", play: "Грати", pause: "Пауза", sleep: "Сон", start: "ПОЧАТИ ТЕСТ", expired: "Час вийшов", buy: "КУПИТИ ПРЕМІУМ", attempts: "Використано: ", lockDesc: "Отримайте повний доступ на Patreon.", tabFeatures: "Функції", tabGuide: "Інструкція",
+    features: [
+        "<span>✦</span> <b>Повна Бібліотека:</b> Всі актуальні преміум звуки.", 
+        "<span>✦</span> <b>Без Сну:</b> Екран не згасає автоматично.", 
+        "<span>✦</span> <b>Міксер:</b> Грайте кілька звуків одночасно.", 
+        "<span>✦</span> <b>Рандомайзер:</b> Автоматичне перемикання звуків.", 
+        "<span>✦</span> <b>Нічний Режим:</b> Повна темрява для сну."
+    ],
+    guide: [
+        "<b>1. Ручний:</b> Натисніть на звук, щоб увімкнути/вимкнути.", 
+        "<b>2. Фон:</b> Звук працює навіть на заблокованому екрані.", 
+        "<b>3. Авто:</b> Кнопка <b>ГРАТИ</b> для випадкового режиму.", 
+        "<b>4. Швидкість:</b> Змінюйте темп авто-режиму в меню.", 
+        "<b>5. Тиша:</b> Маленька іконка на плитці вимикає звук."
+    ],
+    speeds: { slow: "Повільно", medium: "Середньо", fast: "Швидко" } 
+  },
+  ru: { 
+    code: "RU", title: "ВЕДРО АСМР", play: "Играть", pause: "Пауза", sleep: "Сон", start: "НАЧАТЬ ТЕСТ", expired: "Время вышло", buy: "КУПИТЬ ПРЕМИУМ", attempts: "Использовано: ", lockDesc: "Получите полный доступ на Patreon.", tabFeatures: "Функции", tabGuide: "Инструкция",
+    features: [
+        "<span>✦</span> <b>Полная библиотека:</b> Все текущие премиум звуки открыты.", 
+        "<span>✦</span> <b>Бодрость:</b> Экран не гаснет во время сеанса.", 
+        "<span>✦</span> <b>Микшер:</b> Запуск нескольких звуков одновременно.", 
+        "<span>✦</span> <b>Рандомайзер:</b> Авто-переключение звуков для вас.", 
+        "<span>✦</span> <b>Режим Сна:</b> Минимум света для глубокого отдыха."
+    ],
+    guide: [
+        "<b>1. Ручной:</b> Нажми на иконку для старта или стопа звука.", 
+        "<b>2. Фон:</b> Звук работает даже на заблокированном экране.", 
+        "<b>3. Авто:</b> Кнопка <b>ИГРАТЬ</b> включит случайный режим.", 
+        "<b>4. Скорость:</b> Настрой ритм переключения в меню.", 
+        "<b>5. Тишина:</b> Маленький значок на плитке убирает звук."
+    ],
+    speeds: { slow: "Медленно", medium: "Средне", fast: "Быстро" } 
+  }
 };
 
 const sounds = [
@@ -175,28 +280,17 @@ const sounds = [
 ];
 
 let audioElements = [], timeLeft = 120, timerActive = false, randomActive = false, speed = 22, langIdx = 0;
-let secretCounter = 0;
 const langOrder = ['en', 'pt', 'uk', 'ru'];
 
-// --- ЛОГИКА ЗАЩИТЫ ---
+// --- ЛОГИКА ТРИАЛА ---
 let attempts = parseInt(localStorage.getItem('trial_attempts')) || 0;
 
 function checkAttempts() {
-    if(localStorage.getItem('trial_blocked')) {
-        lockApp();
-        return;
-    }
-
+    if(localStorage.getItem('trial_blocked')) { lockApp(); return; }
     attempts++;
     localStorage.setItem('trial_attempts', attempts);
-
-    if (attempts > MAX_ATTEMPTS) {
-        lockApp();
-    } else if (attempts > 1) {
-        const badge = document.getElementById('attemptIndicator');
-        badge.style.display = 'block';
-        updateUI(); 
-    }
+    if (attempts > MAX_ATTEMPTS) { lockApp(); } 
+    else if (attempts > 1) { document.getElementById('attemptIndicator').style.display = 'block'; }
 }
 
 function startTrial() {
@@ -205,58 +299,50 @@ function startTrial() {
         timerActive = true;
         const interval = setInterval(() => {
             timeLeft--;
-            updateTimerUI();
-            if (timeLeft <= 0) {
-                clearInterval(interval);
-                lockApp();
-            }
+            const m = Math.floor(timeLeft / 60), s = timeLeft % 60;
+            document.getElementById('timerBtn').innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
+            if (timeLeft <= 0) { clearInterval(interval); lockApp(); }
         }, 1000);
     }
 }
 
-function updateTimerUI() {
-    const m = Math.floor(timeLeft / 60), s = timeLeft % 60;
-    document.getElementById('timerBtn').innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
-}
-
 function lockApp() {
-    audioElements.forEach(el => { fadeOut(el); });
+    audioElements.forEach(el => fadeOut(el));
     localStorage.setItem('trial_blocked', 'true');
+    updateUI(); 
     document.getElementById('trial-expired-screen').style.display = 'flex';
     document.getElementById('pass-screen').style.display = 'none';
 }
 
-// РЕНДЕР СЕТКИ
+function showHelp() { document.getElementById('welcomeModal').style.display = 'flex'; }
+function closeHelp() { document.getElementById('welcomeModal').style.display = 'none'; }
+function switchTab(event, tabId) {
+    document.querySelectorAll('.help-section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(tabId).classList.add('active');
+    event.currentTarget.classList.add('active');
+}
+
 const grid = document.getElementById('soundGrid');
 sounds.forEach((s, idx) => {
     const btn = document.createElement('button');
     btn.className = 'sound-button';
     btn.innerHTML = `<div class="mute-btn">🔊</div><span>${s.name['en']}</span>`;
     grid.appendChild(btn);
-
     const audio = new Audio(`https://raw.githubusercontent.com/bucketasmr/sounds/main/${s.file}`);
     audio.loop = true; audio.setAttribute('playsinline', '');
-    const state = { audio, btn, active: false, color: s.color, isMuted: false, idx };
-
-    btn.onclick = () => { state.active ? fadeOut(state) : fadeIn(state); };
-    
-    const mBtn = btn.querySelector('.mute-btn');
-    mBtn.onclick = (e) => {
+    const state = { audio, btn, active: false, color: s.color, isMuted: false };
+    btn.onclick = () => state.active ? fadeOut(state) : fadeIn(state);
+    btn.querySelector('.mute-btn').onclick = (e) => {
         e.stopPropagation();
         state.isMuted = !state.isMuted;
-        mBtn.classList.toggle('is-muted', state.isMuted);
-        if(state.isMuted) {
-            state.audio.volume = 0;
-        } else if(state.active) {
-            state.audio.volume = 0.6;
-        }
+        btn.querySelector('.mute-btn').classList.toggle('is-muted', state.isMuted);
+        state.audio.volume = state.isMuted ? 0 : (state.active ? 0.6 : 0);
     };
-
     audioElements.push(state);
 });
 
 function fadeIn(el) {
-    if (el.isMuted) { el.audio.volume = 0; }
     el.active = true; el.btn.classList.add('active'); el.btn.style.backgroundColor = el.color + "44";
     el.audio.play().catch(()=>{});
     if(!el.isMuted) {
@@ -276,55 +362,49 @@ function fadeOut(el) {
 
 function updateUI() {
     const t = uiTL[langOrder[langIdx]];
+    
+    // Тексты основного экрана
     document.getElementById('title').innerText = t.title;
     document.getElementById('langBtn').innerText = t.code;
+    document.getElementById('modalLangBtn').innerText = t.code;
     document.getElementById('randomBtn').innerText = randomActive ? t.pause : t.play;
     document.getElementById('sleepBtn').innerText = `${t.sleep}: ${document.getElementById('soundGrid').classList.contains('hidden') ? 'ON' : 'OFF'}`;
-    
-    // Индикатор попыток
     document.getElementById('attemptIndicator').innerText = `${t.attempts} ${attempts} / ${MAX_ATTEMPTS}`;
 
-    // Перевод имен звуков
-    audioElements.forEach((el, i) => {
-        el.btn.querySelector('span').innerText = sounds[i].name[langOrder[langIdx]];
-    });
+    // Тексты экрана блокировки
+    document.getElementById('expired-title').innerText = t.expired;
+    document.getElementById('expired-desc').innerText = t.lockDesc;
+    document.getElementById('premium-link').innerText = t.buy;
 
-    // Скорости
-    let sk = (speed === 22) ? 'fast' : (speed === 52) ? 'slow' : 'medium';
-    document.getElementById('speedTrigger').innerText = t.speeds[sk];
+    // Справка
+    document.getElementById('tabTitleFeatures').innerText = t.tabFeatures;
+    document.getElementById('tabTitleGuide').innerText = t.tabGuide;
+    document.getElementById('featuresList').innerHTML = t.features.map(i => `<li>${i}</li>`).join('');
+    document.getElementById('guideList').innerHTML = t.guide.map(i => `<li>${i}</li>`).join('');
+
+    // Звуки
+    audioElements.forEach((el, i) => el.btn.querySelector('span').innerText = sounds[i].name[langOrder[langIdx]]);
+    
+    // --- ОБНОВЛЕНИЕ СПИСКА СКОРОСТЕЙ ---
     document.getElementById('spFast').innerText = t.speeds.fast;
     document.getElementById('spMed').innerText = t.speeds.medium;
     document.getElementById('spSlow').innerText = t.speeds.slow;
-
-    // Экраны
-    document.getElementById('start-title').innerText = t.title;
-    document.getElementById('start-btn').innerText = t.start;
-    document.getElementById('expired-title').innerText = t.expired;
-    document.getElementById('premium-link').innerText = t.buy;
+    
+    // Текст самого триггера (кнопки)
+    let sk = (speed === 22) ? 'fast' : (speed === 52) ? 'slow' : 'medium';
+    document.getElementById('speedTrigger').innerText = t.speeds[sk];
 }
 
 function toggleRandom() {
-    randomActive = !randomActive;
-    updateUI();
-    if(randomActive) {
-        runRandom();
-    } else {
-        audioElements.forEach(el => fadeOut(el));
-    }
+    randomActive = !randomActive; updateUI();
+    if(randomActive) runRandom(); else audioElements.forEach(el => fadeOut(el));
 }
 
 function runRandom() {
     if(!randomActive || timeLeft <= 0) return;
-    let availablePool = audioElements.filter(el => !el.isMuted);
-    if(availablePool.length === 0) availablePool = [audioElements[0]];
-
-    const count = Math.floor(Math.random() * 2) + 1;
-    const toPlay = availablePool.sort(() => 0.5 - Math.random()).slice(0, count);
-    
-    audioElements.forEach(el => {
-        if(toPlay.includes(el)) { if(!el.active) fadeIn(el); } 
-        else { if(el.active) fadeOut(el); }
-    });
+    let pool = audioElements.filter(el => !el.isMuted);
+    const toPlay = pool.sort(() => 0.5 - Math.random()).slice(0, Math.floor(Math.random()*2)+1);
+    audioElements.forEach(el => toPlay.includes(el) ? (!el.active && fadeIn(el)) : (el.active && fadeOut(el)));
     setTimeout(runRandom, speed * 1000);
 }
 
@@ -337,31 +417,20 @@ function toggleSleep() {
 }
 
 function toggleDropdown() { document.getElementById('speedDropdown').classList.toggle('open'); }
-function setSpeed(v, key) { 
-    speed = v; 
-    toggleDropdown(); 
-    updateUI(); 
-}
+function setSpeed(v, key) { speed = v; toggleDropdown(); updateUI(); }
 
-document.getElementById('langBtn').onclick = () => {
-    langIdx = (langIdx + 1) % 4;
-    updateUI();
+document.getElementById('langBtn').onclick = document.getElementById('modalLangBtn').onclick = () => {
+    langIdx = (langIdx + 1) % 4; updateUI();
 };
 
+let secretCounter = 0;
 function handleSecretClick() {
-    secretCounter++;
-    if(secretCounter >= 5) {
-        const pass = prompt("Code:");
-        if(pass === "again") { 
-            localStorage.removeItem('trial_blocked'); 
-            localStorage.removeItem('trial_attempts');
-            location.reload(); 
-        }
+    if(++secretCounter >= 5) {
+        if(prompt("Code:") === "again") { localStorage.clear(); location.reload(); }
         secretCounter = 0;
     }
 }
 
-// ЗВЕЗДЫ
 const canvas = document.getElementById('stars'), ctx = canvas.getContext('2d');
 function resize() { canvas.width = innerWidth; canvas.height = innerHeight; }
 window.onresize = resize; resize();
