@@ -187,7 +187,7 @@ const uiTL = {
   pt: { 
     code: "PT", title: "BALDE ASMR", play: "Tocar", pause: "Pausa", sleep: "Dormir", start: "INICIAR TESTE", expired: "Teste Encerrado", buy: "OBTER PREMIUM", retry: "TENTAR NOVAMENTE", attempts: "Usadas: ", lockDesc: "Acesso total no Patreon.", 
     tabFeatures: "Funções", tabGuide: "Guia",
-    features: ["<span>✦</span> <b>Teste:</b> 2 min de experiência total.", "<span>✦</span> <b>Mixer:</b> Vários sons ao mesmo tempo.", "<span>✦</span> <b>Ritmo:</b> 3 velocidades automáticas.", "<span>✦</span> <b>Visual:</b> Fundo de estrelas interativo.", "<span>✦</span> <b>Sono:</b> Modo escuro para relaxar."],
+    features: ["<span>✦</span> <b>Teste:</b> 2 min de опыт total.", "<span>✦</span> <b>Mixer:</b> Vários sons ao mesmo tempo.", "<span>✦</span> <b>Ritmo:</b> 3 velocidades automáticas.", "<span>✦</span> <b>Visual:</b> Fundo de estrelas interativo.", "<span>✦</span> <b>Sono:</b> Modo escuro para relaxar."],
     guide: ["<b>1. Sons:</b> Clique nos ícones para tocar.", "<b>2. Mudo:</b> Ícone pequeno silencia a trilha.", "<b>3. Auto:</b> Clique em TOCAR para o modo aleatório.", "<b>4. Tempo:</b> O teste dura 120 segundos.", "<b>5. Apoio:</b> Entre no Patreon para tempo ilimitado."],
     speeds: { slow: "Lento", medium: "Médio", fast: "Rápido" } 
   },
@@ -255,7 +255,8 @@ function initSounds() {
         grid.appendChild(btn);
         const audio = new Audio(`https://raw.githubusercontent.com/bucketasmr/sounds/main/${s.file}`);
         audio.loop = true; audio.setAttribute('playsinline', '');
-        const state = { audio, btn, active: false, color: s.color, isMuted: false };
+        audio.preload = "auto"; // Улучшенная предзагрузка
+        const state = { audio, btn, active: false, color: s.color, isMuted: false, fadeInt: null };
         btn.onclick = () => { if(timerActive) state.active ? fadeOut(state) : fadeIn(state); };
         btn.querySelector('.mute-btn').onclick = (e) => {
             e.stopPropagation();
@@ -267,7 +268,19 @@ function initSounds() {
     });
 }
 
-// СПРАВКА
+// РАЗБЛОКИРОВКА АУДИО (iOS FIX)
+// При любом клике пользователя запускаем все звуки на долю секунды
+function unlockAllAudio() {
+    audioElements.forEach(el => {
+        el.audio.play().then(() => {
+            if (!el.active) {
+                el.audio.pause();
+                el.audio.volume = 0;
+            }
+        }).catch(e => console.log("Audio unlock suppressed"));
+    });
+}
+
 function showHelp() { document.getElementById('welcomeModal').style.display = 'flex'; }
 function closeHelp() { document.getElementById('welcomeModal').style.display = 'none'; }
 function switchTab(event, tabId) {
@@ -279,13 +292,11 @@ function switchTab(event, tabId) {
 
 function startTrial() {
     if(timerActive || attempts >= MAX_ATTEMPTS) return;
+    unlockAllAudio(); // Важно для iPhone
     attempts++;
     localStorage.setItem('trial_attempts', attempts);
     document.getElementById('pass-screen').classList.add('hidden');
-    
-    // Показываем справку при первом запуске
     showHelp();
-    
     timerActive = true;
     timeLeft = 120;
     trialEndTime = Date.now() + (timeLeft * 1000);
@@ -304,23 +315,21 @@ function startTrial() {
 
 function retryTrial() {
     if(attempts >= MAX_ATTEMPTS) return;
-    timerActive = false; randomActive = false;
-    clearTimeout(randomTimer);
-    if(globalInterval) clearInterval(globalInterval);
-    audioElements.forEach(el => { el.audio.pause(); el.audio.volume = 0; el.audio.currentTime = 0; });
-    document.getElementById('trial-expired-screen').style.display = 'none';
-    document.getElementById('pass-screen').classList.remove('hidden');
-    document.getElementById('timerBtn').innerText = "02:00";
-    initSounds();
-    updateUI();
+    location.reload(); // Перезагрузка - самый надежный способ сбросить потоки на iOS
 }
 
 function lockApp() {
     timerActive = false; randomActive = false;
     clearTimeout(randomTimer);
     if(globalInterval) clearInterval(globalInterval);
-    audioElements.forEach(el => { el.active = false; el.audio.volume = 0; el.audio.pause(); el.audio.currentTime = 0; el.btn.classList.remove('active'); el.btn.style.backgroundColor = ""; });
-    
+    audioElements.forEach(el => { 
+        el.active = false; 
+        clearInterval(el.fadeInt);
+        el.audio.pause(); 
+        el.audio.volume = 0; 
+        el.btn.classList.remove('active'); 
+        el.btn.style.backgroundColor = ""; 
+    });
     if(attempts >= MAX_ATTEMPTS) {
         localStorage.setItem('trial_blocked', 'true');
         document.getElementById('retry-btn').style.display = 'none';
@@ -333,23 +342,30 @@ function lockApp() {
 
 function fadeIn(el) {
     if (!timerActive) return; 
-    el.active = true; el.btn.classList.add('active'); el.btn.style.backgroundColor = el.color + "44";
+    clearInterval(el.fadeInt);
+    el.active = true; 
+    el.btn.classList.add('active'); 
+    el.btn.style.backgroundColor = el.color + "44";
     el.audio.play().catch(()=>{});
+    
     if(!el.isMuted) {
-        let v = 0; el.audio.volume = 0;
-        const fade = setInterval(() => {
-            if (!timerActive) { clearInterval(fade); el.audio.volume = 0; return; }
-            if (v < 0.6) { v += 0.05; el.audio.volume = v; } else { el.audio.volume = 0.6; clearInterval(fade); }
+        let v = el.audio.volume;
+        el.fadeInt = setInterval(() => {
+            if (v < 0.6) { v += 0.05; el.audio.volume = Math.min(v, 0.6); } 
+            else { el.audio.volume = 0.6; clearInterval(el.fadeInt); }
         }, 50);
     }
 }
 
 function fadeOut(el) {
-    el.active = false; el.btn.classList.remove('active'); el.btn.style.backgroundColor = "";
+    clearInterval(el.fadeInt);
+    el.active = false; 
+    el.btn.classList.remove('active'); 
+    el.btn.style.backgroundColor = "";
     let v = el.audio.volume; 
-    const fade = setInterval(() => {
-        if (v > 0.05) { v -= 0.05; el.audio.volume = v; } 
-        else { el.audio.pause(); el.audio.volume = 0; clearInterval(fade); }
+    el.fadeInt = setInterval(() => {
+        if (v > 0.05) { v -= 0.05; el.audio.volume = Math.max(v, 0); } 
+        else { el.audio.pause(); el.audio.volume = 0; clearInterval(el.fadeInt); }
     }, 50);
 }
 
@@ -364,13 +380,10 @@ function updateUI() {
     document.getElementById('retry-btn').innerText = `${t.retry} (${attempts}/${MAX_ATTEMPTS})`;
     document.getElementById('premium-link').innerText = t.buy;
     document.getElementById('expired-desc').innerText = (attempts >= MAX_ATTEMPTS) ? t.lockDesc : "";
-    
-    // Справка
     document.getElementById('tabTitleFeatures').innerText = t.tabFeatures;
     document.getElementById('tabTitleGuide').innerText = t.tabGuide;
     document.getElementById('featuresList').innerHTML = t.features.map(i => `<li>${i}</li>`).join('');
     document.getElementById('guideList').innerHTML = t.guide.map(i => `<li>${i}</li>`).join('');
-
     audioElements.forEach((el, i) => { el.btn.querySelector('span').innerText = soundsData[i].name[langOrder[langIdx]]; });
     document.getElementById('spFast').innerText = t.speeds.fast;
     document.getElementById('spMed').innerText = t.speeds.medium;
@@ -381,9 +394,11 @@ function updateUI() {
 
 function toggleRandom() {
     if (!timerActive) return;
+    unlockAllAudio(); // "Пингуем" аудио при активации рандома
     randomActive = !randomActive; 
     clearTimeout(randomTimer);
-    if(randomActive) { runRandom(); } else { audioElements.forEach(el => { if(el.active) fadeOut(el); }); }
+    if(randomActive) { runRandom(); } 
+    else { audioElements.forEach(el => { if(el.active) fadeOut(el); }); }
     updateUI();
 }
 
@@ -392,13 +407,14 @@ function runRandom() {
     let pool = audioElements.filter(el => !el.isMuted);
     if(pool.length > 0) {
         const shuffled = [...pool].sort(() => 0.5 - Math.random());
-        const count = Math.floor(Math.random() * 4) + 1;
+        const count = Math.floor(Math.random() * 3) + 1; // Максимум 3 звука для стабильности
         const toPlay = shuffled.slice(0, count);
         audioElements.forEach(el => {
             if (toPlay.includes(el)) { if(!el.active) fadeIn(el); } 
             else { if(el.active) fadeOut(el); }
         });
     }
+    // Используем динамическую задержку, чтобы iPhone не "засыпал" на одном интервале
     randomTimer = setTimeout(runRandom, speed * 1000);
 }
 
@@ -415,7 +431,7 @@ function toggleLang() { langIdx = (langIdx + 1) % 4; updateUI(); }
 const canvas = document.getElementById('stars'), ctx = canvas.getContext('2d');
 function resize() { canvas.width = innerWidth; canvas.height = innerHeight; }
 window.onresize = resize; resize();
-const starsArr = Array.from({length: 70}, () => ({ x: Math.random() * innerWidth, y: Math.random() * innerHeight, r: Math.random() * 1.5, a: Math.random(), s: Math.random() * 0.01 }));
+const starsArr = Array.from({length: 60}, () => ({ x: Math.random() * innerWidth, y: Math.random() * innerHeight, r: Math.random() * 1.5, a: Math.random(), s: Math.random() * 0.01 }));
 function draw() {
     ctx.clearRect(0,0,innerWidth,innerHeight);
     starsArr.forEach(s => {
