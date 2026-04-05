@@ -7,7 +7,6 @@
 <meta name="color-scheme" content="dark">
 <title>BUCKET ASMR | FREE TRIAL</title>
 <style>
-  /* Стили экрана блокировки триала */
   #trial-expired-screen {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: radial-gradient(circle at center, #1a1a2e 0%, #050505 100%);
@@ -25,8 +24,6 @@
     border-radius: 12px; font-weight: bold; cursor: pointer; width: 100%; 
     font-size: 16px; text-decoration: none; display: block; margin-top: 20px;
   }
-
-  /* Основной интерфейс (копируем твои стили) */
   body, html {
     margin: 0; padding: 0; height: 100%;
     background: #050505; transition: background 1s ease;
@@ -36,34 +33,14 @@
   body.fancy-bg { background: radial-gradient(ellipse at bottom, #050505 0%, #0a0a1f 100%); }
   .overlay { position: absolute; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.4); z-index:3; pointer-events: none; }
   .container { position: relative; z-index: 10; display:flex; flex-direction: column; align-items:center; padding:20px; height: 100vh; box-sizing: border-box; }
-  
-  .title-bar { display:flex; align-items:center; gap:15px; margin-bottom:15px; z-index: 1000; }
+  .title-bar { display:flex; align-items:center; gap:15px; margin-bottom:15px; z-index: 1000; cursor: pointer; }
   h1 { margin:0; font-size:24px; color:#ffb400; text-shadow:0 0 10px #ffb400; }
-  
-  .live-counter {
-    background: rgba(255, 50, 50, 0.15); border: 1px solid rgba(255, 50, 50, 0.4);
-    padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: bold; color: #ff8080;
-    display: flex; align-items: center; gap: 5px;
-  }
-  .live-dot { width: 6px; height: 6px; background: #ff3030; border-radius: 50%; animation: blink 1.5s infinite; }
-  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-
   .controls { margin-bottom:15px; display:flex; gap:10px; justify-content: center; z-index: 10; }
   .controls > button { padding:8px 14px; border:none; border-radius:12px; background: rgba(255,255,255,0.15); color:white; font-weight:bold; backdrop-filter: blur(5px); font-size: 13px; }
-  
-  .sound-grid { 
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(85px, 1fr)); 
-    gap: 15px; width: 100%; max-width: 600px; flex-grow: 1; z-index: 5;
-  }
-  .sound-button { 
-    aspect-ratio: 1/1; border: 1px solid rgba(255,255,255,0.05); border-radius: 20px; 
-    background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.3); 
-    display: flex; flex-direction: column; justify-content: center; align-items: center; 
-    backdrop-filter: blur(8px); transition: 0.4s; font-size: 11px; text-align: center; padding: 5px;
-  }
+  .sound-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(85px, 1fr)); gap: 15px; width: 100%; max-width: 600px; flex-grow: 1; z-index: 5; }
+  .sound-button { aspect-ratio: 1/1; border: 1px solid rgba(255,255,255,0.05); border-radius: 20px; background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.3); display: flex; flex-direction: column; justify-content: center; align-items: center; backdrop-filter: blur(8px); transition: 0.4s; font-size: 11px; text-align: center; padding: 5px; }
   .sound-button.active { color: white; border: 1px solid rgba(255,255,255,0.4); background: rgba(255,180,0,0.1); }
   .lock-icon { font-size: 18px; margin-bottom: 5px; opacity: 0.6; }
-  
   canvas { position: fixed; top:0; left:0; width:100%; height:100%; pointer-events: none; }
 </style>
 </head>
@@ -71,9 +48,9 @@
 
 <div id="trial-expired-screen">
   <div class="expired-box">
-    <h2>Trial Ended</h2>
+    <h2 onclick="handleSecretClick()">Trial Ended</h2>
     <p>Your 2-minute session is over. Get Premium for unlimited sleep sounds and full library.</p>
-    <a href="https://www.patreon.com/posts/join-to-unlock-154613006" class="buy-btn">GET FULL ACCESS</a>
+    <a href="https://www.patreon.com/posts/join-to-unlock-154613006" class="buy-btn">GET PREMIUM</a>
   </div>
 </div>
 
@@ -82,27 +59,21 @@
 
 <div class="container">
   <div class="title-bar">
-    <h1>BUCKET TRIAL</h1>
-    <div class="live-counter">
-      <div class="live-dot"></div>
-      <span id="online-count">1</span> FREE
-    </div>
+    <h1 onclick="handleSecretClick()">BUCKET TRIAL</h1>
   </div>
 
   <div class="controls">
     <button id="trial-timer-display">Time: 02:00</button>
-    <button style="background: #ffb400; color: black;" onclick="window.open('https://www.patreon.com/posts/join-to-unlock-154613006')">UPGRADE</button>
+    <button style="background: #ffb400; color: black;" onclick="window.open('https://www.patreon.com/posts/join-to-unlock-154613006')">Premium</button>
   </div>
   
   <div id="soundGrid" class="sound-grid"></div>
 </div>
 
 <script>
-// --- КОНФИГУРАЦИЯ ТРИАЛА ---
-const TRIAL_TIME = 120; // 2 минуты в секундах
+const TRIAL_TIME = 120;
 const PREMIUM_URL = "https://www.patreon.com/posts/join-to-unlock-154613006";
 
-// Звуки (три бесплатных, остальные закрыты)
 const sounds = [
   { "file": "purplebrush.mp3", "name": "Purple Brush", "color": "#9664ff", "locked": false },
   { "file": "pinksoftbrush.mp3", "name": "Soft Brush", "color": "#ffb6c1", "locked": false },
@@ -116,19 +87,30 @@ let audioElements = [];
 let timeLeft = TRIAL_TIME;
 let timerStarted = false;
 
-// ПРОВЕРКА: не закончился ли триал раньше?
 if (localStorage.getItem('trial_expired') === 'true') {
     document.getElementById('trial-expired-screen').style.display = 'flex';
+}
+
+// СЕКРЕТНЫЙ КОД СБРОСА
+let secretClicks = 0;
+function handleSecretClick() {
+    secretClicks++;
+    if (secretClicks >= 5) {
+        let pass = prompt("Admin access:");
+        if (pass === "again") {
+            localStorage.removeItem('trial_expired');
+            location.reload();
+        }
+        secretClicks = 0;
+    }
 }
 
 function startTimer() {
     if (timerStarted) return;
     timerStarted = true;
-    
     const countdown = setInterval(() => {
         timeLeft--;
         updateTimerDisplay();
-        
         if (timeLeft <= 0) {
             clearInterval(countdown);
             endTrial();
@@ -143,44 +125,31 @@ function updateTimerDisplay() {
 }
 
 function endTrial() {
-    // Останавливаем все звуки
     audioElements.forEach(el => {
         el.audio.pause();
         el.audio.volume = 0;
     });
-    // Сохраняем метку в браузере
     localStorage.setItem('trial_expired', 'true');
-    // Показываем экран блокировки
     document.getElementById('trial-expired-screen').style.display = 'flex';
 }
 
-// Рендер кнопок
 const grid = document.getElementById('soundGrid');
 sounds.forEach((s) => {
   const btn = document.createElement('button');
   btn.className = 'sound-button';
-  
   if (s.locked) {
       btn.innerHTML = `<div class="lock-icon">🔒</div><span>Premium</span>`;
       btn.onclick = () => { window.open(PREMIUM_URL, '_blank'); };
   } else {
       btn.innerHTML = `<span>${s.name}</span>`;
-      
       const audio = new Audio(`https://raw.githubusercontent.com/bucketasmr/sounds/main/${s.file}`);
       audio.loop = true;
       audio.setAttribute('playsinline', '');
-      
       const state = { audio, btn, active: false };
-      
       btn.onclick = () => {
-          startTimer(); // Запуск таймера при первом клике
-          if (state.active) {
-              state.audio.pause();
-              btn.classList.remove('active');
-          } else {
-              state.audio.play().catch(()=>{});
-              btn.classList.add('active');
-          }
+          startTimer();
+          if (state.active) { state.audio.pause(); btn.classList.remove('active'); } 
+          else { state.audio.play().catch(()=>{}); btn.classList.add('active'); }
           state.active = !state.active;
       };
       audioElements.push(state);
@@ -188,7 +157,6 @@ sounds.forEach((s) => {
   grid.appendChild(btn);
 });
 
-// Звезды (твой код)
 const canvas = document.getElementById('stars'), ctx = canvas.getContext('2d');
 function resize() { canvas.width = innerWidth; canvas.height = innerHeight; }
 window.onresize = resize; resize();
