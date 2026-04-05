@@ -31,11 +31,10 @@
     position: relative;
   }
 
+  /* Для тройного тапа */
   #expired-title, #start-title {
-    user-select: none;
-    -webkit-user-select: none;
-    cursor: pointer;
-    touch-action: manipulation;
+    user-select: none; -webkit-user-select: none;
+    cursor: pointer; touch-action: manipulation;
   }
 
   .lock-box h2 { color: #ffb400; margin-bottom: 10px; font-size: 20px; text-transform: uppercase; letter-spacing: 2px; }
@@ -69,6 +68,7 @@
   .title-bar { display:flex; align-items:center; gap:12px; margin-bottom:15px; z-index: 1000; }
   h1 { margin:0; font-size:22px; color:#ffb400; text-shadow:0 0 10px #ffb400; }
   
+  /* Стиль кнопки языка (возвращенный) */
   .lang-btn-ui { 
     background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.4); 
     padding: 6px 12px; border-radius: 10px; color: white; cursor: pointer; 
@@ -155,6 +155,7 @@
 </div>
 
 <script>
+// ОСНОВНАЯ КОНФИГУРАЦИЯ
 const MAX_ATTEMPTS = 5;
 const uiTL = {
   en: { code: "EN", title: "BUCKET ASMR", play: "Play", pause: "Pause", sleep: "Sleep", start: "START TRIAL", expired: "Trial Ended", buy: "GET PREMIUM", retry: "TRY AGAIN", attempts: "Used: ", lockDesc: "Get full access on Patreon.", speeds: { slow: "Slow", medium: "Medium", fast: "Fast" } },
@@ -177,9 +178,31 @@ const soundsData = [
 
 let audioElements = [], timeLeft = 120, timerActive = false, randomActive = false, speed = 8, langIdx = 0;
 let trialEndTime = null, randomTimer = null, globalInterval = null;
-let secretCounter = 0, secretTimeout = null;
+let _sc = 0, _st; // Переменные для секретного кода
 const langOrder = ['en', 'pt', 'uk', 'ru'];
 let attempts = parseInt(localStorage.getItem('trial_attempts')) || 0;
+
+//  
+function _checkKey(v) { return btoa(v) === "YWdhaW4="; }
+
+function handleSecretClick(e) {
+    if(e) e.preventDefault();
+    _sc++;
+    clearTimeout(_st);
+    if (_sc >= 3) {
+        const input = prompt("Key:");
+        if (input && _checkKey(input)) { 
+            localStorage.clear(); 
+            location.reload(); 
+        }
+        _sc = 0;
+    }
+    _st = setTimeout(() => { _sc = 0; }, 2000);
+}
+
+// Привязка событий тапа
+document.getElementById('expired-title').addEventListener('pointerdown', handleSecretClick);
+document.getElementById('start-title').addEventListener('pointerdown', handleSecretClick);
 
 function checkAttempts() {
     if(localStorage.getItem('trial_blocked')) { lockApp(); return; }
@@ -256,22 +279,6 @@ function lockApp() {
     updateUI();
 }
 
-// СЕКРЕТНЫЙ КОД
-function handleSecretClick(e) {
-    if(e) e.preventDefault();
-    secretCounter++;
-    clearTimeout(secretTimeout);
-    if (secretCounter >= 3) {
-        const code = prompt("Code:");
-        if (code === "again") { localStorage.clear(); location.reload(); }
-        secretCounter = 0;
-    }
-    secretTimeout = setTimeout(() => { secretCounter = 0; }, 2000);
-}
-
-document.getElementById('expired-title').addEventListener('pointerdown', handleSecretClick);
-document.getElementById('start-title').addEventListener('pointerdown', handleSecretClick);
-
 function fadeIn(el) {
     if (!timerActive) return;
     el.active = true; el.btn.classList.add('active'); el.btn.style.backgroundColor = el.color + "44";
@@ -305,11 +312,11 @@ function updateUI() {
     document.getElementById('premium-link').innerText = t.buy;
     document.getElementById('expired-desc').innerText = (attempts >= MAX_ATTEMPTS) ? t.lockDesc : "";
     audioElements.forEach((el, i) => { el.btn.querySelector('span').innerText = soundsData[i].name[langOrder[langIdx]]; });
+    let sk = (speed === 8) ? 'fast' : (speed === 35) ? 'slow' : 'medium';
+    document.getElementById('speedTrigger').innerText = t.speeds[sk];
     document.getElementById('spFast').innerText = t.speeds.fast;
     document.getElementById('spMed').innerText = t.speeds.medium;
     document.getElementById('spSlow').innerText = t.speeds.slow;
-    let sk = (speed === 8) ? 'fast' : (speed === 35) ? 'slow' : 'medium';
-    document.getElementById('speedTrigger').innerText = t.speeds[sk];
 }
 
 function toggleRandom() {
