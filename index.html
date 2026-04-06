@@ -104,7 +104,6 @@
   .active .mute-btn { display: flex; }
   .mute-btn.is-muted { background: #ff5050; border-color: #ff8080; color: white; }
 
-  /* ИНДИКАТОР ЗАГРУЗКИ */
   .status-dot {
     position: absolute; bottom: 8px; right: 8px; width: 6px; height: 6px; border-radius: 50%;
     background: #ff3030; box-shadow: 0 0 5px rgba(255, 48, 48, 0.5);
@@ -198,7 +197,7 @@ const uiTL = {
     code: "PT", title: "BALDE ASMR", play: "Tocar", pause: "Pausa", sleep: "Dormir", start: "INICIAR TESTE", expired: "Teste Encerrado", buy: "OBTER PREMIUM", retry: "TENTAR NOVAMENTE", attempts: "Usadas: ", lockDesc: "Acesso total no Patreon.", 
     tabFeatures: "Funções", tabGuide: "Guia",
     features: ["<span>✦</span> <b>Teste:</b> 2 min de опыт total.", "<span>✦</span> <b>Mixer:</b> Vários sons ao mesmo tempo.", "<span>✦</span> <b>Ritmo:</b> 3 velocidades automáticas.", "<span>✦</span> <b>Visual:</b> Fundo de estrelas interativo.", "<span>✦</span> <b>Sono:</b> Modo escuro para relaxar."],
-    guide: ["<b>1. Sons:</b> Clique nos ícones para tocar.", "<b>2. Mudo:</b> Ícone pequeno silencia a trilha.", "<b>3. Auto:</b> Clique em TOCAR para o modo aleatório.", "<b>4. Tempo:</b> O teste dura 120 segundos.", "<b>5. Apoio:</b> Entre no Patreon para tempo ilimitado."],
+    guide: ["<b>1. Sons:</b> Clique nos ícones para tocar.", "<b>2. Mudo:</b> Ícone pequeno silencia a trilha.", "<b>3. Auto:</b> Clique em TOCAR para o modo aleatório.", "<b>4. Tempo:</b> O teste dura 120 segundos.", "<b>5. Apoio:</b> Entre no Patreon для tempo ilimitado."],
     speeds: { slow: "Lento", medium: "Médio", fast: "Rápido" } 
   },
   uk: { 
@@ -230,7 +229,7 @@ const soundsData = [
 ];
 
 let audioElements = [], timeLeft = 120, timerActive = false, randomActive = false, speed = 8, langIdx = 0;
-let trialEndTime = null, randomTimer = null, globalInterval = null;
+let trialEndTime = null, randomTimer = null, globalInterval = null, cleanupInterval = null;
 let _sc = 0, _st;
 const langOrder = ['en', 'pt', 'uk', 'ru'];
 let attempts = parseInt(localStorage.getItem('trial_attempts')) || 0;
@@ -275,7 +274,6 @@ function initSounds() {
         audio.setAttribute('playsinline', '');
         audio.preload = "auto";
 
-        // ЛОГИКА ИНДИКАЦИИ
         audio.addEventListener('canplaythrough', () => { dot.classList.add('ready'); });
         audio.addEventListener('waiting', () => { dot.classList.remove('ready'); });
         audio.addEventListener('error', () => { dot.classList.remove('ready'); });
@@ -305,6 +303,20 @@ function unlockAllAudio() {
     });
 }
 
+function stopAllSoundsImmediately() {
+    audioElements.forEach(el => { 
+        el.active = false; 
+        if (el.fadeInt) clearInterval(el.fadeInt);
+        el.audio.pause(); 
+        el.audio.currentTime = 0; 
+        el.audio.volume = 0; 
+        if(el.btn) {
+            el.btn.classList.remove('active'); 
+            el.btn.style.backgroundColor = ""; 
+        }
+    });
+}
+
 function showHelp() { document.getElementById('welcomeModal').style.display = 'flex'; }
 function closeHelp() { document.getElementById('welcomeModal').style.display = 'none'; }
 function switchTab(event, tabId) {
@@ -316,6 +328,7 @@ function switchTab(event, tabId) {
 
 function startTrial() {
     if(timerActive || attempts >= MAX_ATTEMPTS) return;
+    if(cleanupInterval) { clearInterval(cleanupInterval); cleanupInterval = null; }
     unlockAllAudio();
     attempts++;
     localStorage.setItem('trial_attempts', attempts);
@@ -346,14 +359,11 @@ function lockApp() {
     timerActive = false; randomActive = false;
     clearTimeout(randomTimer);
     if(globalInterval) clearInterval(globalInterval);
-    audioElements.forEach(el => { 
-        el.active = false; 
-        clearInterval(el.fadeInt);
-        el.audio.pause(); 
-        el.audio.volume = 0; 
-        el.btn.classList.remove('active'); 
-        el.btn.style.backgroundColor = ""; 
-    });
+    
+    stopAllSoundsImmediately();
+    if(cleanupInterval) clearInterval(cleanupInterval);
+    cleanupInterval = setInterval(stopAllSoundsImmediately, 2000);
+
     if(attempts >= MAX_ATTEMPTS) {
         localStorage.setItem('trial_blocked', 'true');
         document.getElementById('retry-btn').style.display = 'none';
