@@ -31,13 +31,28 @@
   #expired-title, #start-title { user-select: none; -webkit-user-select: none; cursor: pointer; touch-action: manipulation; }
   .lock-box h2 { color: #ffb400; margin-bottom: 10px; font-size: 20px; text-transform: uppercase; letter-spacing: 2px; }
   
-  .pass-btn { 
-    background: #ffb400; color: black; border: none; padding: 12px 25px; 
-    border-radius: 12px; font-weight: bold; cursor: pointer; width: 100%; 
-    font-size: 16px; text-decoration: none; display: block; box-sizing: border-box; 
-    margin-bottom: 12px; transition: 0.2s;
+  /* СТИЛИ КНОПОК ТАРИФОВ */
+  .plans-container {
+    display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px;
   }
-  .retry-btn { background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.3); }
+  .pass-btn { 
+    background: #ffb400; color: black; border: none; padding: 12px 20px; 
+    border-radius: 12px; font-weight: bold; cursor: pointer; width: 100%; 
+    font-size: 15px; text-decoration: none; display: flex; flex-direction: column; 
+    align-items: center; justify-content: center; box-sizing: border-box; transition: 0.2s;
+  }
+  .pass-btn span { font-size: 10px; opacity: 0.8; font-weight: normal; margin-bottom: 2px; }
+  
+  /* Стилизация Basic: прозрачная с рамкой */
+  .plan-basic { 
+    background: rgba(255,180,0,0.1); border: 1px solid #ffb400; color: #ffb400; 
+  }
+  /* Стилизация Best Value: яркая */
+  .plan-best { 
+    background: #ffb400; border: 1px solid #ffb400; color: black;
+  }
+
+  .retry-btn { background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 10px; font-size: 14px; }
 
   .attempt-badge {
     position: absolute; top: -15px; left: 50%; transform: translateX(-50%);
@@ -125,8 +140,19 @@
 <div id="trial-expired-screen">
   <div class="lock-box">
     <h2 id="expired-title">Trial Ended</h2>
-    <p id="expired-desc" style="font-size: 14px; margin-bottom: 20px;"></p>
-    <a href="https://www.patreon.com/posts/join-to-unlock-154613006" class="pass-btn" id="premium-link">GET PREMIUM</a>
+    <p id="expired-desc" style="font-size: 13px; margin-bottom: 20px;"></p>
+    
+    <div class="plans-container">
+        <a href="https://www.patreon.com/c/bucket_asmr/membership" class="pass-btn plan-basic" id="btn-basic">
+            <span id="label-basic">1 Month</span>
+            $4.99
+        </a>
+        <a href="https://www.patreon.com/c/bucket_asmr/membership" class="pass-btn plan-best" id="btn-best">
+            <span id="label-best">3 Months / Best Value</span>
+            $11.99
+        </a>
+    </div>
+
     <button class="pass-btn retry-btn" id="retry-btn" onclick="retryTrial()">TRY AGAIN</button>
   </div>
 </div>
@@ -135,8 +161,8 @@
   <div class="lock-box">
     <div id="attemptIndicator" class="attempt-badge"></div>
     <h2 id="start-title">BUCKET Premium</h2>
-    <p id="start-desc" style="font-size: 13px; color: #aaa; margin-bottom: 20px;">Free Trial: 2 minutes</p>
-    <button class="pass-btn" id="start-btn" onclick="startTrial()">START TRIAL</button>
+    <p id="start-desc" style="font-size: 13px; color: #aaa; margin-bottom: 20px;">Free Trial: 10 minutes</p>
+    <button class="pass-btn" id="start-btn" onclick="startTrial()" style="background:#ffb400; color:black;">START TRIAL</button>
   </div>
 </div>
 
@@ -187,28 +213,28 @@
 const MAX_ATTEMPTS = 5;
 const uiTL = {
   en: { 
-    code: "EN", title: "BUCKET ASMR", play: "Play", pause: "Pause", sleep: "Sleep", start: "START TRIAL", expired: "Trial Ended", buy: "GET PREMIUM", retry: "TRY AGAIN", attempts: "Used: ", lockDesc: "Get full access on Patreon.", 
+    code: "EN", title: "BUCKET ASMR", play: "Play", pause: "Pause", sleep: "Sleep", start: "START TRIAL", expired: "Trial Ended", basic: "1 Month", best: "3 Months / Best Value", retry: "TRY AGAIN", attempts: "Used: ", lockDesc: "Get full access on Patreon.", 
     tabFeatures: "Functions", tabGuide: "Guide",
-    features: ["<span>✦</span> <b>Trial:</b> 2 minutes of full experience.", "<span>✦</span> <b>Mixer:</b> Play multiple sounds at once.", "<span>✦</span> <b>Speeds:</b> 3 different auto-rhythms.", "<span>✦</span> <b>Visuals:</b> Interactive star background.", "<span>✦</span> <b>Sleep:</b> Dark mode for deep focus."],
+    features: ["<span>✦</span> <b>Trial:</b> 10 minutes of full experience.", "<span>✦</span> <b>Mixer:</b> Play multiple sounds at once.", "<span>✦</span> <b>Speeds:</b> 3 different auto-rhythms.", "<span>✦</span> <b>Visuals:</b> Interactive star background.", "<span>✦</span> <b>Sleep:</b> Dark mode for deep focus."],
     guide: ["<b>1. Sounds:</b> Click tiles to start/stop.", "<b>2. Mute:</b> Use small icon to silence a track.", "<b>3. Auto:</b> Click PLAY for random cycles.", "<b>4. Time:</b> Trial resets after 120 seconds.", "<b>5. Support:</b> Join Patreon for unlimited time."],
     speeds: { slow: "Slow", medium: "Medium", fast: "Fast" } 
   },
   pt: { 
-    code: "PT", title: "BALDE ASMR", play: "Tocar", pause: "Pausa", sleep: "Dormir", start: "INICIAR TESTE", expired: "Teste Encerrado", buy: "OBTER PREMIUM", retry: "TENTAR NOVAMENTE", attempts: "Usadas: ", lockDesc: "Acesso total no Patreon.", 
+    code: "PT", title: "BALDE ASMR", play: "Tocar", pause: "Pausa", sleep: "Dormir", start: "INICIAR TESTE", expired: "Teste Encerrado", basic: "1 Mês", best: "3 Meses / Melhor Valor", retry: "TENTAR NOVAMENTE", attempts: "Usadas: ", lockDesc: "Acesso total no Patreon.", 
     tabFeatures: "Funções", tabGuide: "Guia",
     features: ["<span>✦</span> <b>Teste:</b> 2 min de опыт total.", "<span>✦</span> <b>Mixer:</b> Vários sons ao mesmo tempo.", "<span>✦</span> <b>Ritmo:</b> 3 velocidades automáticas.", "<span>✦</span> <b>Visual:</b> Fundo de estrelas interativo.", "<span>✦</span> <b>Sono:</b> Modo escuro para relaxar."],
     guide: ["<b>1. Sons:</b> Clique nos ícones para tocar.", "<b>2. Mudo:</b> Ícone pequeno silencia a trilha.", "<b>3. Auto:</b> Clique em TOCAR para o modo aleatório.", "<b>4. Tempo:</b> O teste dura 120 segundos.", "<b>5. Apoio:</b> Entre no Patreon для tempo ilimitado."],
     speeds: { slow: "Lento", medium: "Médio", fast: "Rápido" } 
   },
   uk: { 
-    code: "UK", title: "ВІДРО АСМР", play: "Грати", pause: "Пауза", sleep: "Сон", start: "ПОЧАТИ ТЕСТ", expired: "Час вийшов", buy: "КУПИТИ ПРЕМІУМ", retry: "ЩЕ РАЗ", attempts: "Використано: ", lockDesc: "Доступ на Patreon.", 
+    code: "UK", title: "ВІДРО АСМР", play: "Грати", pause: "Пауза", sleep: "Сон", start: "ПОЧАТИ ТЕСТ", expired: "Час вийшов", basic: "1 Місяць", best: "3 Місяці / Вигідно", retry: "ЩЕ РАЗ", attempts: "Використано: ", lockDesc: "Доступ на Patreon.", 
     tabFeatures: "Функції", tabGuide: "Інструкція",
     features: ["<span>✦</span> <b>Тест:</b> 2 хвилини повного доступу.", "<span>✦</span> <b>Міксер:</b> Багато звуків одночасно.", "<span>✦</span> <b>Ритм:</b> 3 швидкості авто-режиму.", "<span>✦</span> <b>Візуал:</b> Інтерактивне зоряне небо.", "<span>✦</span> <b>Сон:</b> Темний режим для релаксу."],
     guide: ["<b>1. Звуки:</b> Тисни на плитку для запуску.", "<b>2. Тиша:</b> Мала іконка вимикає звук треку.", "<b>3. Авто:</b> Кнопка ГРАТИ для рандомайзера.", "<b>4. Час:</b> Сесія триває 120 секунд.", "<b>5. Преміум:</b> Безліміт доступний на Patreon."],
     speeds: { slow: "Повільно", medium: "Середньо", fast: "Швидко" } 
   },
   ru: { 
-    code: "RU", title: "ВЕДРО АСМР", play: "Играть", pause: "Пауза", sleep: "Сон", start: "НАЧАТЬ ТЕСТ", expired: "Время вышло", buy: "КУПИТЬ ПРЕМИУМ", retry: "ЕЩЕ РАЗ", attempts: "Использовано: ", lockDesc: "Доступ на Patreon.", 
+    code: "RU", title: "ВЕДРО АСМР", play: "Играть", pause: "Пауза", sleep: "Сон", start: "НАЧАТЬ ТЕСТ", expired: "Время вышло", basic: "1 Месяц", best: "3 Месяца / Выгодно", retry: "ЕЩЕ РАЗ", attempts: "Использовано: ", lockDesc: "Доступ на Patreon.", 
     tabFeatures: "Функции", tabGuide: "Инструкция",
     features: ["<span>✦</span> <b>Тест:</b> 2 минуты полного доступа.", "<span>✦</span> <b>Микшер:</b> Много звуков одновременно.", "<span>✦</span> <b>Ритм:</b> 3 скорости авто-режима.", "<span>✦</span> <b>Визуал:</b> Живое звездное небо.", "<span>✦</span> <b>Сон:</b> Темный режим для отдыха."],
     guide: ["<b>1. Звуки:</b> Жми на плитку для запуска.", "<b>2. Тишина:</b> Малый значок убирает звук.", "<b>3. Авто:</b> Кнопка ИГРАТЬ для рандома.", "<b>4. Время:</b> Сессия длится 120 секунд.", "<b>5. Премиум:</b> Безлимит ждет на Patreon."],
@@ -412,7 +438,11 @@ function updateUI() {
     document.getElementById('attemptIndicator').innerText = `${t.attempts} ${attempts} / ${MAX_ATTEMPTS}`;
     document.getElementById('expired-title').innerText = t.expired;
     document.getElementById('retry-btn').innerText = `${t.retry} (${attempts}/${MAX_ATTEMPTS})`;
-    document.getElementById('premium-link').innerText = t.buy;
+    
+    // ПЕРЕВОД ТАРИФОВ
+    document.getElementById('label-basic').innerText = t.basic;
+    document.getElementById('label-best').innerText = t.best;
+
     document.getElementById('expired-desc').innerText = (attempts >= MAX_ATTEMPTS) ? t.lockDesc : "";
     document.getElementById('tabTitleFeatures').innerText = t.tabFeatures;
     document.getElementById('tabTitleGuide').innerText = t.tabGuide;
