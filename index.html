@@ -5,66 +5,135 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="darkreader-lock">
 <meta name="color-scheme" content="dark">
-<title>BUCKET ASMR Premium Trial</title>
+<title>BUCKET ASMR Free</title>
 <style>
-  /* ЭКРАНЫ БЛОКИРОВКИ */
-  #trial-expired-screen {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: radial-gradient(circle at center, #1a1a2e 0%, #050505 100%);
-    z-index: 200000; display: none; flex-direction: column; align-items: center; justify-content: center;
-    text-align: center; padding: 20px; backdrop-filter: blur(15px);
+  /* Основной интерфейс */
+  body, html {
+    margin: 0; padding: 0; height: 100%;
+    background: #050505; transition: background 1s ease;
+    font-family: 'Segoe UI', sans-serif; color: white; overflow: hidden;
+    touch-action: manipulation; -webkit-user-select: none; user-select: none;
   }
-  #pass-screen {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: radial-gradient(circle at center, #1a1a2e 0%, #050505 100%);
-    z-index: 99999; display: flex; flex-direction: column; align-items: center; justify-content: center;
-    transition: opacity 0.5s ease, visibility 0.5s;
-  }
-  #pass-screen.hidden { opacity: 0; visibility: hidden; }
+  body.fancy-bg { background: radial-gradient(ellipse at bottom, #050505 0%, #0a0a1f 100%); }
+  .overlay { position: absolute; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.4); z-index:3; pointer-events: none; }
   
-  .lock-box {
-    background: rgba(255, 255, 255, 0.05); border: 1px solid #ffb400;
-    padding: 40px 30px; border-radius: 30px; backdrop-filter: blur(20px);
-    text-align: center; box-shadow: 0 0 30px rgba(255, 180, 0, 0.2); width: 280px;
-    position: relative;
-  }
-  #expired-title, #start-title { user-select: none; -webkit-user-select: none; cursor: pointer; touch-action: manipulation; }
-  .lock-box h2 { color: #ffb400; margin-bottom: 10px; font-size: 20px; text-transform: uppercase; letter-spacing: 2px; }
+  /* Отступ снизу увеличен до 90px под баннер, чтобы контент не перекрывался */
+  .container { position: relative; z-index: 10; display:flex; flex-direction: column; align-items:center; padding: 20px 20px 90px 20px; height: 100vh; box-sizing: border-box; }
   
-  /* СТИЛИ КНОПОК ТАРИФОВ */
-  .plans-container {
-    display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px;
-  }
-  .pass-btn { 
-    background: #ffb400; color: black; border: none; padding: 12px 20px; 
-    border-radius: 12px; font-weight: bold; cursor: pointer; width: 100%; 
-    font-size: 15px; text-decoration: none; display: flex; flex-direction: column; 
-    align-items: center; justify-content: center; box-sizing: border-box; transition: 0.2s;
-  }
-  .pass-btn span { font-size: 10px; opacity: 0.8; font-weight: normal; margin-bottom: 2px; }
+  .title-bar { display:flex; align-items:center; gap:15px; margin-bottom:15px; z-index: 1000; transition: opacity 0.5s; }
+  h1 { margin:0; font-size:24px; color:#ffb400; text-shadow:0 0 10px #ffb400; }
   
-  /* Стилизация Basic: прозрачная с рамкой */
-  .plan-basic { 
-    background: rgba(255,180,0,0.1); border: 1px solid #ffb400; color: #ffb400; 
+  .live-counter {
+    background: rgba(255, 50, 50, 0.15);
+    border: 1px solid rgba(255, 50, 50, 0.4);
+    padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: bold; color: #ff8080;
+    display: flex; align-items: center; gap: 5px; text-transform: uppercase;
   }
-  /* Стилизация Best Value: яркая */
-  .plan-best { 
-    background: #ffb400; border: 1px solid #ffb400; color: black;
+  .live-dot { width: 6px; height: 6px; background: #ff3030; border-radius: 50%; animation: blink 1.5s infinite; }
+  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+  #helpBtn { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.3); width: 35px; height: 35px; border-radius: 50%; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px); font-weight: bold; font-size: 18px; }
+  .lang-btn-ui { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.4); padding: 8px 16px; border-radius: 10px; color: white; cursor: pointer; font-weight: bold; min-width: 45px; }
+
+  .controls { margin-bottom:15px; display:flex; gap:10px; flex-wrap: wrap; justify-content: center; align-items: center; z-index: 10; transition: opacity 0.5s; }
+  .controls > button { padding:8px 14px; border:none; border-radius:12px; background: rgba(255,255,255,0.15); color:white; cursor:pointer; font-weight:bold; backdrop-filter: blur(5px); font-size: 13px; transition: 0.3s; }
+  
+  #randomBtn { background: rgba(138, 43, 226, 0.4); border: 1px solid rgba(138, 43, 226, 0.3); min-width: 80px; }
+  #sleepBtn.active { background: #ffb400; border: 1px solid #ffb400; color: black; box-shadow: 0 0 15px rgba(255, 180, 0, 0.4); }
+
+  .sound-grid { 
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(85px, 1fr)); 
+    gap: 15px; width: 100%; max-width: 600px; padding: 10px; 
+    overflow-y: auto; flex-grow: 1; z-index: 5; transition: opacity 0.5s, visibility 0.5s;
+  }
+  .sound-grid.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+
+  .sound-button { 
+    aspect-ratio: 1/1; border: 1px solid rgba(255,255,255,0.05); border-radius: 20px;
+    background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.3); 
+    font-weight: bold; cursor: pointer; display: flex; flex-direction: column; 
+    justify-content: center; align-items: center; backdrop-filter: blur(8px);
+    transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); font-size: 11px; text-align: center; 
+    position: relative; overflow: hidden; padding: 5px;
+    background-size: cover; background-position: center; background-repeat: no-repeat;
+  }
+  
+  .sound-button::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.4); opacity: 1; transition: opacity 0.4s; z-index: 1;
+  }
+  .sound-button.ready::before { background: rgba(0,0,0,0.25); }
+  .sound-button.active::before { background: rgba(0,0,0,0.1); }
+
+  .sound-button span { position: relative; z-index: 2; pointer-events: none; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); }
+  .sound-button.ready { color: white; background-color: rgba(255,255,255,0.12); }
+  
+  /* Фиолетовый светящийся обод для активной кнопки */
+  .sound-button.active { 
+    color: white; 
+    transform: scale(1.03); 
+    border: 1px solid #8a2be2 !important; 
+    box-shadow: 0 0 20px rgba(138, 43, 226, 0.6), inset 0 0 10px rgba(138, 43, 226, 0.4); 
+  }
+  .sound-button.is-fav { border: 1px solid #ffb400; }
+  .sound-button.active.is-fav { border: 1px solid #8a2be2 !important; }
+  
+  /* Стили для заблокированных кнопок */
+  .sound-button.locked {
+    border: 1px dashed rgba(255,255,255,0.15) !important;
+    background-image: none !important;
+    cursor: special;
+  }
+  .sound-button.locked::before {
+    background: rgba(0, 0, 0, 0.65) !important;
+  }
+  .lock-icon {
+    position: absolute; top: 8px; left: 8px; font-size: 12px; z-index: 3; color: #ffb400;
+    background: rgba(0,0,0,0.6); padding: 3px 5px; border-radius: 6px; line-height: 1;
   }
 
-  .retry-btn { background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 10px; font-size: 14px; }
+  .mute-btn { position: absolute; top: 5px; right: 5px; width: 22px; height: 22px; background: rgba(0,0,0,0.5); border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 10px; border: 1px solid rgba(255,255,255,0.2); z-index: 15; }
+  .active .mute-btn { display: flex; }
+  .mute-btn.muted { background: #ff5050; border-color: #ff8080; }
 
-  .attempt-badge {
-    position: absolute; top: -15px; left: 50%; transform: translateX(-50%);
-    background: #ff3030; color: white; padding: 4px 15px; border-radius: 20px;
-    font-size: 11px; font-weight: bold; border: 1px solid #ff8080;
-    white-space: nowrap; box-shadow: 0 5px 15px rgba(255, 48, 48, 0.4);
-    display: none; z-index: 100;
+  .custom-select-container { position: relative; }
+  .select-trigger { padding: 8px 14px; border-radius: 12px; background: rgba(255, 255, 255, 0.15); color: white; cursor: pointer; font-weight: bold; font-size: 13px; min-width: 90px; text-align: center; }
+  
+  .custom-dropdown, .fav-dropdown { 
+    display: none; position: absolute; top: 40px; left: 50%; transform: translateX(-50%); 
+    background: #1e1e2d; border-radius: 15px; flex-direction: column; z-index: 3000; 
+    overflow: hidden; min-width: 120px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); 
   }
+  .custom-dropdown.open, .fav-dropdown.open { display: flex; }
+  .custom-dropdown button { padding: 12px; border: none; background: transparent; color: white; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.1); font-weight: bold; }
 
-  /* МОДАЛЬНОЕ ОКНО СПРАВКИ */
+  .fav-dropdown { width: 180px; max-height: 250px; overflow-y: auto; padding: 5px; }
+  .fav-item { display: flex; align-items: center; gap: 10px; padding: 10px; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .fav-item:last-child { border-bottom: none; }
+  .fav-item input { cursor: pointer; accent-color: #ffb400; }
+  .fav-item label { cursor: pointer; font-size: 13px; flex-grow: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* Нижний Рекламный Баннер */
+  .bottom-banner {
+    position: fixed; bottom: 0; left: 0; width: 100%; height: 70px;
+    background: #0d0d1a; border-top: 1px solid rgba(255, 180, 0, 0.3);
+    z-index: 9999; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 -5px 20px rgba(0,0,0,0.8); box-sizing: border-box;
+  }
+  .banner-placeholder {
+    color: rgba(255,255,255,0.4); font-size: 12px; letter-spacing: 1px; text-transform: uppercase;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+  }
+  .banner-placeholder b { color: #ffb400; font-size: 10px; background: rgba(255,180,0,0.1); padding: 2px 6px; border-radius: 4px; margin-bottom: 2px;}
+
+  /* Канвасы эффектов */
+  canvas { position: fixed; top:0; left:0; width:100%; height:100%; pointer-events: none; }
+  #stars { z-index: 1; transition: opacity 2s; }
+  #steamCanvas { z-index: 4; }
+  
+  /* Модальные окна */
   .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 10001; justify-content: center; align-items: center; backdrop-filter: blur(12px); }
-  .modal-content { background: linear-gradient(145deg, #141423, #0a0a0f); border: 1px solid #ffb400; padding: 25px; border-radius: 30px; text-align: left; color: white; max-width: 85%; width: 380px; max-height: 85vh; overflow-y: auto; box-shadow: 0 0 40px rgba(255, 180, 0, 0.2); position: relative; }
+  .modal-content { background: linear-gradient(145deg, #141423, #0a0a0f); border: 1px solid #ffb400; padding: 25px; border-radius: 30px; text-align: left; color: white; max-width: 85%; width: 400px; max-height: 85vh; overflow-y: auto; box-shadow: 0 0 40px rgba(255, 180, 0, 0.2); position: relative; }
   .modal-tabs { display: flex; gap: 10px; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
   .tab-btn { background: none; border: none; color: #666; font-weight: bold; cursor: pointer; font-size: 14px; padding: 5px 0; position: relative; }
   .tab-btn.active { color: #ffb400; }
@@ -77,98 +146,47 @@
   .help-list li span { color: #ffb400; }
   .modal-btn { background:#ffb400; border:none; padding:14px; border-radius:15px; font-weight:bold; cursor:pointer; color:black; font-size: 15px; width: 100%; margin-top: 15px; }
 
-  /* ОСНОВНОЙ ИНТЕРФЕЙС */
-  body, html {
-    margin: 0; padding: 0; height: 100%;
-    background: #050505; font-family: 'Segoe UI', sans-serif; color: white; 
-    overflow: hidden; touch-action: manipulation; -webkit-user-select: none; user-select: none;
+  /* Окно разблокировки рекламы */
+  #unlockModal .modal-content { text-align: center; }
+  .ad-video-sim {
+    width: 100%; height: 160px; background: #000; border-radius: 15px; margin: 15px 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    border: 1px solid rgba(255,255,255,0.1); position: relative; overflow: hidden;
   }
-  body.fancy-bg { background: radial-gradient(ellipse at bottom, #050505 0%, #0a0a1f 100%); }
-  .container { position: relative; z-index: 10; display:flex; flex-direction: column; align-items:center; padding:20px; height: 100vh; box-sizing: border-box; }
-  
-  .title-bar { display:flex; align-items:center; gap:12px; margin-bottom:15px; z-index: 1000; }
-  h1 { margin:0; font-size:22px; color:#ffb400; text-shadow:0 0 10px #ffb400; }
-  
-  #helpBtn { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.3); width: 32px; height: 32px; border-radius: 50%; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px); font-weight: bold; font-size: 16px; }
-  .lang-btn-ui { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.4); padding: 6px 12px; border-radius: 10px; color: white; cursor: pointer; font-weight: bold; font-size: 12px; min-width: 40px; }
-
-  .controls { margin-bottom:15px; display:flex; gap:10px; flex-wrap: wrap; justify-content: center; align-items: center; z-index: 10; }
-  .controls > button { padding:8px 14px; border:none; border-radius:12px; background: rgba(255,255,255,0.15); color:white; cursor:pointer; font-weight:bold; backdrop-filter: blur(5px); font-size: 13px; transition: 0.3s; }
-  
-  #randomBtn { background: rgba(138, 43, 226, 0.4); border: 1px solid rgba(138, 43, 226, 0.3); min-width: 80px; }
-  #timerBtn { background: rgba(255, 255, 255, 0.05); color: #ffb400; border: 1px solid rgba(255, 180, 0, 0.3); }
-
-  .sound-grid { 
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(85px, 1fr)); 
-    gap: 15px; width: 100%; max-width: 600px; padding: 10px; 
-    overflow-y: auto; flex-grow: 1; z-index: 5;
+  .ad-progress {
+    position: absolute; bottom: 0; left: 0; height: 4px; background: #8a2be2; width: 0%;
+    transition: width 1s linear;
   }
-  .sound-grid.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
-
-  .sound-button { 
-    aspect-ratio: 1/1; border: 1px solid rgba(255,255,255,0.05); border-radius: 20px; 
-    background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.3); 
-    font-weight: bold; cursor: pointer; display: flex; flex-direction: column; 
-    justify-content: center; align-items: center; backdrop-filter: blur(8px); 
-    transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); font-size: 11px; text-align: center; 
-    position: relative; overflow: hidden; padding: 5px;
-  }
-  .sound-button.active { color: white; transform: scale(1.03); border: 1px solid rgba(255,255,255,0.4); box-shadow: 0 0 20px rgba(255,180,0,0.2); }
-  
-  .mute-btn { position: absolute; top: 5px; right: 5px; width: 22px; height: 22px; background: rgba(255,255,255,0.1); border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 10px; border: 1px solid rgba(255,255,255,0.2); z-index: 15; }
-  .active .mute-btn { display: flex; }
-  .mute-btn.is-muted { background: #ff5050; border-color: #ff8080; color: white; }
-
-  .status-dot {
-    position: absolute; bottom: 8px; right: 8px; width: 6px; height: 6px; border-radius: 50%;
-    background: #ff3030; box-shadow: 0 0 5px rgba(255, 48, 48, 0.5);
-    transition: 0.3s; z-index: 10;
-  }
-  .status-dot.ready {
-    background: #00ff88; box-shadow: 0 0 8px rgba(0, 255, 136, 0.6);
-  }
-
-  .custom-dropdown { display: none; position: absolute; top: 40px; left: 50%; transform: translateX(-50%); background: #1e1e2d; border-radius: 15px; flex-direction: column; z-index: 3000; overflow: hidden; min-width: 120px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); border: 1px solid rgba(255, 180, 0, 0.3); }
-  .custom-dropdown.open { display: flex; }
-  .custom-dropdown button { padding: 12px; border: none; background: transparent; color: white; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.1); font-weight: bold; }
-
-  canvas { position: fixed; top:0; left:0; width:100%; height:100%; pointer-events: none; }
 </style>
 </head>
 <body class="fancy-bg">
 
-<div id="trial-expired-screen">
-  <div class="lock-box">
-    <h2 id="expired-title">Trial Ended</h2>
-    <p id="expired-desc" style="font-size: 13px; margin-bottom: 20px;"></p>
+<canvas id="stars"></canvas>
+<canvas id="steamCanvas"></canvas>
+<div class="overlay"></div>
+
+<div id="unlockModal" class="modal">
+  <div class="modal-content">
+    <h3 style="color: #ffb400; margin: 0 0 10px 0; font-size: 20px;" id="unlockTitle">Unlock Sound</h3>
+    <p style="font-size: 13px; color: #ccc; margin: 0;" id="unlockDesc">Watch a short video commercial to unlock this premium trigger!</p>
     
-    <div class="plans-container">
-        <a href="https://www.patreon.com/c/bucket_asmr/membership" class="pass-btn plan-basic" id="btn-basic">
-            <span id="label-basic">1 Month</span>
-            $4.99
-        </a>
-        <a href="https://www.patreon.com/c/bucket_asmr/membership" class="pass-btn plan-best" id="btn-best">
-            <span id="label-best">3 Months / Best Value</span>
-            $11.99
-        </a>
+    <div class="ad-video-sim" id="adBox">
+        <span style="font-size: 32px; margin-bottom: 5px;">🎬</span>
+        <div id="adStatus" style="font-size: 14px; font-weight: bold; color: #ffb400;">Ready to Watch</div>
+        <div class="ad-progress" id="adProgress"></div>
     </div>
 
-    <button class="pass-btn retry-btn" id="retry-btn" onclick="retryTrial()">TRY AGAIN</button>
-  </div>
-</div>
-
-<div id="pass-screen">
-  <div class="lock-box">
-    <div id="attemptIndicator" class="attempt-badge"></div>
-    <h2 id="start-title">BUCKET Premium</h2>
-    <p id="start-desc" style="font-size: 13px; color: #aaa; margin-bottom: 20px;">Free Trial: 10 minutes</p>
-    <button class="pass-btn" id="start-btn" onclick="startTrial()" style="background:#ffb400; color:black;">START TRIAL</button>
+    <button class="modal-btn" id="watchAdBtn" style="margin-top: 5px;">👀 WATCH VIDEO</button>
+    <button class="modal-btn" id="cancelUnlock" style="background: rgba(255,255,255,0.1); color: white; margin-top: 10px; padding: 10px;">Cancel</button>
   </div>
 </div>
 
 <div id="welcomeModal" class="modal">
   <div class="modal-content">
-    <h2 style="color: #ffb400; margin: 0 0 15px 0; font-size: 20px;">BUCKET ASMR</h2>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+        <h2 style="color: #ffb400; margin: 0; font-size: 20px;">BUCKET Free Version</h2>
+        <button class="lang-btn-ui lang-switcher-btn" style="scale: 0.8;">EN</button>
+    </div>
     <div class="modal-tabs">
         <button class="tab-btn active" onclick="switchTab(event, 'tab-features')" id="tabTitleFeatures">Functions</button>
         <button class="tab-btn" onclick="switchTab(event, 'tab-guide')" id="tabTitleGuide">Guide</button>
@@ -179,29 +197,38 @@
     <div id="tab-guide" class="help-section">
         <ul class="help-list" id="guideList"></ul>
     </div>
-    <button class="modal-btn" onclick="closeHelp()">OK / START</button>
+    <button class="modal-btn" id="closeWelcome">OK / START</button>
   </div>
 </div>
 
-<canvas id="stars"></canvas>
-
 <div class="container">
-  <div class="title-bar">
+  <div class="title-bar" id="uiTitleBar">
     <h1 id="title">BUCKET ASMR</h1>
+    <div class="live-counter">
+      <div class="live-dot"></div>
+      <span id="online-count">—</span> LIVE
+    </div>
     <div id="helpBtn" onclick="showHelp()">?</div>
-    <button id="langBtn" class="lang-btn-ui" onclick="toggleLang()">EN</button>
+    <button id="langBtn" class="lang-btn-ui lang-switcher-btn">EN</button>
   </div>
 
-  <div class="controls">
-    <button id="randomBtn" onclick="toggleRandom()">Play</button>
-    <button id="timerBtn">02:00</button>
-    <button id="sleepBtn" onclick="toggleSleep()">Sleep: OFF</button>
-    <div class="custom-select-container" style="position: relative;">
-        <div class="select-trigger" onclick="toggleDropdown()" id="speedTrigger" style="padding:8px 14px; border-radius:12px; background: rgba(255,255,255,0.15); color:white; cursor:pointer; font-weight:bold; font-size:13px; min-width:90px; text-align:center;">Fast</div>
+  <div class="controls" id="uiControls">
+    <button id="randomBtn">Play</button>
+    
+    <div class="custom-select-container">
+        <button id="favBtn" class="select-trigger" style="background: rgba(255, 180, 0, 0.2); border: 1px solid #ffb400; min-width: 60px;">⭐ Fav</button>
+        <div class="fav-dropdown" id="favDropdown"></div>
+    </div>
+
+    <button id="sleepBtn">Sleep: OFF</button>
+    <button id="repairBtn">REPAIR</button>
+    
+    <div class="custom-select-container">
+        <div class="select-trigger" id="speedTrigger">Medium</div>
         <div class="custom-dropdown" id="speedDropdown">
-            <button onclick="setSpeed(8, 'fast')" id="spFast">Fast</button>
-            <button onclick="setSpeed(18, 'medium')" id="spMed">Medium</button>
-            <button onclick="setSpeed(35, 'slow')" id="spSlow">Slow</button>
+            <button onclick="setSpeed(22, 'fast')" id="spFast">Fast</button>
+            <button onclick="setSpeed(34, 'medium')" id="spMed">Medium</button>
+            <button onclick="setSpeed(52, 'slow')" id="spSlow">Slow</button>
         </div>
     </div>
   </div>
@@ -209,308 +236,463 @@
   <div id="soundGrid" class="sound-grid"></div>
 </div>
 
-<script>
-const MAX_ATTEMPTS = 5;
-const uiTL = {
-  en: { 
-    code: "EN", title: "BUCKET ASMR", play: "Play", pause: "Pause", sleep: "Sleep", start: "START TRIAL", expired: "Trial Ended", basic: "1 Month", best: "3 Months / Best Value", retry: "TRY AGAIN", attempts: "Used: ", lockDesc: "Get full access on Patreon.", 
-    tabFeatures: "Functions", tabGuide: "Guide",
-    features: ["<span>✦</span> <b>Trial:</b> 10 minutes of full experience.", "<span>✦</span> <b>Mixer:</b> Play multiple sounds at once.", "<span>✦</span> <b>Speeds:</b> 3 different auto-rhythms.", "<span>✦</span> <b>Visuals:</b> Interactive star background.", "<span>✦</span> <b>Sleep:</b> Dark mode for deep focus."],
-    guide: ["<b>1. Sounds:</b> Click tiles to start/stop.", "<b>2. Mute:</b> Use small icon to silence a track.", "<b>3. Auto:</b> Click PLAY for random cycles.", "<b>4. Time:</b> Trial resets after 120 seconds.", "<b>5. Support:</b> Join Patreon for unlimited time."],
-    speeds: { slow: "Slow", medium: "Medium", fast: "Fast" } 
-  },
-  pt: { 
-    code: "PT", title: "BALDE ASMR", play: "Tocar", pause: "Pausa", sleep: "Dormir", start: "INICIAR TESTE", expired: "Teste Encerrado", basic: "1 Mês", best: "3 Meses / Melhor Valor", retry: "TENTAR NOVAMENTE", attempts: "Usadas: ", lockDesc: "Acesso total no Patreon.", 
-    tabFeatures: "Funções", tabGuide: "Guia",
-    features: ["<span>✦</span> <b>Teste:</b> 2 min de опыт total.", "<span>✦</span> <b>Mixer:</b> Vários sons ao mesmo tempo.", "<span>✦</span> <b>Ritmo:</b> 3 velocidades automáticas.", "<span>✦</span> <b>Visual:</b> Fundo de estrelas interativo.", "<span>✦</span> <b>Sono:</b> Modo escuro para relaxar."],
-    guide: ["<b>1. Sons:</b> Clique nos ícones para tocar.", "<b>2. Mudo:</b> Ícone pequeno silencia a trilha.", "<b>3. Auto:</b> Clique em TOCAR para o modo aleatório.", "<b>4. Tempo:</b> O teste dura 120 segundos.", "<b>5. Apoio:</b> Entre no Patreon для tempo ilimitado."],
-    speeds: { slow: "Lento", medium: "Médio", fast: "Rápido" } 
-  },
-  uk: { 
-    code: "UK", title: "ВІДРО АСМР", play: "Грати", pause: "Пауза", sleep: "Сон", start: "ПОЧАТИ ТЕСТ", expired: "Час вийшов", basic: "1 Місяць", best: "3 Місяці / Вигідно", retry: "ЩЕ РАЗ", attempts: "Використано: ", lockDesc: "Доступ на Patreon.", 
-    tabFeatures: "Функції", tabGuide: "Інструкція",
-    features: ["<span>✦</span> <b>Тест:</b> 2 хвилини повного доступу.", "<span>✦</span> <b>Міксер:</b> Багато звуків одночасно.", "<span>✦</span> <b>Ритм:</b> 3 швидкості авто-режиму.", "<span>✦</span> <b>Візуал:</b> Інтерактивне зоряне небо.", "<span>✦</span> <b>Сон:</b> Темний режим для релаксу."],
-    guide: ["<b>1. Звуки:</b> Тисни на плитку для запуску.", "<b>2. Тиша:</b> Мала іконка вимикає звук треку.", "<b>3. Авто:</b> Кнопка ГРАТИ для рандомайзера.", "<b>4. Час:</b> Сесія триває 120 секунд.", "<b>5. Преміум:</b> Безліміт доступний на Patreon."],
-    speeds: { slow: "Повільно", medium: "Середньо", fast: "Швидко" } 
-  },
-  ru: { 
-    code: "RU", title: "ВЕДРО АСМР", play: "Играть", pause: "Пауза", sleep: "Сон", start: "НАЧАТЬ ТЕСТ", expired: "Время вышло", basic: "1 Месяц", best: "3 Месяца / Выгодно", retry: "ЕЩЕ РАЗ", attempts: "Использовано: ", lockDesc: "Доступ на Patreon.", 
-    tabFeatures: "Функции", tabGuide: "Инструкция",
-    features: ["<span>✦</span> <b>Тест:</b> 2 минуты полного доступа.", "<span>✦</span> <b>Микшер:</b> Много звуков одновременно.", "<span>✦</span> <b>Ритм:</b> 3 скорости авто-режима.", "<span>✦</span> <b>Визуал:</b> Живое звездное небо.", "<span>✦</span> <b>Сон:</b> Темный режим для отдыха."],
-    guide: ["<b>1. Звуки:</b> Жми на плитку для запуска.", "<b>2. Тишина:</b> Малый значок убирает звук.", "<b>3. Авто:</b> Кнопка ИГРАТЬ для рандома.", "<b>4. Время:</b> Сессия длится 120 секунд.", "<b>5. Премиум:</b> Безлимит ждет на Patreon."],
-    speeds: { slow: "Медленно", medium: "Средне", fast: "Быстро" } 
-  }
-};
+<div class="bottom-banner" id="bannerBlock">
+  <div class="banner-placeholder">
+    <b>Advertisement</b>
+    <div style="font-size: 13px; color: #8a2be2; font-weight: bold; letter-spacing: 2px;">BUCKET ASMR ADS BANNER</div>
+  </div>
+</div>
 
-const soundsData = [
-  { "file": "purplebrush.mp3", "name": { "en": "Purple Brush", "pt": "Pincel Roxo", "ru": "Фиолетовая кисть", "uk": "Фіолетовий пензель" }, "color": "#9664ff" },
-  { "file": "greybrush.mp3", "name": { "en": "Grey Brush", "pt": "Pincel Cinза", "ru": "Серая кисть", "uk": "Сірий пензель" }, "color": "#8c8c8c" },
-  { "file": "pinksoftbrush.mp3", "name": { "en": "Soft Brush", "pt": "Pincel Macio", "ru": "Мягкая кисть", "uk": "М’який пензель" }, "color": "#ffb6c1" },
-  { "file": "strawberry.mp3", "name": { "en": "Strawberry", "pt": "Morango", "ru": "Клубника", "uk": "Полуниця" }, "color": "#ff69b4" },
-  { "file": "wax.mp3", "name": { "en": "Wax", "pt": "Cera", "ru": "Воск", "uk": "Віск" }, "color": "#ffa500" },
-  { "file": "carrot.mp3", "name": { "en": "Carrot", "pt": "Cenoura", "ru": "Морковь", "uk": "Морква" }, "color": "#ff8c00" },
-  { "file": "choko.mp3", "name": { "en": "Choco", "pt": "Chocolate", "ru": "Шоколад", "uk": "Шоколад" }, "color": "#8b4513" },
-  { "file": "wood.mp3", "name": { "en": "Wood", "pt": "Madeira", "ru": "Дерево", "uk": "Дерево" }, "color": "#ffff00" },
-  { "file": "oldphone.mp3", "name": { "en": "Phone", "pt": "Telefone", "ru": "Телефон", "uk": "Телефон" }, "color": "#323232" }
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyAhDzJnUnVFQRlojHZaWp00IgrPsfbmkKo",
+  authDomain: "bucket-asmr-premium.firebaseapp.com",
+  projectId: "bucket-asmr-premium",
+  databaseURL: "https://bucket-asmr-premium-default-rtdb.firebaseio.com"
+};
+firebase.initializeApp(firebaseConfig);
+const connectionsRef = firebase.database().ref('online_users');
+let presenceRef = null, liveInterval = null;
+
+let wakeLock = null;
+async function requestWakeLock() {
+  try {
+    if ('wakeLock' in navigator) {
+      wakeLock = await navigator.wakeLock.request('screen');
+    }
+  } catch (err) {}
+}
+
+// Авто-старт подключения к онлайну в бесплатной версии
+updateConnections();
+requestWakeLock();
+
+// Массив звуков. Первые 3 открыты по умолчанию, остальные заблокированы.
+const sounds = [
+  { "file": "purplebrush.mp3", "img": "purplebrush.png", "name": { "en": "Purple Brush", "pt": "Pincel Roxo", "ru": "Фиолетовая кисть", "uk": "Фіолетовий пензель" }, "color": "#9664ff", "locked": false },
+  { "file": "greybrush.mp3", "img": "greybrush.png", "name": { "en": "Grey Brush", "pt": "Pincel Cinза", "ru": "Серая кисть", "uk": "Сірий пензель" }, "color": "#8c8c8c", "locked": false },
+  { "file": "pinksoftbrush.mp3", "img": "pinksoftbrush.png", "name": { "en": "Soft Brush", "pt": "Pincel Macio", "ru": "Мягкая кисть", "uk": "М’який пензель" }, "color": "#ffb6c1", "locked": false },
+  
+  // Эти 6 звуков изначально заблокированы для бесплатной версии
+  { "file": "strawberry.mp3", "img": "strawberry.png", "name": { "en": "Strawberry", "pt": "Morango", "ru": "Клубника", "uk": "Полуниця" }, "color": "#ff69b4", "locked": true },
+  { "file": "wax.mp3", "img": "wax.png", "name": { "en": "Wax", "pt": "Cera", "ru": "Воск", "uk": "Віск" }, "color": "#ffa500", "locked": true },
+  { "file": "carrot.mp3", "img": "carrot.png", "name": { "en": "Carrot", "pt": "Cenoura", "ru": "Морковь", "uk": "Морква" }, "color": "#ff8c00", "locked": true },
+  { "file": "choko.mp3", "img": "choko.png", "name": { "en": "Choco", "pt": "Chocolate", "ru": "Шоколад", "uk": "Шоколад" }, "color": "#8b4513", "locked": true },
+  { "file": "wood.mp3", "img": "wood.png", "name": { "en": "Wood", "pt": "Madeira", "ru": "Дерево", "uk": "Дерево" }, "color": "#ffff00", "locked": true },
+  { "file": "oldphone.mp3", "img": "oldphone.png", "name": { "en": "Old Phone", "pt": "Telefone Antigo", "ru": "Телефон", "uk": "Телефон" }, "color": "#323232", "locked": true }
 ];
 
-let audioElements = [], timeLeft = 120, timerActive = false, randomActive = false, speed = 8, langIdx = 0;
-let trialEndTime = null, randomTimer = null, globalInterval = null, cleanupInterval = null;
-let _sc = 0, _st;
+const uiTL = {
+  en: { code: "EN", title: "BUCKET ASMR Free", play: "Play", pause: "Pause", repair: "REPAIR", sleep: "Sleep", tabFeatures: "Functions", tabGuide: "Guide", features: ["<span>✦</span> <b>Free Version:</b> Support with ads.", "<span>✦</span> <b>Unlockable Content:</b> Unlock remaining 6 triggers by watching ads.", "<span>✦</span> <b>Stay Awake:</b> Screen won't turn off automatically.", "<span>✦</span> <b>Mixer:</b> Play multiple sounds at the same time."], guide: ["<b>1. Unlock:</b> Tap locked icons to watch a video and open the sound.", "<b>2. Manual:</b> Click unlocked icons to start/stop sounds.", "<b>3. Auto:</b> Press <b>PLAY</b> for random switching (only unlocked sounds)."], speeds: { slow: "Slow", medium: "Medium", fast: "Fast" }, unlockTitle: "Unlock Trigger", unlockDesc: "Watch a short video commercial to unlock this trigger!", watchVideo: "👀 WATCH VIDEO", cancel: "Cancel" },
+  pt: { code: "PT", title: "BALDE ASMR Grátis", play: "Tocar", pause: "Pausa", repair: "REPARAR", sleep: "Dormir", tabFeatures: "Funções", tabGuide: "Guia", features: ["<span>✦</span> <b>Versão Grátis:</b> Suporte com anúncios.", "<span>✦</span> <b>Conteúdo Desbloqueável:</b> Abra mais 6 sons assistindo vídeos.", "<span>✦</span> <b>Sempre Ativo:</b> A tela não apaga durante o uso.", "<span>✦</span> <b>Mixer:</b> Toque vários sons ao mesmo tempo."], guide: ["<b>1. Desbloquear:</b> Toque nos cadeados para assistir ao vídeo.", "<b>2. Manual:</b> Clique nos ícones liberados para iniciar/parar sons.", "<b>3. Auto:</b> Pressione <b>Tocar</b> para troca aleatória."], speeds: { slow: "Lento", medium: "Médio", fast: "Rápido" }, unlockTitle: "Desbloquear Som", unlockDesc: "Assista a um pequeno vídeo para liberar este som!", watchVideo: "👀 ASSISTIR VÍDEO", cancel: "Cancelar" },
+  uk: { code: "UK", title: "ВІДРО АСМР Безкоштовно", play: "Грати", pause: "Пауза", repair: "ЛАГОДИТИ", sleep: "Сон", tabFeatures: "Функції", tabGuide: "Інструкція", features: ["<span>✦</span> <b>Безкоштовна версія:</b> Робота за рахунок реклами.", "<span>✦</span> <b>Контент за рекламу:</b> Відкривайте інші 6 звуків за перегляд відео.", "<span>✦</span> <b>Без Сну:</b> Екран не згасає автоматично.", "<span>✦</span> <b>Міксер:</b> Грайте кілька звуків одночасно."], guide: ["<b>1. Розблокування:</b> Натисніть на закритий звук, щоб подивитися відео.", "<b>2. Ручний:</b> Натискайте на відкриті плитки для міксу.", "<b>3. Авто:</b> Кнопка <b>ГРАТИ</b> запускає випадковий режим."], speeds: { slow: "Повільно", medium: "Середньо", fast: "Швидко" }, unlockTitle: "Відкрити звук", unlockDesc: "Подивіться коротке відео, щоб розблокувати цей тригер!", watchVideo: "👀 ДИВИТИСЬ ВІДЕО", cancel: "Скасувати" },
+  ru: { code: "RU", title: "ВЕДРО АСМР Бесплатно", play: "Играть", pause: "Пауза", repair: "ЧИНИТЬ", sleep: "Сон", tabFeatures: "Функции", tabGuide: "Инструкция", features: ["<span>✦</span> <b>Бесплатная версия:</b> Работа за счет рекламы.", "<span>✦</span> <b>Контент за рекламу:</b> Открывайте остальные 6 звуков за просмотр видео.", "<span>✦</span> <b>Бодрость:</b> Экран не гаснет во время сеанса.", "<span>✦</span> <b>Микшер:</b> Запуск нескольких звуков одновременно."], guide: ["<b>1. Разблокировка:</b> Нажмите на закрытый звук, чтобы посмотреть видео.", "<b>2. Ручной:</b> Нажимайте на открытые плитки для микса звуков.", "<b>3. Авто:</b> Кнопка <b>ИГРАТЬ</b> включит случайный режим."], speeds: { slow: "Медленно", medium: "Средне", fast: "Быстро" }, unlockTitle: "Открыть звук", unlockDesc: "Посмотрите короткое видео, чтобы разблокировать этот триггер!", watchVideo: "👀 СМОТРЕТЬ ВИДЕО", cancel: "Отмена" }
+};
+
+let audioElements = [], randomActive = false, sleepMode = false, langIdx = 0;
+let currentSpeedValue = 34, nextCycleTimeout = null;
 const langOrder = ['en', 'pt', 'uk', 'ru'];
-let attempts = parseInt(localStorage.getItem('trial_attempts')) || 0;
 
-function _checkKey(v) { return btoa(v) === "YWdhaW4="; }
-function handleSecretClick(e) {
-    if(e) e.preventDefault();
-    _sc++; clearTimeout(_st);
-    if (_sc >= 3) {
-        const input = prompt("Key:");
-        if (input && _checkKey(input)) { localStorage.clear(); location.reload(); }
-        _sc = 0;
+let steamParticles = [];
+let pendingUnlockElement = null; // Элемент, который хочет разблокировать пользователь
+
+const grid = document.getElementById('soundGrid');
+const favDropdown = document.getElementById('favDropdown');
+
+function loadAudio(el) {
+  if (!el.loaded && !el.locked) {
+    el.audio.src = `https://raw.githubusercontent.com/bucketasmr/sounds/main/${el.fileName}`;
+    el.audio.load();
+    el.loaded = true;
+    el.btn.classList.add('ready');
+    if (el.imgName) {
+      el.btn.style.backgroundImage = `url('https://raw.githubusercontent.com/bucketasmr/sounds/main/${el.imgName}')`;
     }
-    _st = setTimeout(() => { _sc = 0; }, 2000);
+  }
 }
 
-document.getElementById('expired-title').addEventListener('pointerdown', handleSecretClick);
-document.getElementById('start-title').addEventListener('pointerdown', handleSecretClick);
+sounds.forEach((s, idx) => {
+  const btn = document.createElement('button');
+  btn.className = 'sound-button';
+  
+  // Если звук закрыт, сразу вешаем класс locked и иконку замка
+  if (s.locked) {
+    btn.classList.add('locked');
+    btn.innerHTML = `<div class="lock-icon">🔒</div><div class="mute-btn">🔊</div><span>${s.name['en']}</span>`;
+  } else {
+    btn.innerHTML = `<div class="mute-btn">🔊</div><span>${s.name['en']}</span>`;
+  }
+  
+  grid.appendChild(btn);
 
-function checkAttempts() {
-    if(localStorage.getItem('trial_blocked') || attempts >= MAX_ATTEMPTS) { lockApp(); return; }
-    if (attempts > 0) { document.getElementById('attemptIndicator').style.display = 'block'; }
+  const audio = new Audio();
+  audio.loop = true;
+  audio.crossOrigin = "anonymous";
+  audio.setAttribute('playsinline', '');
+  
+  const state = { 
+    audio, 
+    btn, 
+    active: false, 
+    muted: false, 
+    fileName: s.file, 
+    imgName: s.img || null, 
+    color: s.color, 
+    loaded: false, 
+    isFav: false, 
+    locked: s.locked,
+    fadeInterval: null 
+  };
+
+  btn.onclick = () => {
+    if (state.locked) {
+        // Если звук закрыт — вызываем всплывающее окно рекламы
+        openUnlockModal(state);
+    } else {
+        // Если открыт — обычное поведение
+        loadAudio(state);
+        state.active ? fadeOut(state) : fadeIn(state);
+    }
+  };
+
+  btn.querySelector('.mute-btn').onclick = (e) => {
+    e.stopPropagation();
+    if(state.locked) return;
+    state.muted = !state.muted;
+    if (state.muted) {
+        state.audio.volume = 0;
+    } else if (state.active) {
+        state.audio.volume = 0.6;
+    }
+    btn.querySelector('.mute-btn').classList.toggle('muted', state.muted);
+  };
+  audioElements.push(state);
+
+  const favItem = document.createElement('div');
+  favItem.className = 'fav-item';
+  favItem.innerHTML = `<input type="checkbox" id="check-${idx}"><label for="check-${idx}">${s.name['en']}</label>`;
+  favItem.onclick = (e) => {
+    e.stopPropagation();
+    if(state.locked) return; // Нельзя добавить в избранное закрытый звук
+    const checkbox = favItem.querySelector('input');
+    if(e.target !== checkbox) checkbox.checked = !checkbox.checked;
+    state.isFav = checkbox.checked;
+    btn.classList.toggle('is-fav', state.isFav);
+  };
+  favDropdown.appendChild(favItem);
+});
+
+// Логика Рекламного Окна Разблокировки
+function openUnlockModal(el) {
+    pendingUnlockElement = el;
+    const t = uiTL[langOrder[langIdx]];
+    
+    document.getElementById('unlockTitle').innerText = t.unlockTitle;
+    document.getElementById('unlockDesc').innerText = t.unlockDesc;
+    document.getElementById('watchAdBtn').innerText = t.watchVideo;
+    document.getElementById('cancelUnlock').innerText = t.cancel;
+    
+    document.getElementById('adStatus').innerText = "Ready to Watch";
+    document.getElementById('adProgress').style.width = "0%";
+    document.getElementById('watchAdBtn').disabled = false;
+    document.getElementById('watchAdBtn').style.opacity = "1";
+    
+    document.getElementById('unlockModal').style.display = 'flex';
 }
 
-function initSounds() {
-    const grid = document.getElementById('soundGrid');
-    grid.innerHTML = ''; audioElements = [];
-    soundsData.forEach((s) => {
-        const btn = document.createElement('button');
-        btn.className = 'sound-button';
-        btn.innerHTML = `
-            <div class="status-dot"></div>
-            <div class="mute-btn">🔊</div>
-            <span>${s.name[langOrder[langIdx]]}</span>
-        `;
-        grid.appendChild(btn);
-        
-        const dot = btn.querySelector('.status-dot');
-        const audio = new Audio(`https://raw.githubusercontent.com/bucketasmr/sounds/main/${s.file}`);
-        
-        audio.loop = true; 
-        audio.setAttribute('playsinline', '');
-        audio.preload = "auto";
+document.getElementById('cancelUnlock').onclick = () => {
+    document.getElementById('unlockModal').style.display = 'none';
+    pendingUnlockElement = null;
+};
 
-        audio.addEventListener('canplaythrough', () => { dot.classList.add('ready'); });
-        audio.addEventListener('waiting', () => { dot.classList.remove('ready'); });
-        audio.addEventListener('error', () => { dot.classList.remove('ready'); });
-
-        const state = { audio, btn, active: false, color: s.color, isMuted: false, fadeInt: null };
-        
-        btn.onclick = () => { if(timerActive) state.active ? fadeOut(state) : fadeIn(state); };
-        
-        btn.querySelector('.mute-btn').onclick = (e) => {
-            e.stopPropagation();
-            state.isMuted = !state.isMuted;
-            btn.querySelector('.mute-btn').classList.toggle('is-muted', state.isMuted);
-            state.audio.volume = state.isMuted ? 0 : (state.active ? 0.6 : 0);
-        };
-        audioElements.push(state);
-    });
-}
-
-function unlockAllAudio() {
-    audioElements.forEach(el => {
-        el.audio.play().then(() => {
-            if (!el.active) {
-                el.audio.pause();
-                el.audio.volume = 0;
-            }
-        }).catch(e => console.log("Unlock suppressed"));
-    });
-}
-
-function stopAllSoundsImmediately() {
-    audioElements.forEach(el => { 
-        el.active = false; 
-        if (el.fadeInt) clearInterval(el.fadeInt);
-        el.audio.pause(); 
-        el.audio.currentTime = 0; 
-        el.audio.volume = 0; 
-        if(el.btn) {
-            el.btn.classList.remove('active'); 
-            el.btn.style.backgroundColor = ""; 
-        }
-    });
-}
-
-function showHelp() { document.getElementById('welcomeModal').style.display = 'flex'; }
-function closeHelp() { document.getElementById('welcomeModal').style.display = 'none'; }
-function switchTab(event, tabId) {
-    document.querySelectorAll('.help-section').forEach(s => s.classList.remove('active'));
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById(tabId).classList.add('active');
-    event.currentTarget.classList.add('active');
-}
-
-function startTrial() {
-    if(timerActive || attempts >= MAX_ATTEMPTS) return;
-    if(cleanupInterval) { clearInterval(cleanupInterval); cleanupInterval = null; }
-    unlockAllAudio();
-    attempts++;
-    localStorage.setItem('trial_attempts', attempts);
-    document.getElementById('pass-screen').classList.add('hidden');
-    showHelp();
-    timerActive = true;
-    timeLeft = 120;
-    trialEndTime = Date.now() + (timeLeft * 1000);
-    if(globalInterval) clearInterval(globalInterval);
-    globalInterval = setInterval(() => {
-        const now = Date.now();
-        const remaining = Math.round((trialEndTime - now) / 1000);
-        if (remaining <= 0) { lockApp(); } else {
-            timeLeft = remaining;
-            const m = Math.floor(timeLeft / 60), s = timeLeft % 60;
-            document.getElementById('timerBtn').innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
+document.getElementById('watchAdBtn').onclick = () => {
+    if (!pendingUnlockElement) return;
+    
+    document.getElementById('watchAdBtn').disabled = true;
+    document.getElementById('watchAdBtn').style.opacity = "0.3";
+    
+    let timeLeft = 5; // Имитация 5 секунд просмотра видео рекламы
+    document.getElementById('adStatus').innerText = `Watching Ad... (${timeLeft}s)`;
+    document.getElementById('adProgress').style.width = "100%";
+    document.getElementById('adProgress').style.transition = "width 5s linear";
+    
+    const adCountdown = setInterval(() => {
+        timeLeft--;
+        if (timeLeft > 0) {
+            document.getElementById('adStatus').innerText = `Watching Ad... (${timeLeft}s)`;
+        } else {
+            clearInterval(adCountdown);
+            // Видео просмотрено! Разблокируем триггер
+            document.getElementById('adStatus').innerText = "Success Unlocked! 🎉";
+            setTimeout(() => {
+                if (pendingUnlockElement) {
+                    pendingUnlockElement.locked = false;
+                    pendingUnlockElement.btn.classList.remove('locked');
+                    const lockIcon = pendingUnlockElement.btn.querySelector('.lock-icon');
+                    if (lockIcon) lockIcon.remove();
+                    
+                    loadAudio(pendingUnlockElement); // Подгружаем аудио сразу
+                    
+                    document.getElementById('unlockModal').style.display = 'none';
+                    pendingUnlockElement = null;
+                    updateUI();
+                }
+            }, 800);
         }
     }, 1000);
-    updateUI();
-}
-
-function retryTrial() {
-    if(attempts >= MAX_ATTEMPTS) return;
-    location.reload();
-}
-
-function lockApp() {
-    timerActive = false; randomActive = false;
-    clearTimeout(randomTimer);
-    if(globalInterval) clearInterval(globalInterval);
-    
-    stopAllSoundsImmediately();
-    if(cleanupInterval) clearInterval(cleanupInterval);
-    cleanupInterval = setInterval(stopAllSoundsImmediately, 2000);
-
-    if(attempts >= MAX_ATTEMPTS) {
-        localStorage.setItem('trial_blocked', 'true');
-        document.getElementById('retry-btn').style.display = 'none';
-    } else {
-        document.getElementById('retry-btn').style.display = 'block';
-    }
-    document.getElementById('trial-expired-screen').style.display = 'flex';
-    updateUI();
-}
+};
 
 function fadeIn(el) {
-    if (!timerActive) return; 
-    clearInterval(el.fadeInt);
-    el.active = true; 
-    el.btn.classList.add('active'); 
-    el.btn.style.backgroundColor = el.color + "44";
-    el.audio.play().catch(()=>{});
-    
-    if(!el.isMuted) {
-        let v = el.audio.volume;
-        el.fadeInt = setInterval(() => {
-            if (v < 0.6) { v += 0.05; el.audio.volume = Math.min(v, 0.6); } 
-            else { el.audio.volume = 0.6; clearInterval(el.fadeInt); }
-        }, 50);
-    }
+  if(el.locked) return;
+  if(el.fadeInterval) clearInterval(el.fadeInterval);
+  el.active = true; el.btn.classList.add('active');
+  el.btn.style.backgroundColor = el.color + "44";
+  el.audio.volume = 0;
+  
+  el.audio.play().catch(e => {});
+
+  let v = 0;
+  el.fadeInterval = setInterval(() => {
+    if (v < 0.6 && !el.muted) { v += 0.05; el.audio.volume = Math.min(v, 0.6); } 
+    else { clearInterval(el.fadeInterval); el.fadeInterval = null; }
+  }, 50);
 }
 
 function fadeOut(el) {
-    clearInterval(el.fadeInt);
-    el.active = false; 
-    el.btn.classList.remove('active'); 
-    el.btn.style.backgroundColor = "";
-    let v = el.audio.volume; 
-    el.fadeInt = setInterval(() => {
-        if (v > 0.05) { v -= 0.05; el.audio.volume = Math.max(v, 0); } 
-        else { el.audio.pause(); el.audio.volume = 0; clearInterval(el.fadeInt); }
-    }, 50);
+  if(el.fadeInterval) clearInterval(el.fadeInterval);
+  el.active = false; el.btn.classList.remove('active');
+  el.btn.style.backgroundColor = "";
+  
+  let v = el.audio.volume;
+  el.fadeInterval = setInterval(() => {
+    if (v > 0.05) { v -= 0.05; el.audio.volume = v; } 
+    else { el.audio.volume = 0; el.audio.pause(); clearInterval(el.fadeInterval); el.fadeInterval = null; }
+  }, 50);
+}
+
+document.getElementById('randomBtn').onclick = () => {
+  randomActive = !randomActive;
+  if (randomActive) { 
+    // В автоматическом пуле участвуют только РАЗБЛОКИРОВАННЫЕ звуки
+    const favs = audioElements.filter(el => el.isFav && !el.locked);
+    if(favs.length > 0) favs.forEach(el => loadAudio(el));
+    runRandom(); 
+  } else { 
+    clearTimeout(nextCycleTimeout);
+    audioElements.forEach(el => {
+        el.active = false; 
+        el.btn.classList.remove('active'); 
+        el.btn.style.backgroundColor = "";
+        if(el.fadeInterval) clearInterval(el.fadeInterval); 
+        el.audio.pause();
+        el.audio.volume = 0;
+    });
+  }
+  updateUI();
+};
+
+function runRandom() {
+  if (!randomActive) return;
+
+  // Фильтруем пул: только то, что НЕ заблокировано рекламой
+  let pool = audioElements.filter(el => el.isFav && !el.muted && !el.locked);
+  if (pool.length === 0) {
+      pool = audioElements.filter(el => !el.muted && !el.locked);
+  }
+
+  const unloadedInPool = pool.filter(el => !el.loaded);
+  if (unloadedInPool.length > 0) {
+      unloadedInPool.forEach(el => loadAudio(el));
+      nextCycleTimeout = setTimeout(runRandom, 1500);
+      return;
+  }
+
+  const count = Math.floor(Math.random() * 2) + 1;
+  const toPlay = pool.sort(() => 0.5 - Math.random()).slice(0, count);
+  
+  audioElements.forEach(el => {
+    if (toPlay.includes(el)) { 
+        if(!el.active) fadeIn(el); 
+    } else { 
+        if(el.active) fadeOut(el); 
+    }
+  });
+
+  nextCycleTimeout = setTimeout(runRandom, currentSpeedValue * 1000);
 }
 
 function updateUI() {
-    const t = uiTL[langOrder[langIdx]];
-    document.getElementById('title').innerText = t.title;
-    document.getElementById('langBtn').innerText = t.code;
-    document.getElementById('randomBtn').innerText = randomActive ? t.pause : t.play;
-    document.getElementById('sleepBtn').innerText = `${t.sleep}: ${document.getElementById('soundGrid').classList.contains('hidden') ? 'ON' : 'OFF'}`;
-    document.getElementById('attemptIndicator').innerText = `${t.attempts} ${attempts} / ${MAX_ATTEMPTS}`;
-    document.getElementById('expired-title').innerText = t.expired;
-    document.getElementById('retry-btn').innerText = `${t.retry} (${attempts}/${MAX_ATTEMPTS})`;
-    
-    // ПЕРЕВОД ТАРИФОВ
-    document.getElementById('label-basic').innerText = t.basic;
-    document.getElementById('label-best').innerText = t.best;
-
-    document.getElementById('expired-desc').innerText = (attempts >= MAX_ATTEMPTS) ? t.lockDesc : "";
-    document.getElementById('tabTitleFeatures').innerText = t.tabFeatures;
-    document.getElementById('tabTitleGuide').innerText = t.tabGuide;
-    document.getElementById('featuresList').innerHTML = t.features.map(i => `<li>${i}</li>`).join('');
-    document.getElementById('guideList').innerHTML = t.guide.map(i => `<li>${i}</li>`).join('');
-    audioElements.forEach((el, i) => { 
-        const span = el.btn.querySelector('span');
-        if(span) span.innerText = soundsData[i].name[langOrder[langIdx]]; 
-    });
-    document.getElementById('spFast').innerText = t.speeds.fast;
-    document.getElementById('spMed').innerText = t.speeds.medium;
-    document.getElementById('spSlow').innerText = t.speeds.slow;
-    let sk = (speed === 8) ? 'fast' : (speed === 35) ? 'slow' : 'medium';
-    document.getElementById('speedTrigger').innerText = t.speeds[sk];
+  const t = uiTL[langOrder[langIdx]];
+  document.getElementById('title').innerText = t.title;
+  document.querySelectorAll('.lang-switcher-btn').forEach(btn => btn.innerText = t.code);
+  document.getElementById('randomBtn').innerText = randomActive ? t.pause : t.play;
+  document.getElementById('repairBtn').innerText = t.repair;
+  document.getElementById('sleepBtn').innerText = `${t.sleep}: ${sleepMode ? 'ON' : 'OFF'}`;
+  let speedKey = (currentSpeedValue === 22) ? 'fast' : (currentSpeedValue === 52) ? 'slow' : 'medium';
+  document.getElementById('speedTrigger').innerText = t.speeds[speedKey];
+  document.getElementById('spFast').innerText = t.speeds.fast;
+  document.getElementById('spMed').innerText = t.speeds.medium;
+  document.getElementById('spSlow').innerText = t.speeds.slow;
+  document.getElementById('tabTitleFeatures').innerText = t.tabFeatures;
+  document.getElementById('tabTitleGuide').innerText = t.tabGuide;
+  document.getElementById('featuresList').innerHTML = t.features.map(item => `<li>${item}</li>`).join('');
+  document.getElementById('guideList').innerHTML = t.guide.map(item => `<li>${item}</li>`).join('');
+  
+  audioElements.forEach((el, i) => {
+      const name = sounds[i].name[langOrder[langIdx]];
+      el.btn.querySelector('span').innerText = name;
+      favDropdown.querySelectorAll('label')[i].innerText = name;
+      
+      // Скрываем чекбокс в избранном, если элемент еще заблокирован рекламой
+      const checkInput = favDropdown.querySelectorAll('input')[i];
+      if (el.locked) {
+          checkInput.disabled = true;
+          checkInput.parentElement.style.opacity = "0.4";
+      } else {
+          checkInput.disabled = false;
+          checkInput.parentElement.style.opacity = "1";
+      }
+  });
 }
 
-function toggleRandom() {
-    if (!timerActive) return;
-    unlockAllAudio();
-    randomActive = !randomActive; 
-    clearTimeout(randomTimer);
-    if(randomActive) { runRandom(); } 
-    else { audioElements.forEach(el => { if(el.active) fadeOut(el); }); }
-    updateUI();
-}
-
-function runRandom() {
-    if(!randomActive || !timerActive) return;
-    let pool = audioElements.filter(el => !el.isMuted);
-    if(pool.length > 0) {
-        const shuffled = [...pool].sort(() => 0.5 - Math.random());
-        const count = Math.floor(Math.random() * 3) + 1;
-        const toPlay = shuffled.slice(0, count);
-        audioElements.forEach(el => {
-            if (toPlay.includes(el)) { if(!el.active) fadeIn(el); } 
-            else { if(el.active) fadeOut(el); }
-        });
+function updateConnections() {
+    if (!presenceRef) {
+        presenceRef = connectionsRef.push(true);
+        presenceRef.onDisconnect().remove();
     }
-    randomTimer = setTimeout(runRandom, speed * 1000);
+    const fetchCount = () => {
+        connectionsRef.once('value', snap => {
+            document.getElementById('online-count').innerText = snap.numChildren() || 1;
+        });
+    };
+    fetchCount();
+    if(liveInterval) clearInterval(liveInterval);
+    liveInterval = setInterval(fetchCount, 60000); 
 }
 
-function toggleSleep() {
-    document.getElementById('soundGrid').classList.toggle('hidden');
-    document.body.style.background = document.getElementById('soundGrid').classList.contains('hidden') ? "black" : "";
+function setSpeed(v, label) {
+    currentSpeedValue = v;
+    document.getElementById('speedDropdown').classList.remove('open');
     updateUI();
+    if(randomActive) { clearTimeout(nextCycleTimeout); runRandom(); }
 }
 
-function toggleDropdown() { document.getElementById('speedDropdown').classList.toggle('open'); }
-function setSpeed(v, key) { speed = v; toggleDropdown(); updateUI(); if(randomActive) { clearTimeout(randomTimer); runRandom(); } }
-function toggleLang() { langIdx = (langIdx + 1) % 4; updateUI(); }
+document.getElementById('speedTrigger').onclick = (e) => { e.stopPropagation(); favDropdown.classList.remove('open'); document.getElementById('speedDropdown').classList.toggle('open'); };
+document.getElementById('favBtn').onclick = (e) => { e.stopPropagation(); document.getElementById('speedDropdown').classList.remove('open'); favDropdown.classList.toggle('open'); };
+document.addEventListener('click', () => { document.getElementById('speedDropdown').classList.remove('open'); favDropdown.classList.remove('open'); });
+document.getElementById('repairBtn').onclick = () => location.reload();
+document.getElementById('closeWelcome').onclick = () => { document.getElementById('welcomeModal').style.display = 'none'; };
+document.querySelectorAll('.lang-switcher-btn').forEach(btn => { btn.onclick = (e) => { e.stopPropagation(); langIdx = (langIdx + 1) % 4; updateUI(); }; });
 
+document.getElementById('sleepBtn').onclick = () => {
+    sleepMode = !sleepMode;
+    document.body.style.background = sleepMode ? "#000" : "";
+    document.getElementById('stars').style.opacity = sleepMode ? "0" : "1";
+    document.getElementById('sleepBtn').classList.toggle('active', sleepMode);
+    document.getElementById('soundGrid').classList.toggle('hidden', sleepMode);
+    document.getElementById('bannerBlock').style.display = sleepMode ? "none" : "flex";
+    if (sleepMode) {
+      if(presenceRef) presenceRef.remove();
+      presenceRef = null;
+      if(liveInterval) clearInterval(liveInterval);
+      firebase.database().goOffline();
+      document.getElementById('online-count').innerText = "ECO";
+      steamParticles = [];
+    } else {
+      firebase.database().goOnline();
+      updateConnections();
+    }
+    updateUI();
+};
+
+// Инициализация Эффектов Canvas
 const canvas = document.getElementById('stars'), ctx = canvas.getContext('2d');
-function resize() { canvas.width = innerWidth; canvas.height = innerHeight; }
+const steamCanvas = document.getElementById('steamCanvas'), sCtx = steamCanvas.getContext('2d');
+
+function resize() { 
+  canvas.width = innerWidth; canvas.height = innerHeight; 
+  steamCanvas.width = innerWidth; steamCanvas.height = innerHeight;
+}
 window.onresize = resize; resize();
-const starsArr = Array.from({length: 60}, () => ({ x: Math.random() * innerWidth, y: Math.random() * innerHeight, r: Math.random() * 1.5, a: Math.random(), s: Math.random() * 0.01 }));
+
+const starsArr = Array.from({length: 70}, () => ({ x: Math.random() * innerWidth, y: Math.random() * innerHeight, r: Math.random() * 1.5, a: Math.random(), s: Math.random() * 0.01 }));
+
+function spawnSteam() {
+  if (sleepMode) return;
+  
+  audioElements.forEach(el => {
+    if (el.active && !el.locked) {
+      const rect = el.btn.getBoundingClientRect();
+      if (Math.random() < 0.15) { 
+        steamParticles.push({
+          x: rect.left + Math.random() * rect.width,
+          y: rect.top + rect.height * 0.7,
+          vx: (Math.random() - 0.5) * 0.4,
+          vy: -(Math.random() * 0.6 + 0.4),
+          size: Math.random() * 15 + 10,
+          alpha: Math.random() * 0.3 + 0.2,
+          growth: Math.random() * 0.1 + 0.05
+        });
+      }
+    }
+  });
+}
+
 function draw() {
+  if(!sleepMode) {
     ctx.clearRect(0,0,innerWidth,innerHeight);
     starsArr.forEach(s => {
       s.a += s.s; if(s.a > 1 || s.a < 0) s.s *= -1;
       ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
       ctx.fillStyle = `rgba(255,255,255,${Math.abs(s.a)})`; ctx.fill();
     });
-    requestAnimationFrame(draw);
+  } else { ctx.clearRect(0,0,innerWidth,innerHeight); }
+
+  sCtx.clearRect(0, 0, innerWidth, innerHeight);
+  if (!sleepMode && steamParticles.length > 0) {
+    spawnSteam();
+    
+    for (let i = steamParticles.length - 1; i >= 0; i--) {
+      let p = steamParticles[i];
+      p.x += p.vx; p.y += p.vy; p.size += p.growth; p.alpha -= 0.003;
+
+      if (p.alpha <= 0) {
+        steamParticles.splice(i, 1);
+        continue;
+      }
+
+      sCtx.beginPath();
+      let gradient = sCtx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size);
+      gradient.addColorStop(0, `rgba(138, 43, 226, ${p.alpha})`);
+      gradient.addColorStop(0.5, `rgba(138, 43, 226, ${p.alpha * 0.4})`);
+      gradient.addColorStop(1, 'rgba(138, 43, 226, 0)');
+      
+      sCtx.fillStyle = gradient;
+      sCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      sCtx.fill();
+    }
+  } else if (!sleepMode) {
+    spawnSteam();
+  }
+
+  requestAnimationFrame(draw);
 }
+
 draw();
-initSounds();
-checkAttempts(); 
+// Запуск приветственного окна
+document.getElementById('welcomeModal').style.display = 'flex';
 updateUI();
+
+function switchTab(event, tabId) {
+    document.querySelectorAll('.help-section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(tabId).classList.add('active');
+    event.currentTarget.classList.add('active');
+}
+function showHelp() { document.getElementById('welcomeModal').style.display = 'flex'; }
 </script>
 </body>
 </html>
