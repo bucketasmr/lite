@@ -6,6 +6,12 @@
 <meta name="darkreader-lock">
 <meta name="color-scheme" content="dark">
 <title>BUCKET ASMR Free</title>
+
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="manifest" href="site.webmanifest">
+
 <style>
   /* Основной интерфейс */
   body, html {
@@ -167,18 +173,19 @@
   .help-list li { margin-bottom: 12px; font-size: 13px; line-height: 1.4; color: #ddd; display: flex; align-items: flex-start; gap: 8px; }
   .help-list li b { color: #ffb400; }
   .help-list li span { color: #ffb400; }
-  .modal-btn { background:#ffb400; border:none; padding:14px; border-radius:15px; font-weight:bold; cursor:pointer; color:black; font-size: 15px; width: 100%; margin-top: 15px; }
+  .modal-btn { background:#ffb400; border:none; padding:14px; border-radius:15px; font-weight:bold; cursor:pointer; color:black; font-size: 15px; width: 100%; margin-top: 15px; text-transform: uppercase; text-align: center; text-decoration: none; display: block; box-sizing: border-box; }
 
-  /* Окно разблокировки рекламы */
+  /* Окно разблокировки (Реклама премиума вместо плеера) */
   #unlockModal .modal-content { text-align: center; }
-  .ad-video-sim {
-    width: 100%; height: 160px; background: #000; border-radius: 15px; margin: 15px 0;
+  .ad-patreon-promo {
+    width: 100%; padding: 20px; background: rgba(138, 43, 226, 0.1); border-radius: 20px; margin: 15px 0;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
-    border: 1px solid rgba(255,255,255,0.1); position: relative; overflow: hidden;
+    border: 1px solid rgba(138, 43, 226, 0.3); position: relative; overflow: hidden;
+    text-decoration: none; color: white; transition: background 0.3s; box-sizing: border-box;
   }
+  .ad-patreon-promo:hover { background: rgba(138, 43, 226, 0.18); }
   .ad-progress {
-    position: absolute; bottom: 0; left: 0; height: 4px; background: #8a2be2; width: 0%;
-    transition: width 1s linear;
+    position: absolute; bottom: 0; left: 0; height: 4px; background: #ffb400; width: 0%;
   }
 </style>
 </head>
@@ -191,7 +198,7 @@
 <div id="idleModal" class="modal">
   <div class="modal-content" style="text-align: center;">
     <h2 style="color: #ffb400; margin: 0 0 10px 0; font-size: 22px;" id="idleTitle">Start playing?</h2>
-    <p style="font-size: 14px; color: #ccc; margin-bottom: 20px;" id="idleDesc">Would you like to start the ASMR session?</p>
+    <p style="font-size: 14px; color: #ccc; margin-bottom: 20px;" id="idleDesc">You have been inactive for a while. Would you like to start the ASMR session?</p>
     <button class="modal-btn" id="idlePlayBtn" style="margin-top: 5px;">▶ PLAY</button>
     <button class="modal-btn" id="idleCloseBtn" style="background: rgba(255,255,255,0.1); color: white; margin-top: 10px; padding: 12px;">Close</button>
     <button class="modal-btn" id="idleDisableBtn" style="background: transparent; color: #666; border: 1px dashed rgba(255,255,255,0.2); margin-top: 10px; padding: 8px; font-size: 12px;">Don't show again</button>
@@ -201,16 +208,19 @@
 <div id="unlockModal" class="modal">
   <div class="modal-content">
     <h3 style="color: #ffb400; margin: 0 0 10px 0; font-size: 20px;" id="unlockTitle">Unlock Sound</h3>
-    <p style="font-size: 13px; color: #ccc; margin: 0;" id="unlockDesc">Watch a short video commercial to unlock this premium trigger!</p>
+    <p style="font-size: 13px; color: #ccc; margin: 0;" id="unlockDesc">Unlock this premium trigger or get the permanent Full App version!</p>
     
-    <div class="ad-video-sim" id="adBox">
-        <span style="font-size: 32px; margin-bottom: 5px;">🎬</span>
-        <div id="adStatus" style="font-size: 14px; font-weight: bold; color: #ffb400;">Ready to Watch</div>
+    <a href="https://www.patreon.com/bucket_asmr/posts/asmr-app-accept-160833268" target="_blank" class="ad-patreon-promo" id="adBox">
+        <span style="font-size: 36px; margin-bottom: 8px;">💎</span>
+        <div id="adStatus" style="font-size: 14px; font-weight: bold; color: white; line-height: 1.4; max-width: 280px;">
+           Get the <span>Full Version</span> on Patreon for just <span>$3.50</span>! Permanent Access to all sounds.
+        </div>
         <div class="ad-progress" id="adProgress"></div>
-    </div>
+    </a>
 
-    <button class="modal-btn" id="watchAdBtn" style="margin-top: 5px;">👀 WATCH VIDEO</button>
-    <button class="modal-btn" id="cancelUnlock" style="background: rgba(255,255,255,0.1); color: white; margin-top: 10px; padding: 10px;">Cancel</button>
+    <a href="https://www.patreon.com/bucket_asmr/posts/asmr-app-accept-160833268" target="_blank" class="modal-btn" id="buyFullBtn" style="background: #ffb400; color: black;">🛒 Buy Full Version</a>
+    <button class="modal-btn" id="unlockTriggerBtn" style="background: #8a2be2; color: white; margin-top: 10px;">🔓 Unlock Sound (10s)</button>
+    <button class="modal-btn" id="cancelUnlock" style="background: rgba(255,255,255,0.1); color: white; margin-top: 10px; padding: 12px;">Close</button>
   </div>
 </div>
 
@@ -274,7 +284,9 @@
     <div class="banner-icon">💎</div>
     <div class="banner-text-box">
       <div class="banner-badge" id="bannerBadge">Premium Code</div>
-      <div class="banner-main-text" id="bannerMainText">Get source code on Patreon for <span>$3.50</span>. Full App Access!</div>
+      <div class="banner-text-box">
+        <div class="banner-main-text" id="bannerMainText">Get source code on Patreon for <span>$3.50</span>. Full App Access!</div>
+      </div>
     </div>
   </div>
   <button class="banner-action-btn" id="bannerBtn">Get Access</button>
@@ -320,10 +332,10 @@ const sounds = [
 ];
 
 const uiTL = {
-  en: { code: "EN", title: "BUCKET ASMR Free", play: "Play", pause: "Pause", repair: "REPAIR", sleep: "Sleep", tabFeatures: "Functions", tabGuide: "Guide", features: ["<span>✦</span> <b>Free Version:</b> Support with ads.", "<span>✦</span> <b>Unlockable Content:</b> Unlock remaining 6 triggers by watching ads.", "<span>✦</span> <b>Stay Awake:</b> Screen won't turn off automatically.", "<span>✦</span> <b>Mixer:</b> Play multiple sounds at the same time."], guide: ["<b>1. Unlock:</b> Tap locked icons to watch a video and open the sound.", "<b>2. Manual:</b> Click unlocked icons to start/stop sounds.", "<b>3. Auto:</b> Press <b>PLAY</b> for random switching (only unlocked sounds)."], speeds: { slow: "Slow", medium: "Medium", fast: "Fast" }, unlockTitle: "Unlock Trigger", unlockDesc: "Watch a short video commercial to unlock this trigger!", watchVideo: "👀 WATCH VIDEO", cancel: "Cancel", idleTitle: "Start playing?", idleDesc: "Would you like to start the ASMR session?", idleDisable: "Don't show again", bannerBadge: "Premium Code", bannerText: "Get source code on Patreon for <span>$3.50</span>. Full App Access!", bannerBtn: "Get Access" },
-  pt: { code: "PT", title: "BALDE ASMR Grátis", play: "Tocar", pause: "Pausa", repair: "REPARAR", sleep: "Dormir", tabFeatures: "Funções", tabGuide: "Guia", features: ["<span>✦</span> <b>Versão Grátis:</b> Suporte com anúncios.", "<span>✦</span> <b>Conteúdo Desbloqueável:</b> Abra mais 6 sons assistindo vídeos.", "<span>✦</span> <b>Sempre Ativo:</b> A tela não apaga durante o uso.", "<span>✦</span> <b>Mixer:</b> Toque vários sons ao mesmo tempo."], guide: ["<b>1. Desbloquear:</b> Toque nos cadeados para assistir ao vídeo.", "<b>2. Manual:</b> Clique nos ícones liberados para iniciar/parar sons.", "<b>3. Auto:</b> Pressione <b>Tocar</b> para troca aleatória."], speeds: { slow: "Lento", medium: "Médio", fast: "Rápido" }, unlockTitle: "Desbloquear Som", unlockDesc: "Assista a um pequeno vídeo para liberar este som!", watchVideo: "👀 ASSISTIR VÍDEO", cancel: "Cancelar", idleTitle: "Começar a tocar?", idleDesc: "Você está inativo. Gostaria de iniciar a sessão de ASMR?", idleDisable: "Não mostrar novamente", bannerBadge: "Código Premium", bannerText: "Obtenha o código no Patreon por <span>$3.50</span>. Acesso total!", bannerBtn: "Obter Acesso" },
-  uk: { code: "UK", title: "ВІДРО АСМР Безкоштовно", play: "Грати", pause: "Пауза", repair: "ЛАГОДИТИ", sleep: "Сон", tabFeatures: "Функції", tabGuide: "Інструкція", features: ["<span>✦</span> <b>Безкоштовна версія:</b> Робота за рахунок реклами.", "<span>✦</span> <b>Контент за рекламу:</b> Відкривайте інші 6 звуків за перегляд відео.", "<span>✦</span> <b>Без Сну:</b> Екран не згасає автоматично.", "<span>✦</span> <b>Міксер:</b> Грайте кілька звуків одночасно."], guide: ["<b>1. Розблокування:</b> Натисніть на закритий звук, щоб подивитися відео.", "<b>2. Ручний:</b> Натискайте на відкриті плитки для міксу.", "<b>3. Auto:</b> Кнопка <b>ГРАТИ</b> запускає випадковий режим."], speeds: { slow: "Повільно", medium: "Середньо", fast: "Швидко" }, unlockTitle: "Відкрити звук", unlockDesc: "Подивіться коротке відео, щоб розблокувати цей тригер!", watchVideo: "👀 ДИВИТИСЬ ВІДЕО", cancel: "Скасувати", idleTitle: "Запустити програвання?", idleDesc: "Ви нічого не натискали. Бажаєте увімкнути випадковий режим АСМР?", idleDisable: "Приховати нагадування", bannerBadge: "Преміум Код", bannerText: "Отримай вихідний код на Patreon за <span>$3.50</span>. Повний доступ!", bannerBtn: "Отримати" },
-  ru: { code: "RU", title: "ВЕДРО АСМР Бесплатно", play: "Играть", pause: "Пауза", repair: "ЧИНИТЬ", sleep: "Сон", tabFeatures: "Функции", tabGuide: "Инструкция", features: ["<span>✦</span> <b>Бесплатная версия:</b> Работа за счет рекламы.", "<span>✦</span> <b>Контент за рекламу:</b> Открывайте остальные 6 звуков за просмотр видео.", "<span>✦</span> <b>Бодрость:</b> Экран не гаснет во время сеанса.", "<span>✦</span> <b>Микшер:</b> Запуск нескольких звуков одновременно."], guide: ["<b>1. Разблокировка:</b> Нажмите на закрытый звук, чтобы посмотреть видео.", "<b>2. Ручной:</b> Нажимайте на открытые плитки для микса звуков.", "<b>3. Авто:</b> Кнопка <b>ИГРАТЬ</b> включит случайный режим."], speeds: { slow: "Медленно", medium: "Средне", fast: "Быстро" }, unlockTitle: "Открыть звук", unlockDesc: "Посмотрите короткое видео, чтобы разблокировать этот trigger!", watchVideo: "👀 СМОТРЕТЬ ВИДЕО", cancel: "Отмена", idleTitle: "Запустить проигрывание?", idleDesc: "Вы ничего не нажимали. Хотите включить случайный режим АСМР?", idleDisable: "Скрыть напоминание", bannerBadge: "Премиум Код", bannerText: "Получи исходный код на Patreon за <span>$3.50</span>. Полный доступ к приложению!", bannerBtn: "Получить доступ" }
+  en: { code: "EN", title: "BUCKET ASMR Free", play: "Play", pause: "Pause", repair: "REPAIR", sleep: "Sleep", tabFeatures: "Functions", tabGuide: "Guide", features: ["<span>✦</span> <b>Free Version:</b> Support with ads.", "<span>✦</span> <b>Unlockable Content:</b> Unlock remaining 6 triggers by opening Patreon links.", "<span>✦</span> <b>Stay Awake:</b> Screen won't turn off automatically.", "<span>✦</span> <b>Mixer:</b> Play multiple sounds at the same time."], guide: ["<b>1. Unlock:</b> Tap locked icons to open Patreon link and wait 10s to open the sound.", "<b>2. Manual:</b> Click unlocked icons to start/stop sounds.", "<b>3. Auto:</b> Press <b>PLAY</b> for random switching (only unlocked sounds)."], speeds: { slow: "Slow", medium: "Medium", fast: "Fast" }, unlockTitle: "Unlock Trigger", unlockDesc: "Unlock this trigger or get permanent Premium access!", buyFull: "🛒 Buy Full Version", unlockBtn: "🔓 Unlock Sound (10s)", closeBtn: "Close", promoText: "Get the <span style='color:#ffb400;'>Full Version</span> on Patreon for just <span style='color:#ffb400;'>$3.50</span>! Permanent Access to all sounds.", idleTitle: "Start playing?", idleDesc: "You have been inactive for a while. Would you like to start the ASMR session?", idleDisable: "Don't show again", bannerBadge: "Premium Code", bannerText: "Get source code on Patreon for <span>$3.50</span>. Full App Access!", bannerBtn: "Get Access" },
+  pt: { code: "PT", title: "BALDE ASMR Grátis", play: "Tocar", pause: "Pausa", repair: "REPARAR", sleep: "Dormir", tabFeatures: "Funções", tabGuide: "Guia", features: ["<span>✦</span> <b>Versão Grátis:</b> Suporte com anúncios.", "<span>✦</span> <b>Conteúdo Desbloqueável:</b> Abra mais 6 sons acessando o Patreon.", "<span>✦</span> <b>Sempre Ativo:</b> A tela não apaga durante o uso.", "<span>✦</span> <b>Mixer:</b> Toque vários sons ao mesmo tempo."], guide: ["<b>1. Desbloquear:</b> Toque nos cadeados, veja a oferta do Patreon e aguarde 10s.", "<b>2. Manual:</b> Clique nos ícones liberados para iniciar/parar sons.", "<b>3. Auto:</b> Pressione <b>Tocar</b> para troca aleatória."], speeds: { slow: "Lento", medium: "Médio", fast: "Rápido" }, unlockTitle: "Desbloquear Som", unlockDesc: "Desbloqueie este som ou obtenha acesso Premium permanente!", buyFull: "🛒 Comprar Versão Completa", unlockBtn: "🔓 Desbloquear Som (10s)", closeBtn: "Fechar", promoText: "Obtenha a <span style='color:#ffb400;'>Versão Completa</span> no Patreon por apenas <span style='color:#ffb400;'>$3.50</span>! Acesso permanente a tudo.", idleTitle: "Começar a tocar?", idleDesc: "Você está inativo. Gostaria de iniciar a sessão de ASMR?", idleDisable: "Não mostrar novamente", bannerBadge: "Código Premium", bannerText: "Obtenha o código no Patreon por <span>$3.50</span>. Acesso total!", bannerBtn: "Obter Acesso" },
+  uk: { code: "UK", title: "ВІДРО АСМР Безкоштовно", play: "Грати", pause: "Пауза", repair: "ЛАГОДИТИ", sleep: "Сон", tabFeatures: "Функції", tabGuide: "Інструкція", features: ["<span>✦</span> <b>Безкоштовна версія:</b> Робота за рахунок реклами.", "<span>✦</span> <b>Контент за посилання:</b> Відкривайте інші 6 звуків, переходячи на Патреон.", "<span>✦</span> <b>Без Сну:</b> Екран не згасає автоматично.", "<span>✦</span> <b>Міксер:</b> Грайте кілька звуків одночасно."], guide: ["<b>1. Розблокування:</b> Натисніть на закритий звук, перейдіть на Patreon та зачекайте 10 сек.", "<b>2. Ручний:</b> Натискайте на відкриті плитки для міксу.", "<b>3. Auto:</b> Кнопка <b>ГРАТИ</b> запускає випадковий режим."], speeds: { slow: "Повільно", medium: "Середньо", fast: "Швидко" }, unlockTitle: "Відкрити звук", unlockDesc: "Розблокуйте цей тригер або придбайте повну версію додатка!", buyFull: "🛒 Купити повну версію", unlockBtn: "🔓 Розблокувати звук (10с)", closeBtn: "Закрити", promoText: "Отримай <span style='color:#ffb400;'>Повну Версію</span> на Patreon всього за <span style='color:#ffb400;'>$3.50</span>! Постійний доступ до всіх звуків.", idleTitle: "Запустити програвання?", idleDesc: "Ви нічого не натискали. Бажаєте увімкнути випадковий режим АСМР?", idleDisable: "Приховати нагадування", bannerBadge: "Преміум Код", bannerText: "Отримай вихідний код на Patreon за <span>$3.50</span>. Повний доступ!", bannerBtn: "Отримати" },
+  ru: { code: "RU", title: "ВЕДРО АСМР Бесплатно", play: "Играть", pause: "Пауза", repair: "ЧИНИТЬ", sleep: "Сон", tabFeatures: "Функции", tabGuide: "Инструкция", features: ["<span>✦</span> <b>Бесплатная версия:</b> Работа за счет рекламы.", "<span>✦</span> <b>Контент за переход:</b> Открывайте остальные 6 звуков, посещая Патреон.", "<span>✦</span> <b>Бодрость:</b> Экран не гаснет во время сеанса.", "<span>✦</span> <b>Микшер:</b> Запуск нескольких звуков одновременно."], guide: ["<b>1. Разблокировка:</b> Нажмите на закритый звук, перейдите на Patreon и подождите 10 сек.", "<b>2. Ручной:</b> Нажимайте на открытые плитки для микса звуков.", "<b>3. Авто:</b> Кнопка <b>ИГРАТЬ</b> включит случайный режим."], speeds: { slow: "Медленно", medium: "Средне", fast: "Быстро" }, unlockTitle: "Открыть звук", unlockDesc: "Разблокируйте этот триггер или приобретите полную версию приложения!", buyFull: "🛒 Купить полную версию", unlockBtn: "🔓 Разблокировать звук (10с)", closeBtn: "Закрыть", promoText: "Получи <span style='color:#ffb400;'>Полную Версию</span> на Patreon всего за <span style='color:#ffb400;'>$3.50</span>! Постоянный доступ ко всем звукам без ограничений.", idleTitle: "Запустити проигрывание?", idleDesc: "Вы ничего не нажимали. Хотите включить случайный режим АСМР?", idleDisable: "Скрыть напоминание", bannerBadge: "Премиум Код", bannerText: "Получи исходный код на Patreon за <span>$3.50</span>. Полный доступ к приложению!", bannerBtn: "Получить доступ" }
 };
 
 let audioElements = [], randomActive = false, sleepMode = false, langIdx = 0;
@@ -332,6 +344,7 @@ const langOrder = ['en', 'pt', 'uk', 'ru'];
 
 let steamParticles = [];
 let pendingUnlockElement = null;
+let adTimerInterval = null;
 
 let idleTimer = null;
 let isIdleSystemEnabled = true;
@@ -424,45 +437,53 @@ sounds.forEach((s, idx) => {
 });
 
 function openUnlockModal(el) {
+    if(adTimerInterval) clearInterval(adTimerInterval);
     pendingUnlockElement = el;
     const t = uiTL[langOrder[langIdx]];
     
     document.getElementById('unlockTitle').innerText = t.unlockTitle;
     document.getElementById('unlockDesc').innerText = t.unlockDesc;
-    document.getElementById('watchAdBtn').innerText = t.watchVideo;
-    document.getElementById('cancelUnlock').innerText = t.cancel;
+    document.getElementById('buyFullBtn').innerText = t.buyFull;
+    document.getElementById('unlockTriggerBtn').innerText = t.unlockBtn;
+    document.getElementById('cancelUnlock').innerText = t.closeBtn;
+    document.getElementById('adStatus').innerHTML = t.promoText;
     
-    document.getElementById('adStatus').innerText = "Ready to Watch";
     document.getElementById('adProgress').style.width = "0%";
-    document.getElementById('watchAdBtn').disabled = false;
-    document.getElementById('watchAdBtn').style.opacity = "1";
+    document.getElementById('adProgress').style.transition = "none";
+    document.getElementById('unlockTriggerBtn').disabled = false;
+    document.getElementById('unlockTriggerBtn').style.opacity = "1";
     
     document.getElementById('unlockModal').style.display = 'flex';
 }
 
 document.getElementById('cancelUnlock').onclick = () => {
+    if(adTimerInterval) clearInterval(adTimerInterval);
     document.getElementById('unlockModal').style.display = 'none';
     pendingUnlockElement = null;
+    resetIdleTimer();
 };
 
-document.getElementById('watchAdBtn').onclick = () => {
+document.getElementById('unlockTriggerBtn').onclick = () => {
     if (!pendingUnlockElement) return;
     
-    document.getElementById('watchAdBtn').disabled = true;
-    document.getElementById('watchAdBtn').style.opacity = "0.3";
+    // Переход на Патреон в новой вкладке
+    window.open("https://www.patreon.com/bucket_asmr/posts/asmr-app-accept-160833268", "_blank");
     
-    let timeLeft = 5;
-    document.getElementById('adStatus').innerText = `Watching Ad... (${timeLeft}s)`;
+    document.getElementById('unlockTriggerBtn').disabled = true;
+    document.getElementById('unlockTriggerBtn').style.opacity = "0.3";
+    
+    let timeLeft = 10;
+    document.getElementById('adStatus').innerText = `Unlocking sound... (${timeLeft}s)`;
     document.getElementById('adProgress').style.width = "100%";
-    document.getElementById('adProgress').style.transition = "width 5s linear";
+    document.getElementById('adProgress').style.transition = "width 10s linear";
     
-    const adCountdown = setInterval(() => {
+    adTimerInterval = setInterval(() => {
         timeLeft--;
         if (timeLeft > 0) {
-            document.getElementById('adStatus').innerText = `Watching Ad... (${timeLeft}s)`;
+            document.getElementById('adStatus').innerText = `Unlocking sound... (${timeLeft}s)`;
         } else {
-            clearInterval(adCountdown);
-            document.getElementById('adStatus').innerText = "Success Unlocked! 🎉";
+            clearInterval(adTimerInterval);
+            document.getElementById('adStatus').innerText = "Unlocked! 🎉";
             setTimeout(() => {
                 if (pendingUnlockElement) {
                     pendingUnlockElement.locked = false;
@@ -475,6 +496,7 @@ document.getElementById('watchAdBtn').onclick = () => {
                     document.getElementById('unlockModal').style.display = 'none';
                     pendingUnlockElement = null;
                     updateUI();
+                    resetIdleTimer();
                 }
             }, 800);
         }
@@ -589,6 +611,16 @@ function updateUI() {
   document.getElementById('idleDesc').innerText = t.idleDesc;
   document.getElementById('idleDisableBtn').innerText = t.idleDisable;
 
+  // Локализация окна разблокировки (если оно не активно в данный момент таймера)
+  if (!pendingUnlockElement || !document.getElementById('unlockTriggerBtn').disabled) {
+      document.getElementById('unlockTitle').innerText = t.unlockTitle;
+      document.getElementById('unlockDesc').innerText = t.unlockDesc;
+      document.getElementById('buyFullBtn').innerText = t.buyFull;
+      document.getElementById('unlockTriggerBtn').innerText = t.unlockBtn;
+      document.getElementById('cancelUnlock').innerText = t.closeBtn;
+      document.getElementById('adStatus').innerHTML = t.promoText;
+  }
+
   // Локализация текстов баннера Patreon
   document.getElementById('bannerBadge').innerText = t.bannerBadge;
   document.getElementById('bannerMainText').innerHTML = t.bannerText;
@@ -662,16 +694,16 @@ document.getElementById('sleepBtn').onclick = () => {
 
 // ================= СИСТЕМА ОБНАРУЖЕНИЯ БЕЗДЕЙСТВИЯ (IDLE TIMEOUT) =================
 function resetIdleTimer() {
-  if (!isIdleSystemEnabled || randomActive || sleepMode) {
+  if (!isIdleSystemEnabled || randomActive || sleepMode || document.getElementById('unlockModal').style.display === 'flex') {
     clearTimeout(idleTimer);
     return;
   }
   clearTimeout(idleTimer);
-  idleTimer = setTimeout(showIdleModal, 5000);
+  idleTimer = setTimeout(showIdleModal, 5000); // 5 секунд бездействия
 }
 
 function showIdleModal() {
-  if (document.getElementById('welcomeModal').style.display !== 'flex' && !randomActive) {
+  if (document.getElementById('welcomeModal').style.display !== 'flex' && !randomActive && document.getElementById('unlockModal').style.display !== 'flex') {
     document.getElementById('idleModal').style.display = 'flex';
   }
 }
