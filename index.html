@@ -46,6 +46,7 @@
   
   #randomBtn { background: rgba(138, 43, 226, 0.4); border: 1px solid rgba(138, 43, 226, 0.3); min-width: 80px; }
   #sleepBtn.active { background: #ffb400; border: 1px solid #ffb400; color: black; box-shadow: 0 0 15px rgba(255, 180, 0, 0.4); }
+  #linksBtnRed { background: rgba(226, 43, 43, 0.4); border: 1px solid rgba(226, 43, 43, 0.3); min-width: 80px; }
 
   .sound-grid { 
     display: grid; grid-template-columns: repeat(auto-fill, minmax(85px, 1fr)); 
@@ -187,6 +188,38 @@
   .ad-progress {
     position: absolute; bottom: 0; left: 0; height: 4px; background: #ffb400; width: 0%;
   }
+  
+  
+  /* Кнопка соцсетей (Ссылки) */
+  #linksBtn {
+    background: rgba(255, 180, 0, 0.15);
+    border: 1px solid rgba(255, 180, 0, 0.4);
+    box-shadow: 0 0 10px rgba(255, 180, 0, 0.15);
+  }
+  #linksBtn:hover {
+    background: rgba(255, 180, 0, 0.25);
+    border-color: #ffb400;
+  }
+  .links-dropdown button {
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .links-dropdown a {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    box-sizing: border-box;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 13px;
+    transition: background 0.2s;
+  }
+  .links-dropdown a:hover {
+    background: rgba(255, 255, 255, 0.08);
+  }
+  .links-dropdown a:last-child {
+    border-bottom: none;
+  }
 </style>
 </head>
 <body class="fancy-bg">
@@ -209,6 +242,8 @@
   <div class="modal-content">
     <h3 style="color: #ffb400; margin: 0 0 10px 0; font-size: 20px;" id="unlockTitle">Unlock Sound</h3>
     <p style="font-size: 13px; color: #ccc; margin: 0;" id="unlockDesc">Unlock this premium trigger or get the permanent Full App version!</p>
+
+
     
     <a href="https://www.patreon.com/bucket_asmr/posts/asmr-app-accept-160833268" target="_blank" class="ad-patreon-promo" id="adBox">
         <span style="font-size: 36px; margin-bottom: 8px;">💎</span>
@@ -256,8 +291,9 @@
   </div>
 
   <div class="controls" id="uiControls">
-    <button id="randomBtn">Play</button>
-    
+    <button id="randomBtn">Play ASMR</button>
+    <button id="linksBtnRed" onclick="window.open('https://www.youtube.com/@BucketASMR/videos', '_blank')">YouTube</button>
+	
     <div class="custom-select-container">
         <button id="favBtn" class="select-trigger" style="background: rgba(255, 180, 0, 0.2); border: 1px solid #ffb400; min-width: 60px;">⭐ Fav</button>
         <div class="fav-dropdown" id="favDropdown"></div>
@@ -273,6 +309,7 @@
             <button onclick="setSpeed(34, 'medium')" id="spMed">Medium</button>
             <button onclick="setSpeed(52, 'slow')" id="spSlow">Slow</button>
         </div>
+		
     </div>
   </div>
   
@@ -332,7 +369,7 @@ const sounds = [
 ];
 
 const uiTL = {
-  en: { code: "EN", title: "BUCKET ASMR Free", play: "Play", pause: "Pause", repair: "REPAIR", sleep: "Sleep", tabFeatures: "Functions", tabGuide: "Guide", features: ["<span>✦</span> <b>Free Version:</b> Support with ads.", "<span>✦</span> <b>Unlockable Content:</b> Unlock remaining 6 triggers by opening Patreon links.", "<span>✦</span> <b>Stay Awake:</b> Screen won't turn off automatically.", "<span>✦</span> <b>Mixer:</b> Play multiple sounds at the same time."], guide: ["<b>1. Unlock:</b> Tap locked icons to open Patreon link and wait 10s to open the sound.", "<b>2. Manual:</b> Click unlocked icons to start/stop sounds.", "<b>3. Auto:</b> Press <b>PLAY</b> for random switching (only unlocked sounds)."], speeds: { slow: "Slow", medium: "Medium", fast: "Fast" }, unlockTitle: "Unlock Trigger", unlockDesc: "Unlock this trigger or get permanent Premium access!", buyFull: "🛒 Buy Full Version", unlockBtn: "🔓 Unlock Sound (10s)", closeBtn: "Close", promoText: "Get the <span style='color:#ffb400;'>Full Version</span> on Patreon for just <span style='color:#ffb400;'>$3.50</span>! Permanent Access to all sounds.", idleTitle: "Start playing?", idleDesc: "You have been inactive for a while. Would you like to start the ASMR session?", idleDisable: "Don't show again", bannerBadge: "Premium Code", bannerText: "Get source code on Patreon for <span>$3.50</span>. Full App Access!", bannerBtn: "Get Access" },
+  en: { code: "EN", title: "BUCKET ASMR Free", play: "Play", pause: "Pause", repair: "REPAIR", sleep: "Sleep", tabFeatures: "Functions", tabGuide: "Guide", features: ["<span>✦</span> <b>Free Version:</b> Support with ads.", "<span>✦</span> <b>Unlockable Content:</b> Unlock remaining 6 triggers to press.", "<span>✦</span> <b>Stay Awake:</b> Screen won't turn off automatically.", "<span>✦</span> <b>Mixer:</b> Play multiple sounds at the same time."], guide: ["<b>1. Unlock:</b> Tap locked icons to open Patreon link and wait 10s to open the sound.", "<b>2. Manual:</b> Click unlocked icons to start/stop sounds.", "<b>3. Auto:</b> Press <b>PLAY</b> for random switching (only unlocked sounds)."], speeds: { slow: "Slow", medium: "Medium", fast: "Fast" }, unlockTitle: "Unlock Trigger", unlockDesc: "Unlock this trigger or get permanent Premium access!", buyFull: "🛒 Buy Full Version", unlockBtn: "🔓 Unlock Sound (10s)", closeBtn: "Close", promoText: "Get the <span style='color:#ffb400;'>Full Version</span> on Patreon for just <span style='color:#ffb400;'>$3.50</span>! Permanent Access to all sounds.", idleTitle: "Start playing?", idleDesc: "You have been inactive for a while. Would you like to start the ASMR session?", idleDisable: "Don't show again", bannerBadge: "Premium Code", bannerText: "Get source code on Patreon for <span>$3.50</span>. Full App Access!", bannerBtn: "Get Access" },
   pt: { code: "PT", title: "BALDE ASMR Grátis", play: "Tocar", pause: "Pausa", repair: "REPARAR", sleep: "Dormir", tabFeatures: "Funções", tabGuide: "Guia", features: ["<span>✦</span> <b>Versão Grátis:</b> Suporte com anúncios.", "<span>✦</span> <b>Conteúdo Desbloqueável:</b> Abra mais 6 sons acessando o Patreon.", "<span>✦</span> <b>Sempre Ativo:</b> A tela não apaga durante o uso.", "<span>✦</span> <b>Mixer:</b> Toque vários sons ao mesmo tempo."], guide: ["<b>1. Desbloquear:</b> Toque nos cadeados, veja a oferta do Patreon e aguarde 10s.", "<b>2. Manual:</b> Clique nos ícones liberados para iniciar/parar sons.", "<b>3. Auto:</b> Pressione <b>Tocar</b> para troca aleatória."], speeds: { slow: "Lento", medium: "Médio", fast: "Rápido" }, unlockTitle: "Desbloquear Som", unlockDesc: "Desbloqueie este som ou obtenha acesso Premium permanente!", buyFull: "🛒 Comprar Versão Completa", unlockBtn: "🔓 Desbloquear Som (10s)", closeBtn: "Fechar", promoText: "Obtenha a <span style='color:#ffb400;'>Versão Completa</span> no Patreon por apenas <span style='color:#ffb400;'>$3.50</span>! Acesso permanente a tudo.", idleTitle: "Começar a tocar?", idleDesc: "Você está inativo. Gostaria de iniciar a sessão de ASMR?", idleDisable: "Não mostrar novamente", bannerBadge: "Código Premium", bannerText: "Obtenha o código no Patreon por <span>$3.50</span>. Acesso total!", bannerBtn: "Obter Acesso" },
   uk: { code: "UK", title: "ВІДРО АСМР Безкоштовно", play: "Грати", pause: "Пауза", repair: "ЛАГОДИТИ", sleep: "Сон", tabFeatures: "Функції", tabGuide: "Інструкція", features: ["<span>✦</span> <b>Безкоштовна версія:</b> Робота за рахунок реклами.", "<span>✦</span> <b>Контент за посилання:</b> Відкривайте інші 6 звуків, переходячи на Патреон.", "<span>✦</span> <b>Без Сну:</b> Екран не згасає автоматично.", "<span>✦</span> <b>Міксер:</b> Грайте кілька звуків одночасно."], guide: ["<b>1. Розблокування:</b> Натисніть на закритий звук, перейдіть на Patreon та зачекайте 10 сек.", "<b>2. Ручний:</b> Натискайте на відкриті плитки для міксу.", "<b>3. Auto:</b> Кнопка <b>ГРАТИ</b> запускає випадковий режим."], speeds: { slow: "Повільно", medium: "Середньо", fast: "Швидко" }, unlockTitle: "Відкрити звук", unlockDesc: "Розблокуйте цей тригер або придбайте повну версію додатка!", buyFull: "🛒 Купити повну версію", unlockBtn: "🔓 Розблокувати звук (10с)", closeBtn: "Закрити", promoText: "Отримай <span style='color:#ffb400;'>Повну Версію</span> на Patreon всього за <span style='color:#ffb400;'>$3.50</span>! Постійний доступ до всіх звуків.", idleTitle: "Запустити програвання?", idleDesc: "Ви нічого не натискали. Бажаєте увімкнути випадковий режим АСМР?", idleDisable: "Приховати нагадування", bannerBadge: "Преміум Код", bannerText: "Отримай вихідний код на Patreon за <span>$3.50</span>. Повний доступ!", bannerBtn: "Отримати" },
   ru: { code: "RU", title: "ВЕДРО АСМР Бесплатно", play: "Играть", pause: "Пауза", repair: "ЧИНИТЬ", sleep: "Сон", tabFeatures: "Функции", tabGuide: "Инструкция", features: ["<span>✦</span> <b>Бесплатная версия:</b> Работа за счет рекламы.", "<span>✦</span> <b>Контент за переход:</b> Открывайте остальные 6 звуков, посещая Патреон.", "<span>✦</span> <b>Бодрость:</b> Экран не гаснет во время сеанса.", "<span>✦</span> <b>Микшер:</b> Запуск нескольких звуков одновременно."], guide: ["<b>1. Разблокировка:</b> Нажмите на закритый звук, перейдите на Patreon и подождите 10 сек.", "<b>2. Ручной:</b> Нажимайте на открытые плитки для микса звуков.", "<b>3. Авто:</b> Кнопка <b>ИГРАТЬ</b> включит случайный режим."], speeds: { slow: "Медленно", medium: "Средне", fast: "Быстро" }, unlockTitle: "Открыть звук", unlockDesc: "Разблокируйте этот триггер или приобретите полную версию приложения!", buyFull: "🛒 Купить полную версию", unlockBtn: "🔓 Разблокировать звук (10с)", closeBtn: "Закрыть", promoText: "Получи <span style='color:#ffb400;'>Полную Версию</span> на Patreon всего за <span style='color:#ffb400;'>$3.50</span>! Постоянный доступ ко всем звукам без ограничений.", idleTitle: "Запустити проигрывание?", idleDesc: "Вы ничего не нажимали. Хотите включить случайный режим АСМР?", idleDisable: "Скрыть напоминание", bannerBadge: "Премиум Код", bannerText: "Получи исходный код на Patreon за <span>$3.50</span>. Полный доступ к приложению!", bannerBtn: "Получить доступ" }
@@ -699,7 +736,7 @@ function resetIdleTimer() {
     return;
   }
   clearTimeout(idleTimer);
-  idleTimer = setTimeout(showIdleModal, 5000); // 5 секунд бездействия
+  idleTimer = setTimeout(showIdleModal, 8000); // 8 секунд бездействия
 }
 
 function showIdleModal() {
