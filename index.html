@@ -291,16 +291,18 @@
     <button id="langBtn" class="lang-btn-ui lang-switcher-btn">EN</button>
   </div>
 
-  <div class="controls" id="uiControls">
-    <button id="randomBtn">Play</button>
-<div class="custom-select-container" id="linksSelectContainer">
-      <div class="select-trigger" id="linksTrigger" style="background: rgba(226, 43, 43, 0.4); border: 1px solid rgba(226, 43, 43, 0.3); min-width: 80px; color: #fff; font-weight: bold;">Links</div>
-      <div class="custom-dropdown" id="linksOptions">
-        <button onclick="window.open('https://www.youtube.com/@BucketASMR', '_blank')">YouTube</button>
-        <button onclick="window.open('https://www.tiktok.com/@bucket_asmr', '_blank')">TikTok</button>
-        <button onclick="window.open('https://www.instagram.com/bucket_asmr', '_blank')">Instagram</button>
-      </div>
-    </div>
+<div class="controls" id="uiControls">
+  <button id="randomBtn">Play</button>
+  <div class="custom-select-container" id="linksSelectContainer">
+    <div class="select-trigger" id="linksTrigger" style="background: rgba(226, 43, 43, 0.4); border: 1px solid rgba(226, 43, 43, 0.3); min-width: 80px; color: #fff; font-weight: bold;">Links</div>
+    
+<div class="custom-dropdown" id="linksOptions">
+  <button onclick="trackLinkClick('youtube', 'https://www.youtube.com/@BucketASMR')">YouTube</button>
+  <button onclick="trackLinkClick('tiktok', 'https://www.tiktok.com/@bucket_asmr')">TikTok</button>
+  <button onclick="trackLinkClick('instagram', 'https://www.instagram.com/bucket_asmr')">Instagram</button>
+</div>
+    
+  </div>
 	
     <div class="custom-select-container">
         <button id="favBtn" class="select-trigger" style="background: rgba(255, 180, 0, 0.2); border: 1px solid #ffb400; min-width: 60px;">⭐ Fav</button>
@@ -350,6 +352,24 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const connectionsRef = firebase.database().ref('online_users');
 let presenceRef = null, liveInterval = null;
+
+
+
+// === ФУНКЦИЯ СЧЕТЧИКА КЛИКОВ ПО ССЫЛКАМ ===
+function trackLinkClick(platform, url) {
+  try {
+    const clickRef = firebase.database().ref('link_clicks/' + platform);
+    clickRef.transaction((currentValue) => {
+      return (currentValue || 0) + 1;
+    }, () => {
+      window.open(url, '_blank');
+    });
+  } catch (error) {
+    console.error("Firebase tracking error:", error);
+    window.open(url, '_blank');
+  }
+}
+// =========================================
 
 let wakeLock = null;
 async function requestWakeLock() {
