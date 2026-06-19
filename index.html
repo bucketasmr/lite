@@ -887,6 +887,28 @@ function switchTab(event, tabId) {
 }
 function showHelp() { document.getElementById('welcomeModal').style.display = 'flex'; clearTimeout(idleTimer); }
 
+// === ИСПРАВЛЕНИЕ БАГА ЗАМОРОЗКИ FIREBASE НА IOS (БЕЗ ПЕРЕЗАГРУЗКИ СТРАНИЦЫ) ===
+function handleIOSWakeUp() {
+    if (!document.hidden) {
+        try {
+            if (typeof firebase !== 'undefined' && firebase.database) {
+                // Мягко будим веб-сокеты в фоне, чтобы обновить онлайн
+                firebase.database().goOnline();
+            }
+        } catch (error) {
+            console.error("Ошибка восстановления базы данных:", error);
+        }
+    }
+}
+
+// Отслеживаем разблокировку экрана телефона или возврат во вкладку
+document.addEventListener('visibilitychange', handleIOSWakeUp);
+window.addEventListener('pageshow', (event) => {
+    if (event.persisted) {
+        handleIOSWakeUp();
+    }
+});
+
 // Логика для выпадающего списка соцсетей (Links)
 const linksTrigger = document.getElementById('linksTrigger');
 const linksOptions = document.getElementById('linksOptions');
