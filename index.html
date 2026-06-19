@@ -708,19 +708,29 @@ function updateUI() {
   });
 }
 
+// === ЕДИНЫЙ РЕАКТИВНЫЙ ЦЕНТР ОБНОВЛЕНИЯ ОНЛАЙНА ===
 function updateConnections() {
-    if (!presenceRef) {
-        presenceRef = connectionsRef.push(true);
-        presenceRef.onDisconnect().remove();
+    if (typeof firebase === 'undefined' || !firebase.database) return;
+    
+    // Очищаем старую локальную ссылку перед созданием новой сессии
+    if (presenceRef) {
+        try { presenceRef.remove(); } catch(e) {}
+        presenceRef = null;
     }
-    const fetchCount = () => {
-        connectionsRef.once('value', snap => {
-            document.getElementById('online-count').innerText = snap.numChildren() || 1;
-        });
-    };
-    fetchCount();
-    if(liveInterval) clearInterval(liveInterval);
-    liveInterval = setInterval(fetchCount, 60000); 
+
+    // Создаем чистую валидную запись true в базе
+    presenceRef = connectionsRef.push(true);
+    presenceRef.onDisconnect().remove();
+
+    // Снимаем прошлые слушатели, чтобы не дублировать их
+    connectionsRef.off();
+
+    // Живой слушатель: как только сокет проснется — цифра сразу обновится сама
+    connectionsRef.on('value', (snap) => {
+        const count = snap.numChildren() || 1;
+        document.getElementById('online-count').innerText = count;
+        console.log("[Firebase] Живой онлайн обновлен:", count);
+    });
 }
 
 function setSpeed(v, label) {
@@ -887,26 +897,76 @@ function switchTab(event, tabId) {
 }
 function showHelp() { document.getElementById('welcomeModal').style.display = 'flex'; clearTimeout(idleTimer); }
 
-// === ИСПРАВЛЕНИЕ БАГА ЗАМОРОЗКИ FIREBASE НА IOS (БЕЗ ПЕРЕЗАГРУЗКИ СТРАНИЦЫ) ===
-function handleIOSWakeUp() {
-    if (!document.hidden) {
-        try {
-            if (typeof firebase !== 'undefined' && firebase.database) {
-                // Мягко будим веб-сокеты в фоне, чтобы обновить онлайн
-                firebase.database().goOnline();
-            }
-        } catch (error) {
-            console.error("Ошибка восстановления базы данных:", error);
-        }
+// === ЛОГИКА ЭКРАНА "CONTINUE" ПРИ РАЗБЛОКИРОВКЕ ДЛЯ IOS ===
+// 1. Создаем полупрозрачный экран блокировки (изначально скрыт)
+const wakeUpOverlay = document.createElement('div');
+wakeUpOverlay.style.cssText = `
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(5, 5, 5, 0.85); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    z-index: 100000; display: none; flex-direction: column; align-items: center; justify-content: center;
+    transition: opacity 0.3s ease; opacity: 0;
+`;
+
+// 2. Создаем неоновую кнопку Continue
+const continueBtn = document.createElement('button');
+continueBtn.innerText = "Continue";
+continueBtn.style.cssText = `
+    padding: 14px 40px; font-size: 18px; font-weight: 600; color: white;
+    background: linear-gradient(135deg, #8a2be2 0%, #4a00e0 100%);
+    border: none; border-radius: 30px; cursor: pointer; box-shadow: 0 4px 15px rgba(138, 43, 226, 0.4);
+    transition: transform 0.2s ease, box-shadow 0.2s ease; -webkit-tap-highlight-color: transparent;
+`;
+
+wakeUpOverlay.appendChild(continueBtn);
+document.body.appendChild(wakeUpOverlay);
+
+// Функция показа экрана Continue только на iOS устройствах
+function showWakeUpScreen() {
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+                  (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    
+    if (isIOS) {
+        wakeUpOverlay.style.display = 'flex';
+        setTimeout(() => { wakeUpOverlay.style.opacity = '1'; }, 10);
     }
 }
 
-// Отслеживаем разблокировку экрана телефона или возврат во вкладку
-document.addEventListener('visibilitychange', handleIOSWakeUp);
-window.addEventListener('pageshow', (event) => {
-    if (event.persisted) {
-        handleIOSWakeUp();
+// Клик по кнопке Continue: Пробиваем заморозку сети iOS 18
+function handleContinueClick() {
+    try {
+        if (typeof firebase !== 'undefined' && firebase.database) {
+            console.log("Пробиваем заморозку iOS 18...");
+            
+            // 1. Жестко закрываем зависший сокет Сафари
+            firebase.database().goOffline();
+            
+            // 2. Через 300мс поднимаем сеть заново и вешаем реактивный слушатель
+            setTimeout(() => {
+                firebase.database().goOnline();
+                updateConnections();
+                console.log("Сеть Firebase успешно перезапущена!");
+            }, 300);
+        }
+    } catch (e) {
+        console.error("Ошибка принудительного обновления сессии:", e);
     }
+    
+    // Плавно убираем экран
+    wakeUpOverlay.style.opacity = '0';
+    setTimeout(() => { wakeUpOverlay.style.display = 'none'; }, 300);
+}
+
+// Слушатели событий экрана разблокировки
+continueBtn.addEventListener('click', handleContinueClick);
+continueBtn.addEventListener('touchstart', () => { continueBtn.style.transform = 'scale(0.95)'; });
+continueBtn.addEventListener('touchend', () => { continueBtn.style.transform = 'scale(1)'; });
+
+// Отслеживаем разблокировку экрана телефона или возврат во вкладку
+document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) showWakeUpScreen();
+});
+window.addEventListener('pageshow', (event) => {
+    if (event.persisted) showWakeUpScreen();
 });
 
 // Логика для выпадающего списка соцсетей (Links)
