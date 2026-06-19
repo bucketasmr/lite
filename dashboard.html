@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASMR Premium Dashboard</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent-viewers: #38bdf8;
+            --accent-clicks: #f43f5e;
+            --accent-sub: #10b981;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-image: radial-gradient(circle at top right, rgba(56, 189, 248, 0.1), transparent 40%),
+                              radial-gradient(circle at bottom left, rgba(244, 63, 94, 0.1), transparent 40%);
+        }
+
+        .dashboard {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 2.5rem;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 2rem;
+            letter-spacing: -0.5px;
+            background: linear-gradient(to right, #fff, var(--text-muted));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+        }
+
+        .card.viewers:hover { box-shadow: 0 8px 20px rgba(56, 189, 248, 0.15); }
+        .card.clicks:hover { box-shadow: 0 8px 20px rgba(244, 63, 94, 0.15); }
+
+        .card-label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .card-value {
+            font-size: 3rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .viewers .card-value { color: var(--accent-viewers); }
+        .clicks .card-value { color: var(--accent-clicks); }
+
+        /* Стили для детальной статистики кликов */
+        .clicks-details {
+            width: 100%;
+            margin-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 0.75rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .details-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .details-row span:last-child {
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        .status {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 2rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .indicator {
+            width: 8px;
+            height: 8px;
+            background-color: #10b981;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard">
+        <h1>ASMR Premium Live Status</h1>
+        
+        <div class="stats-grid">
+            <div class="card viewers">
+                <span class="card-label">Зрители онлайн</span>
+                <span class="card-value" id="viewers-count">0</span>
+            </div>
+            
+            <div class="card clicks">
+                <span class="card-label">Всего кликов</span>
+                <span class="card-value" id="clicks-count">0</span>
+                
+                <div class="clicks-details" id="clicks-platforms">
+                    </div>
+            </div>
+        </div>
+
+        <div class="status">
+            <div class="indicator"></div>
+            <span>Синхронизация с Realtime Database</span>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+        // КОНФИГУРАЦИЯ FIREBASE
+        // Обязательно вставьте ваш реальный apiKey, чтобы авторизоваться в базе!
+        const firebaseConfig = {
+            apiKey: "1:977463565728:web:a35a91ce071d1f0d2a98c5", 
+            authDomain: "bucket-asmr-premium.firebaseapp.com",
+            databaseURL: "https://bucket-asmr-premium-default-rtdb.firebaseio.com",
+            projectId: "bucket-asmr-premium",
+            storageBucket: "bucket-asmr-premium.appspot.com"
+        };
+
+        // Инициализируем приложение
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // Получаем элементы из HTML
+        const viewersElement = document.getElementById('viewers-count');
+        const clicksElement = document.getElementById('clicks-count');
+        const platformsContainer = document.getElementById('clicks-platforms');
+
+        // 1. СЛУШАЕМ ЗРИТЕЛЕЙ (online_users)
+        // Так как ".read": true стоит на самом узле "online_users", мы можем его прочитать
+        const onlineRef = ref(database, 'online_users');
+        onValue(onlineRef, (snapshot) => {
+            if (snapshot.exists()) {
+                // Считаем количество ключей внутри online_users
+                const totalOnline = Object.keys(snapshot.val()).length;
+                viewersElement.textContent = totalOnline;
+            } else {
+                viewersElement.textContent = 0;
+            }
+        }, (error) => {
+            console.error("Ошибка чтения online_users:", error);
+        });
+
+        // 2. СЛУШАЕМ КЛИКИ (link_clicks)
+        // Ваши правила разрешают ".read": true на уровне "link_clicks"
+        const clicksRef = ref(database, 'link_clicks');
+        onValue(clicksRef, (snapshot) => {
+            if (snapshot.exists()) {
+                const platformsData = snapshot.val();
+                let totalClicks = 0;
+                let htmlDetails = '';
+
+                // Проходимся по всем платформам (instagram, youtube и т.д.)
+                for (const platform in platformsData) {
+                    const clicks = platformsData[platform];
+                    if (typeof clicks === 'number') {
+                        totalClicks += clicks;
+                        
+                        // Формируем строчку для каждой платформы (первая буква заглавная)
+                        const platformName = platform.charAt(0).toUpperCase() + platform.slice(1);
+                        htmlDetails += `
+                            <div class="details-row">
+                                <span>${platformName}:</span>
+                                <span>${clicks}</span>
+                            </div>
+                        `;
+                    }
+                }
+
+                // Выводим общее количество и обновляем список платформ
+                clicksElement.textContent = totalClicks;
+                platformsContainer.innerHTML = htmlDetails;
+            } else {
+                clicksElement.textContent = 0;
+                platformsContainer.innerHTML = '';
+            }
+        }, (error) => {
+            console.error("Ошибка чтения link_clicks:", error);
+        });
+    </script>
+</body>
+</html>
