@@ -355,21 +355,22 @@ let presenceRef = null, liveInterval = null;
 
 
 
-// === ФУНКЦИЯ СЧЕТЧИКА КЛИКОВ ПО ССЫЛКАМ ===
+// === НАДЁЖНАЯ ФУНКЦИЯ СЧЕТЧИКА КЛИКОВ ДЛЯ IOS / IPHONE ===
 function trackLinkClick(platform, url) {
+  // 1. Сразу открываем ссылку (синхронно), чтобы iOS не заблокировала окно
+  const newWindow = window.open(url, '_blank');
+
   try {
     const clickRef = firebase.database().ref('link_clicks/' + platform);
+    // 2. В фоне отправляем транзакцию в базу данных
     clickRef.transaction((currentValue) => {
       return (currentValue || 0) + 1;
-    }, () => {
-      window.open(url, '_blank');
     });
   } catch (error) {
     console.error("Firebase tracking error:", error);
-    window.open(url, '_blank');
   }
 }
-// =========================================
+// =========================================================
 
 let wakeLock = null;
 async function requestWakeLock() {
