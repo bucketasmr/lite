@@ -144,10 +144,15 @@
     <div class="dashboard">
         <h1>ASMR Premium Live Status</h1>
         
-        <div class="stats-grid">
+<div class="stats-grid">
             <div class="card viewers">
                 <span class="card-label">Зрители онлайн</span>
                 <span class="card-value" id="viewers-count">0</span>
+            </div>
+            
+            <div class="card" style="border-left: 4px solid var(--accent-sub, #10b981); display: flex; flex-direction: column;">
+                <span class="card-label">Всего просмотров</span>
+                <span class="card-value" id="views-count" style="color: var(--accent-sub, #10b981);">0</span>
             </div>
             
             <div class="card clicks">
@@ -155,7 +160,7 @@
                 <span class="card-value" id="clicks-count">0</span>
                 
                 <div class="clicks-details" id="clicks-platforms">
-                    </div>
+                </div>
             </div>
         </div>
 
@@ -183,17 +188,16 @@
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
 
-        // Получаем элементы из HTML
+       // Получаем элементы из HTML
         const viewersElement = document.getElementById('viewers-count');
         const clicksElement = document.getElementById('clicks-count');
         const platformsContainer = document.getElementById('clicks-platforms');
+        const viewsElement = document.getElementById('views-count'); // <--- 1. ДОБАВИЛИ ПЕРЕМЕННУЮ ДЛЯ ДАШБОРДА
 
         // 1. СЛУШАЕМ ЗРИТЕЛЕЙ (online_users)
-        // Так как ".read": true стоит на самом узле "online_users", мы можем его прочитать
         const onlineRef = ref(database, 'online_users');
         onValue(onlineRef, (snapshot) => {
             if (snapshot.exists()) {
-                // Считаем количество ключей внутри online_users
                 const totalOnline = Object.keys(snapshot.val()).length;
                 viewersElement.textContent = totalOnline;
             } else {
@@ -203,8 +207,19 @@
             console.error("Ошибка чтения online_users:", error);
         });
 
-        // 2. СЛУШАЕМ КЛИКИ (link_clicks)
-        // Ваши правила разрешают ".read": true на уровне "link_clicks"
+        // 2. СЛУШАЕМ ПРОСМОТРЫ (page_views) <--- 2. ДОБАВИЛИ ЖИВОЙ СЛУШАТЕЛЬ ПРОСМОТРОВ
+        const viewsRef = ref(database, 'page_views');
+        onValue(viewsRef, (snapshot) => {
+            if (snapshot.exists()) {
+                viewsElement.textContent = snapshot.val();
+            } else {
+                viewsElement.textContent = 0;
+            }
+        }, (error) => {
+            console.error("Ошибка чтения page_views:", error);
+        });
+
+        // 3. СЛУШАЕМ КЛИКИ (link_clicks)
         const clicksRef = ref(database, 'link_clicks');
         onValue(clicksRef, (snapshot) => {
             if (snapshot.exists()) {
@@ -212,13 +227,11 @@
                 let totalClicks = 0;
                 let htmlDetails = '';
 
-                // Проходимся по всем платформам (instagram, youtube и т.д.)
                 for (const platform in platformsData) {
                     const clicks = platformsData[platform];
                     if (typeof clicks === 'number') {
                         totalClicks += clicks;
                         
-                        // Формируем строчку для каждой платформы (первая буква заглавная)
                         const platformName = platform.charAt(0).toUpperCase() + platform.slice(1);
                         htmlDetails += `
                             <div class="details-row">
@@ -229,7 +242,6 @@
                     }
                 }
 
-                // Выводим общее количество и обновляем список платформ
                 clicksElement.textContent = totalClicks;
                 platformsContainer.innerHTML = htmlDetails;
             } else {
