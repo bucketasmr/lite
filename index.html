@@ -349,10 +349,18 @@ const firebaseConfig = {
   projectId: "bucket-asmr-premium",
   databaseURL: "https://bucket-asmr-premium-default-rtdb.firebaseio.com"
 };
-firebase.initializeApp(firebaseConfig);
-const connectionsRef = firebase.database().ref('online_users');
-let presenceRef = null, liveInterval = null;
 
+// === ИНИЦИАЛИЗАЦИЯ FIREBASE (КРИТИЧЕСКИ ВАЖНО, НЕ УДАЛЯТЬ) ===
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
+
+// Настройка путей в базе данных
+const database = firebase.database();
+const connectionsRef = database.ref('online_users'); // Путь для подсчета онлайна
+const viewsRef = database.ref('page_views');         // Путь для подсчета общих просмотров
+let presenceRef = null;
+let liveInterval = null;
 
 
 // === НАДЁЖНАЯ ФУНКЦИЯ СЧЕТЧИКА КЛИКОВ ДЛЯ IOS / IPHONE ===
@@ -708,7 +716,7 @@ function updateUI() {
   });
 }
 
-// === ЕДИНЫЙ РЕАКТИВНЫЙ ЦЕНТР ОБНОВЛЕНИЯ ОНЛАЙНА ===
+// === ЕДИНЫЙ РЕАКТИВНЫЙ ЦЕНТР ОБНОВЛЕНИЯ ОНЛАЙНА И ПРОСМОТРОВ ===
 function updateConnections() {
     if (typeof firebase === 'undefined' || !firebase.database) return;
     
@@ -731,8 +739,17 @@ function updateConnections() {
         document.getElementById('online-count').innerText = count;
         console.log("[Firebase] Живой онлайн обновлен:", count);
     });
-}
 
+    // === ФИКС ПРОБЛЕМЫ: ДОБАВЛЯЕМ ОТПРАВКУ ПРОСМОТРОВ ===
+    if (!sessionStorage.getItem('page_view_counted')) {
+        viewsRef.set(firebase.database.ServerValue.increment(1))
+            .then(() => {
+                sessionStorage.setItem('page_view_counted', 'true');
+                console.log("[Firebase] Просмотр успешно засчитан!");
+            })
+            .catch(err => console.error("Ошибка обновления счётчика просмотров:", err));
+    }
+}
 function setSpeed(v, label) {
     currentSpeedValue = v;
     document.getElementById('speedDropdown').classList.remove('open');
