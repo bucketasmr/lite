@@ -33,7 +33,7 @@
     background: rgba(255, 50, 50, 0.15);
     border: 1px solid rgba(255, 50, 50, 0.4);
     padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: bold; color: #ff8080;
-	display: none !important; // Счетчик
+	display: none !important; 
     display: flex; align-items: center; gap: 5px; text-transform: uppercase;
   }
   .live-dot { width: 6px; height: 6px; background: #ff3030; border-radius: 50%; animation: blink 1.5s infinite; }
@@ -371,8 +371,26 @@ let presenceRef = null;
 let liveInterval = null;
 
 
+// === УНИВЕРСАЛЬНАЯ ФУНКЦИЯ ЛОГИРОВАНИЯ НАЖАТИЙ КНОПОК ===
+function logButtonClick(buttonId) {
+  try {
+    if (typeof firebase !== 'undefined' && firebase.database) {
+      const btnRef = firebase.database().ref('button_clicks/' + buttonId);
+      btnRef.transaction((currentValue) => {
+        return (currentValue || 0) + 1;
+      });
+    }
+  } catch (error) {
+    console.error("Firebase tracking error:", error);
+  }
+}
+
+
 // === НАДЁЖНАЯ ФУНКЦИЯ СЧЕТЧИКА КЛИКОВ ДЛЯ IOS / IPHONE ===
 function trackLinkClick(platform, url) {
+  // Записываем детальный клик по ссылке соцсети в button_clicks
+  logButtonClick('link_social_' + platform);
+
   // 1. Сразу открываем ссылку (синхронно), чтобы iOS не заблокировала окно
   const newWindow = window.open(url, '_blank');
 
@@ -417,7 +435,7 @@ const uiTL = {
   en: { code: "EN", title: "BUCKET ASMR", play: "Play", pause: "Pause", repair: "REPAIR", sleep: "Sleep", tabFeatures: "Functions", tabGuide: "Guide", features: ["<span>✦</span> <b>Free Version:</b> Support with ads.", "<span>✦</span> <b>Unlockable Content:</b> Unlock remaining 6 triggers to press.", "<span>✦</span> <b>Stay Awake:</b> Screen won't turn off automatically.", "<span>✦</span> <b>Mixer:</b> Play multiple sounds at the same time." , "<span>✦</span> <b>Not Work?:</b> Turn off Silent Mode."], guide: ["<b>1. Unlock:</b> Tap locked icons to open Patreon link and wait 10s to open the sound.", "<b>2. Manual:</b> Click unlocked icons to start/stop sounds.", "<b>3. Auto:</b> Press <b>PLAY</b> for random switching (only unlocked sounds)."], speeds: { slow: "Slow", medium: "Medium", fast: "Fast" }, unlockTitle: "Unlock Trigger", unlockDesc: "Unlock this trigger or get permanent Premium access!", buyFull: "🛒 Buy Full Version", unlockBtn: "🔓 Unlock Sound", closeBtn: "Close", promoText: "Get the <span style='color:#ffb400;'>Full Version</span> on Patreon for just <span style='color:#ffb400;'>$3.50</span>! Permanent Access to all sounds.", idleTitle: "Start playing?", idleDesc: "Would you like to start the ASMR session?", idleDisable: "Don't show again", bannerBadge: "Premium Code", bannerText: "Get source code on Patreon for <span>$3.50</span>. Full App Access!", bannerBtn: "Get Access" },
   pt: { code: "PT", title: "BALDE ASMR", play: "Tocar", pause: "Pausa", repair: "REPARAR", sleep: "Dormir", tabFeatures: "Funções", tabGuide: "Guia", features: ["<span>✦</span> <b>Versão Grátis:</b> Suporte com anúncios.", "<span>✦</span> <b>Conteúdo Desbloqueável:</b> Abra mais 6 sons acessando o Patreon.", "<span>✦</span> <b>Sempre Ativo:</b> A tela não apaga durante o uso.", "<span>✦</span> <b>Mixer:</b> Toque vários sons ao mesmo tempo.", "<span>✦</span> <b>Não funcionou?:</b> Desative o modo silencioso."], guide: ["<b>1. Desbloquear:</b> Toque nos cadeados, veja a oferta do Patreon e aguarde 10s.", "<b>2. Manual:</b> Clique nos ícones liberados para iniciar/parar sons.", "<b>3. Auto:</b> Pressione <b>Tocar</b> para troca aleatória."], speeds: { slow: "Lento", medium: "Médio", fast: "Rápido" }, unlockTitle: "Desbloquear Som", unlockDesc: "Desbloqueie este som ou obtenha acesso Premium permanente!", buyFull: "🛒 Comprar Versão Completa", unlockBtn: "🔓 Desbloquear Som", closeBtn: "Fechar", promoText: "Obtenha a <span style='color:#ffb400;'>Versão Completa</span> no Patreon por apenas <span style='color:#ffb400;'>$3.50</span>! Acesso permanente a tudo.", idleTitle: "Começar a tocar?", idleDesc: "Você está inativo. Gostaria de iniciar a sessão de ASMR?", idleDisable: "Não mostrar novamente", bannerBadge: "Código Premium", bannerText: "Obtenha o código no Patreon por <span>$3.50</span>. Acesso total!", bannerBtn: "Obter Acesso" },
   uk: { code: "UK", title: "ВІДРО АСМР", play: "Грати", pause: "Пауза", repair: "ЛАГОДИТИ", sleep: "Сон", tabFeatures: "Функції", tabGuide: "Інструкція", features: ["<span>✦</span> <b>Безкоштовна версія:</b> Робота за рахунок реклами.", "<span>✦</span> <b>Контент за посилання:</b> Відкривайте інші 6 звуків, переходячи на Патреон.", "<span>✦</span> <b>Без Сну:</b> Екран не згасає автоматично.", "<span>✦</span> <b>Міксер:</b> Грайте кілька звуків одночасно.", "<span>✦</span> <b>Не працює?:</b> Вимкніть беззвучний режим."], guide: ["<b>1. Розблокування:</b> Натисніть на закритий звук, перейдіть на Patreon та зачекайте 10 сек.", "<b>2. Ручний:</b> Натискайте на відкриті плитки для міксу.", "<b>3. Auto:</b> Кнопка <b>ГРАТИ</b> запускає випадковий режим."], speeds: { slow: "Повільно", medium: "Середньо", fast: "Швидко" }, unlockTitle: "Відкрити звук", unlockDesc: "Розблокуйте цей тригер або придбайте повну версію додатка!", buyFull: "🛒 Купити повну версію", unlockBtn: "🔓 Розблокувати звук", closeBtn: "Закрити", promoText: "Отримай <span style='color:#ffb400;'>Повну Версію</span> на Patreon всього за <span style='color:#ffb400;'>$3.50</span>! Постійний доступ до всіх звуків.", idleTitle: "Запустити програвання?", idleDesc: "Ви нічого не натискали. Бажаєте увімкнути випадковий режим АСМР?", idleDisable: "Приховати нагадування", bannerBadge: "Преміум Код", bannerText: "Отримай вихідний код на Patreon за <span>$3.50</span>. Повний доступ!", bannerBtn: "Отримати" },
-  ru: { code: "RU", title: "ВЕДРО АСМР", play: "Играть", pause: "Пауза", repair: "ЧИНИТЬ", sleep: "Сон", tabFeatures: "Функции", tabGuide: "Инструкция", features: ["<span>✦</span> <b>Бесплатная версия:</b> Работа за счет рекламы.", "<span>✦</span> <b>Контент за переход:</b> Открывайте остальные 6 звуков, посещая Патреон.", "<span>✦</span> <b>Бодрость:</b> Экран не гаснет во время сеанса.", "<span>✦</span> <b>Микшер:</b> Запуск нескольких звуков одновременно.", "<span>✦</span> <b>Не работает?:</b> Отключите беззвучный режим."], guide: ["<b>1. Разблокировка:</b> Нажмите на закритый звук, перейдите на Patreon и подождите 10 сек.", "<b>2. Ручной:</b> Нажимайте на открытые плитки для микса звуков.", "<b>3. Авто:</b> Кнопка <b>ИГРАТЬ</b> включит случайный режим."], speeds: { slow: "Медленно", medium: "Средне", fast: "Быстро" }, unlockTitle: "Открыть звук", unlockDesc: "Разблокируйте этот триггер или приобретите полную версию приложения!", buyFull: "🛒 Купить полную версию", unlockBtn: "🔓 Разблокировать звук", closeBtn: "Закрыть", promoText: "Получи <span style='color:#ffb400;'>Полную Версию</span> на Patreon всего за <span style='color:#ffb400;'>$3.50</span>! Постоянный доступ ко всем звукам без ограничений.", idleTitle: "Запустити проигрывание?", idleDesc: "Вы ничего не нажимали. Хотите включить случайный режим АСМР?", idleDisable: "Скрыть напоминание", bannerBadge: "Премиум Код", bannerText: "Получи исходный код на Patreon за <span>$3.50</span>. Полный доступ к приложению!", bannerBtn: "Получить доступ" }
+  ru: { code: "RU", title: "ВЕДРО АСМР", play: "Играть", pause: "Пауза", repair: "ЧИНИТЬ", sleep: "Сон", tabFeatures: "Функции", tabGuide: "Инструкция", features: ["<span>✦</span> <b>Бесплатная версия:</b> Работа за счет рекламы.", "<span>✦</span> <b>Контент за переход:</b> Открывайте остальные 6 звуков, посещая Патреон.", "<span>✦</span> <b>Бодрость:</b> Экран не гаснет во время сеанса.", "<span>✦</span> <b>Микшер:</b> Запуск нескольких звуков одновременно.", "<span>✦</span> <b>Не работает?:</b> Отключите беззвучный режим."], guide: ["<b>1. Разблокировка:</b> Нажмите на закритый звук, перейдите на Patreon и подождите 10 сек.", "<b>2. Ручной:</b> Нажимайте на открытые плитки для микса звуков.", "<b>3. Авто:</b> Кнопка <b>ИГРАТЬ</b> включит случайный режим."], speeds: { slow: "Медленно", medium: "Средне", fast: "Быстро" }, unlockTitle: "Открыть звук", unlockDesc: "Разблокируйте этот триггер или приобретите полную версию приложения!", buyFull: "🛒 Купить полную версию", unlockBtn: "🔓 Разблокировать звук", closeBtn: "Закрыть", promoText: "Получи <span style='color:#ffb400;'>Полную Версию</span> на Patreon всего за <span style='color:#ffb400;'>$3.50</span>! Постоянный доступ ко всем звукам без ограничений.", idleTitle: "Запустити проигрывание?", idleDesc: "Вы ничего не нажимали. Хотите включить случайный режим АСМР?", idleDisable: "Скрыть напоминание", bannerBadge: "Премииум Код", bannerText: "Получи исходный код на Patreon за <span>$3.50</span>. Полный доступ к приложению!", bannerBtn: "Получить доступ" }
 };
 
 let audioElements = [], randomActive = false, sleepMode = false, langIdx = 0;
@@ -455,7 +473,6 @@ sounds.forEach((s, idx) => {
   const btn = document.createElement('button');
   btn.className = 'sound-button';
   
-  // Убрали <div class="mute-btn">🔊</div> из разметки кнопок
   if (s.locked) {
     btn.classList.add('locked');
     btn.innerHTML = `<div class="lock-icon">🔒</div><span>${s.name['en']}</span>`;
@@ -485,15 +502,18 @@ sounds.forEach((s, idx) => {
   };
 
   btn.onclick = () => {
+    // Получаем чистое имя файла без расширения .mp3 для красоты в логах
+    const cleanSoundName = state.fileName.replace('.mp3', '');
+    
     if (state.locked) {
+        logButtonClick('sound_locked_' + cleanSoundName); // Логируем попытку нажать на закрытый звук
         openUnlockModal(state);
     } else {
+        logButtonClick('sound_' + cleanSoundName);        // Логируем успешное включение звука
         loadAudio(state);
         state.active ? fadeOut(state) : fadeIn(state);
     }
   };
-
-  // Полностью удалили старый блок btn.querySelector('.mute-btn').onclick = (e) => { ... };
 
   audioElements.push(state);
 
@@ -532,14 +552,28 @@ function openUnlockModal(el) {
 }
 
 document.getElementById('cancelUnlock').onclick = () => {
+    logButtonClick('ui_modal_unlock_close');
     if(adTimerInterval) clearInterval(adTimerInterval);
     document.getElementById('unlockModal').style.display = 'none';
     pendingUnlockElement = null;
     resetIdleTimer();
 };
 
+// Логируем клик по баннеру перехода к покупке полной версии в модалке
+document.getElementById('buyFullBtn').onclick = () => {
+    logButtonClick('link_modal_buy_full_patreon');
+};
+
+// Логируем клик по нижнему закрепленному баннеру
+document.getElementById('bannerBlock').onclick = (e) => {
+    // Чтобы клик по кнопке внутри баннера не дублировался
+    logButtonClick('link_bottom_banner_patreon');
+};
+
 document.getElementById('unlockTriggerBtn').onclick = () => {
     if (!pendingUnlockElement) return;
+    
+    logButtonClick('link_unlock_trigger_patreon'); // Логируем запуск таймера разблокировки звука
     
     // Переход на Патреон в новой вкладке
     window.open("https://www.patreon.com/bucket_asmr/posts/asmr-app-accept-160833268", "_blank");
@@ -629,6 +663,7 @@ function stopRandomPlaying() {
 }
 
 document.getElementById('randomBtn').onclick = () => {
+  logButtonClick('ui_random_play'); // Логируем запуск / остановку авто-режима
   if (!randomActive) { 
     startRandomPlaying();
   } else { 
@@ -752,6 +787,7 @@ function updateConnections() {
     }
 }
 function setSpeed(v, label) {
+    logButtonClick('ui_speed_' + label); // Логируем переключение скорости авто-режима
     currentSpeedValue = v;
     document.getElementById('speedDropdown').classList.remove('open');
     updateUI();
@@ -759,13 +795,36 @@ function setSpeed(v, label) {
 }
 
 document.getElementById('speedTrigger').onclick = (e) => { e.stopPropagation(); favDropdown.classList.remove('open'); document.getElementById('speedDropdown').classList.toggle('open'); };
-document.getElementById('favBtn').onclick = (e) => { e.stopPropagation(); document.getElementById('speedDropdown').classList.remove('open'); favDropdown.classList.toggle('open'); };
+document.getElementById('favBtn').onclick = (e) => { 
+    e.stopPropagation(); 
+    logButtonClick('ui_fav_menu'); // Логируем открытие меню Избранного
+    document.getElementById('speedDropdown').classList.remove('open'); 
+    favDropdown.classList.toggle('open'); 
+};
 document.addEventListener('click', () => { document.getElementById('speedDropdown').classList.remove('open'); favDropdown.classList.remove('open'); });
-document.getElementById('repairBtn').onclick = () => location.reload();
-document.getElementById('closeWelcome').onclick = () => { document.getElementById('welcomeModal').style.display = 'none'; resetIdleTimer(); };
-document.querySelectorAll('.lang-switcher-btn').forEach(btn => { btn.onclick = (e) => { e.stopPropagation(); langIdx = (langIdx + 1) % 4; updateUI(); }; });
+
+document.getElementById('repairBtn').onclick = () => {
+    logButtonClick('ui_repair'); // Логируем использование кнопки REPAIR
+    location.reload();
+};
+
+document.getElementById('closeWelcome').onclick = () => { 
+    logButtonClick('ui_welcome_close');
+    document.getElementById('welcomeModal').style.display = 'none'; 
+    resetIdleTimer(); 
+};
+
+document.querySelectorAll('.lang-switcher-btn').forEach(btn => { 
+    btn.onclick = (e) => { 
+        e.stopPropagation(); 
+        langIdx = (langIdx + 1) % 4; 
+        logButtonClick('ui_lang_change_' + langOrder[langIdx]); // Логируем смену языка интерфейса
+        updateUI(); 
+    }; 
+});
 
 document.getElementById('sleepBtn').onclick = () => {
+    logButtonClick('ui_sleep_mode'); // Логируем переключение эко-режима сна
     sleepMode = !sleepMode;
     document.body.style.background = sleepMode ? "#000" : "";
     document.getElementById('stars').style.opacity = sleepMode ? "0" : "1";
@@ -798,21 +857,25 @@ function resetIdleTimer() {
 
 function showIdleModal() {
   if (document.getElementById('welcomeModal').style.display !== 'flex' && !randomActive && document.getElementById('unlockModal').style.display !== 'flex') {
+    logButtonClick('ui_idle_modal_shown'); // Запишем факт появления окна бездействия
     document.getElementById('idleModal').style.display = 'flex';
   }
 }
 
 document.getElementById('idlePlayBtn').onclick = () => {
+  logButtonClick('ui_idle_modal_accept_play');
   document.getElementById('idleModal').style.display = 'none';
   startRandomPlaying();
 };
 
 document.getElementById('idleCloseBtn').onclick = () => {
+  logButtonClick('ui_idle_modal_close');
   document.getElementById('idleModal').style.display = 'none';
   resetIdleTimer();
 };
 
 document.getElementById('idleDisableBtn').onclick = () => {
+  logButtonClick('ui_idle_modal_disable_forever');
   document.getElementById('idleModal').style.display = 'none';
   isIdleSystemEnabled = false;
   clearTimeout(idleTimer);
@@ -838,8 +901,6 @@ const starsArr = Array.from({length: 70}, () => ({ x: Math.random() * innerWidth
 function spawnSteam() {
   if (sleepMode) return;
   
-  // Плавно двигаем оттенок по кругу (от 0 до 360 градусов). 
-  // Скорость изменения можно регулировать (например, +0.2 делает перелив более медленным)
   steamHue = (steamHue + 0.2) % 360; 
 
   audioElements.forEach(el => {
@@ -854,7 +915,7 @@ function spawnSteam() {
           size: Math.random() * 15 + 10,
           alpha: Math.random() * 0.3 + 0.2,
           growth: Math.random() * 0.1 + 0.05,
-          hue: steamHue // <-- Каждая частица запоминает оттенок, в который окрасилась при рождении
+          hue: steamHue 
         });
       }
     }
@@ -887,7 +948,6 @@ function draw() {
       sCtx.beginPath();
       let gradient = sCtx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size);
       
-      // Используем динамический HSL-оттенок частицы (p.hue) вместо статического фиолетового цвета
       gradient.addColorStop(0, `hsla(${p.hue}, 80%, 60%, ${p.alpha})`);
       gradient.addColorStop(0.5, `hsla(${p.hue}, 80%, 60%, ${p.alpha * 0.4})`);
       gradient.addColorStop(1, `hsla(${p.hue}, 80%, 60%, 0)`);
@@ -915,15 +975,19 @@ audioElements.forEach(el => {
 });
 
 function switchTab(event, tabId) {
+    logButtonClick('ui_welcome_tab_switch_' + tabId); // Замерим вкладки инструкции
     document.querySelectorAll('.help-section').forEach(s => s.classList.remove('active'));
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     document.getElementById(tabId).classList.add('active');
     event.currentTarget.classList.add('active');
 }
-function showHelp() { document.getElementById('welcomeModal').style.display = 'flex'; clearTimeout(idleTimer); }
+function showHelp() { 
+    logButtonClick('ui_help_question_btn');
+    document.getElementById('welcomeModal').style.display = 'flex'; 
+    clearTimeout(idleTimer); 
+}
 
 // === ЛОГИКА ЭКРАНА "CONTINUE" ПРИ РАЗБЛОКИРОВКЕ ДЛЯ IOS ===
-// 1. Создаем полупрозрачный экран блокировки (изначально скрыт)
 const wakeUpOverlay = document.createElement('div');
 wakeUpOverlay.style.cssText = `
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -932,7 +996,6 @@ wakeUpOverlay.style.cssText = `
     transition: opacity 0.3s ease; opacity: 0;
 `;
 
-// 2. Создаем неоновую кнопку Continue
 const continueBtn = document.createElement('button');
 continueBtn.innerText = "Continue";
 continueBtn.style.cssText = `
@@ -945,7 +1008,6 @@ continueBtn.style.cssText = `
 wakeUpOverlay.appendChild(continueBtn);
 document.body.appendChild(wakeUpOverlay);
 
-// Функция показа экрана Continue только на iOS устройствах
 function showWakeUpScreen() {
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
                   (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
@@ -956,16 +1018,13 @@ function showWakeUpScreen() {
     }
 }
 
-// Клик по кнопке Continue: Пробиваем заморозку сети iOS 18
 function handleContinueClick() {
+    logButtonClick('ui_ios_wake_continue');
     try {
         if (typeof firebase !== 'undefined' && firebase.database) {
             console.log("Пробиваем заморозку iOS 18...");
-            
-            // 1. Жестко закрываем зависший сокет Сафари
             firebase.database().goOffline();
             
-            // 2. Через 300мс поднимаем сеть заново и вешаем реактивный слушатель
             setTimeout(() => {
                 firebase.database().goOnline();
                 updateConnections();
@@ -976,17 +1035,14 @@ function handleContinueClick() {
         console.error("Ошибка принудительного обновления сессии:", e);
     }
     
-    // Плавно убираем экран
     wakeUpOverlay.style.opacity = '0';
     setTimeout(() => { wakeUpOverlay.style.display = 'none'; }, 300);
 }
 
-// Слушатели событий экрана разблокировки
 continueBtn.addEventListener('click', handleContinueClick);
 continueBtn.addEventListener('touchstart', () => { continueBtn.style.transform = 'scale(0.95)'; });
 continueBtn.addEventListener('touchend', () => { continueBtn.style.transform = 'scale(1)'; });
 
-// Отслеживаем разблокировку экрана телефона или возврат во вкладку
 document.addEventListener('visibilitychange', () => {
     if (!document.hidden) showWakeUpScreen();
 });
@@ -999,18 +1055,13 @@ const linksTrigger = document.getElementById('linksTrigger');
 const linksOptions = document.getElementById('linksOptions');
 const speedDropdown = document.getElementById('speedDropdown');
 
-// Открытие / закрытие списка по клику на кнопку Links
 linksTrigger.addEventListener('click', (e) => {
   e.stopPropagation();
-  
-  // Закрываем список скорости, если он открыт
+  logButtonClick('ui_social_links_menu');
   if (speedDropdown) speedDropdown.classList.remove('open');
-  
-  // Переключаем показ списка ссылок
   linksOptions.classList.toggle('open');
 });
 
-// Закрытие списка соцсетей, если кликнули в любую другую точку экрана
 window.addEventListener('click', () => {
   linksOptions.classList.remove('open');
 });
