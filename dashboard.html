@@ -13,6 +13,7 @@
             --accent-viewers: #38bdf8;
             --accent-clicks: #f43f5e;
             --accent-sub: #10b981;
+            --accent-purple: #a855f7;
         }
 
         body {
@@ -73,6 +74,7 @@
 
         .card.viewers:hover { box-shadow: 0 8px 20px rgba(56, 189, 248, 0.15); }
         .card.clicks:hover { box-shadow: 0 8px 20px rgba(244, 63, 94, 0.15); }
+        .card.buttons:hover { box-shadow: 0 8px 20px rgba(168, 85, 247, 0.15); }
 
         .card-label {
             font-size: 0.9rem;
@@ -91,7 +93,31 @@
         .viewers .card-value { color: var(--accent-viewers); }
         .clicks .card-value { color: var(--accent-clicks); }
 
-        /* Стили для детальной статистики кликов */
+        /* Блок с двойными счетчиками */
+        .dual-counters {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            margin-top: 0.5rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .counter-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .counter-sublabel {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            margin-bottom: 0.25rem;
+        }
+
+        /* Стили для детальной статистики */
         .clicks-details {
             width: 100%;
             margin-top: 1rem;
@@ -156,17 +182,29 @@
             </div>
             
             <div class="card clicks">
-                <span class="card-label">Всего кликов</span>
+                <span class="card-label">Всего кликов по ссылкам</span>
                 <span class="card-value" id="clicks-count">0</span>
                 
                 <div class="clicks-details" id="clicks-platforms">
                 </div>
             </div>
 
-            <!-- ДОБАВЛЕННАЯ КАРТОЧКА ДЛЯ КЛИКОВ ПО КНОПКАМ И ЗВУКАМ -->
-            <div class="card" style="border-left: 4px solid var(--accent-viewers, #38bdf8); display: flex; flex-direction: column; align-items: stretch;">
+            <!-- ОБНОВЛЕННАЯ КАРТОЧКА: ДВОЙНОЙ СЧЕТЧИК И СПИСОК -->
+            <div class="card buttons" style="border-left: 4px solid var(--accent-purple); align-items: stretch;">
                 <span class="card-label" style="text-align: center;">Популярность кнопок и звуков</span>
-                <div id="button-clicks-container" style="max-height: 200px; overflow-y: auto; margin-top: 15px; font-size: 14px; width: 100%; padding-right: 4px;">
+                
+                <div class="dual-counters">
+                    <div class="counter-item">
+                        <span class="counter-sublabel">Всего нажатий</span>
+                        <span class="card-value" id="total-button-clicks" style="color: var(--accent-purple);">0</span>
+                    </div>
+                    <div class="counter-item">
+                        <span class="counter-sublabel">Только звуки</span>
+                        <span class="card-value" id="sound-button-clicks" style="color: var(--accent-viewers);">0</span>
+                    </div>
+                </div>
+
+                <div id="button-clicks-container" style="max-height: 220px; overflow-y: auto; margin-top: 10px; font-size: 14px; width: 100%; padding-right: 4px; border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 10px;">
                     <div style="color: var(--text-muted); text-align: center;">Загрузка статистики...</div>
                 </div>
             </div>
@@ -200,6 +238,9 @@
         const clicksElement = document.getElementById('clicks-count');
         const platformsContainer = document.getElementById('clicks-platforms');
         const viewsElement = document.getElementById('views-count');
+        
+        const totalButtonClicksElem = document.getElementById('total-button-clicks');
+        const soundButtonClicksElem = document.getElementById('sound-button-clicks');
         const buttonContainer = document.getElementById('button-clicks-container');
 
         // 1. СЛУШАЕМ ЗРИТЕЛЕЙ (online_users)
@@ -260,18 +301,28 @@
             console.error("Ошибка чтения link_clicks:", error);
         });
 
-        // 4. ДОБАВЛЕНО: СЛУШАЕМ ДИНАМИЧЕСКИЕ КЛИКИ ПО КНОПКАМ И ЗВУКАМ (button_clicks)
+        // 4. СЛУШАЕМ КЛИКИ ПО КНОПКАМ И ЗВУКАМ (button_clicks)
         const buttonClicksRef = ref(database, 'button_clicks');
         onValue(buttonClicksRef, (snapshot) => {
             if (snapshot.exists()) {
                 const clicksData = snapshot.val();
+                let totalAllClicks = 0;
+                let totalSoundClicks = 0;
                 let htmlDetails = '';
 
-                // Сортируем элементы: самые популярные всегда будут вверху списка
+                // Сортируем элементы: самые популярные всегда вверху
                 const sortedButtons = Object.entries(clicksData).sort((a, b) => b[1] - a[1]);
 
                 sortedButtons.forEach(([btnName, count]) => {
-                    // Заменяем технические префиксы на красивые эмодзи для наглядности
+                    const clickNum = Number(count) || 0;
+                    totalAllClicks += clickNum;
+
+                    // Если имя кнопки содержит sound_ — это звук
+                    if (btnName.startsWith('sound_')) {
+                        totalSoundClicks += clickNum;
+                    }
+
+                    // Заменяем технические префиксы на эмодзи
                     let displayName = btnName
                         .replace("sound_", "🔊 ")
                         .replace("ui_", "⚙️ ")
@@ -280,13 +331,18 @@
                     htmlDetails += `
                         <div class="details-row" style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem;">
                             <span style="color: var(--text-muted); text-transform: capitalize;">${displayName}</span>
-                            <span style="font-weight: 600; color: var(--text-main); margin-left: 10px;">${count}</span>
+                            <span style="font-weight: 600; color: var(--text-main); margin-left: 10px;">${clickNum}</span>
                         </div>
                     `;
                 });
 
+                // Обновляем главные цифры
+                totalButtonClicksElem.textContent = totalAllClicks;
+                soundButtonClicksElem.textContent = totalSoundClicks;
                 buttonContainer.innerHTML = htmlDetails;
             } else {
+                totalButtonClicksElem.textContent = 0;
+                soundButtonClicksElem.textContent = 0;
                 buttonContainer.innerHTML = '<div style="color: var(--text-muted); text-align: center;">Кликов пока нет</div>';
             }
         }, (error) => {
