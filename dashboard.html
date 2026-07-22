@@ -95,7 +95,6 @@
         .viewers .card-value { color: var(--accent-viewers); }
         .clicks .card-value { color: var(--accent-clicks); }
 
-        /* Зеленый мини-счетчик динамики прироста */
         .delta-badge {
             font-size: 0.75rem;
             font-weight: 600;
@@ -110,7 +109,6 @@
             gap: 4px;
         }
 
-        /* Блок с двойными счетчиками */
         .dual-counters {
             display: flex;
             justify-content: space-around;
@@ -134,7 +132,6 @@
             margin-bottom: 0.25rem;
         }
 
-        /* Стили для детальной статистики */
         .clicks-details {
             width: 100%;
             margin-top: 1rem;
@@ -254,7 +251,7 @@
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
 
-        // Элементы
+        // Элементы UI
         const viewersElement = document.getElementById('viewers-count');
         const clicksElement = document.getElementById('clicks-count');
         const platformsContainer = document.getElementById('clicks-platforms');
@@ -264,16 +261,18 @@
         const soundButtonClicksElem = document.getElementById('sound-button-clicks');
         const buttonContainer = document.getElementById('button-clicks-container');
 
-        // Элементы прироста
+        // Элементы дельты
         const viewsDeltaElem = document.getElementById('views-delta');
         const clicksDeltaElem = document.getElementById('clicks-delta');
         const totalBtnDeltaElem = document.getElementById('total-btn-delta');
         const soundBtnDeltaElem = document.getElementById('sound-btn-delta');
 
-        // Данные текущей сессии для подсчета разницы
+        // Текущее live-состояние
         let currentLiveState = { page_views: 0, link_clicks: 0, total_buttons: 0, sound_buttons: 0 };
-        let lastVisitState = null;
-        let dayAgoState = null;
+        
+        // Якори отсчета
+        let sessionStartState = null; // Старт текущей сессии (не сбрасывается от F5)
+        let dayAgoState = null;        // Срез за вчера
 
         const getTodayKey = () => new Date().toISOString().split('T')[0];
         const getYesterdayKey = () => {
@@ -282,46 +281,54 @@
             return d.toISOString().split('T')[0];
         };
 
-        // 1. ИНИЦИАЛИЗАЦИЯ ИСТОРИИ И ПОСЕЩЕНИЙ
         async function initVisitTracking() {
             try {
-                // Получаем последний визит
-                const visitsRef = ref(database, 'dashboard_stats/visits_history');
-                const visitsSnap = await get(visitsRef);
+                // 1. ПРОВЕРЯЕМ СЕССИЮ В БРАУЗЕРЕ
+                const savedSession = sessionStorage.getItem('dashboard_session_start');
                 
-                if (visitsSnap.exists()) {
-                    const visitsData = Object.values(visitsSnap.val());
-                    if (visitsData.length > 0) {
-                        // Берем предпоследний визит (прошлый заход)
-                        lastVisitState = visitsData[visitsData.length - 1];
+                if (savedSession) {
+                    sessionStartState = JSON.parse(savedSession);
+                } else {
+                    // Если это новый заход — читаем последнюю запись до нас из Firebase
+                    const visitsRef = ref(database, 'dashboard_stats/visits_history');
+                    const visitsSnap = await get(visitsRef);
+                    
+                    if (visitsSnap.exists()) {
+                        const visitsData = Object.values(visitsSnap.val());
+                        sessionStartState = visitsData[visitsData.length - 1];
+                    } else {
+                        sessionStartState = { page_views: 0, link_clicks: 0, total_buttons: 0, sound_buttons: 0 };
                     }
+                    // Запоминаем якорь в памяти сессии браузера
+                    sessionStorage.setItem('dashboard_session_start', JSON.stringify(sessionStartState));
                 }
 
-                // Получаем данные за вчерашний день для суточной разницы
+                // 2. ПОЛУЧАЕМ СУТОЧНЫЙ СРЕЗ (За вчера)
                 const yesterdayRef = ref(database, `daily_history/${getYesterdayKey()}`);
                 const yesterdaySnap = await get(yesterdayRef);
                 if (yesterdaySnap.exists()) {
                     dayAgoState = yesterdaySnap.val();
                 }
 
-                // Записываем текущий визит в лог
+                // 3. ЗАПИСЫВАЕМ СНИМОК В БАЗУ ДЛЯ БУДУЩИХ ЗАХОДОВ (с задержкой 3 сек)
                 setTimeout(async () => {
-                    const newVisitRef = push(ref(database, 'dashboard_stats/visits_history'));
-                    await set(newVisitRef, {
-                        timestamp: Date.now(),
-                        ...currentLiveState
-                    });
-
-                    // Фиксируем срез за сегодня
-                    const todayRef = ref(database, `daily_history/${getTodayKey()}`);
-                    const todaySnap = await get(todayRef);
-                    if (!todaySnap.exists()) {
-                        await set(todayRef, {
+                    if (currentLiveState.total_buttons > 0 || currentLiveState.page_views > 0) {
+                        const newVisitRef = push(ref(database, 'dashboard_stats/visits_history'));
+                        await set(newVisitRef, {
                             timestamp: Date.now(),
                             ...currentLiveState
                         });
+
+                        const todayRef = ref(database, `daily_history/${getTodayKey()}`);
+                        const todaySnap = await get(todayRef);
+                        if (!todaySnap.exists()) {
+                            await set(todayRef, {
+                                timestamp: Date.now(),
+                                ...currentLiveState
+                            });
+                        }
                     }
-                }, 1500);
+                }, 3000);
 
             } catch (err) {
                 console.error("Ошибка инициализации истории:", err);
@@ -329,16 +336,36 @@
         }
 
         function updateDeltas() {
-            const calcDelta = (current, lastVisit, dayAgo) => {
-                const vDiff = lastVisit ? Math.max(0, current - (lastVisit || 0)) : 0;
-                const dDiff = dayAgo ? Math.max(0, current - (dayAgo || 0)) : 0;
+            const calcDelta = (current, startStateVal, dayAgoStateVal) => {
+                const startVal = typeof startStateVal === 'number' ? startStateVal : current;
+                const vDiff = Math.max(0, current - startVal);
+                
+                const dayVal = typeof dayAgoStateVal === 'number' ? dayAgoStateVal : current;
+                const dDiff = Math.max(0, current - dayVal);
+
                 return `+${vDiff} визит / +${dDiff} сут.`;
             };
 
-            viewsDeltaElem.textContent = calcDelta(currentLiveState.page_views, lastVisitState?.page_views, dayAgoState?.page_views);
-            clicksDeltaElem.textContent = calcDelta(currentLiveState.link_clicks, lastVisitState?.link_clicks, dayAgoState?.link_clicks);
-            totalBtnDeltaElem.textContent = calcDelta(currentLiveState.total_buttons, lastVisitState?.total_buttons, dayAgoState?.total_buttons);
-            soundBtnDeltaElem.textContent = calcDelta(currentLiveState.sound_buttons, lastVisitState?.sound_buttons, dayAgoState?.sound_buttons);
+            viewsDeltaElem.textContent = calcDelta(
+                currentLiveState.page_views, 
+                sessionStartState?.page_views, 
+                dayAgoState?.page_views
+            );
+            clicksDeltaElem.textContent = calcDelta(
+                currentLiveState.link_clicks, 
+                sessionStartState?.link_clicks, 
+                dayAgoState?.link_clicks
+            );
+            totalBtnDeltaElem.textContent = calcDelta(
+                currentLiveState.total_buttons, 
+                sessionStartState?.total_buttons, 
+                dayAgoState?.total_buttons
+            );
+            soundBtnDeltaElem.textContent = calcDelta(
+                currentLiveState.sound_buttons, 
+                sessionStartState?.sound_buttons, 
+                dayAgoState?.sound_buttons
+            );
         }
 
         // --- СЛУШАТЕЛИ REALTIME DATABASE ---
@@ -432,7 +459,7 @@
             updateDeltas();
         });
 
-        // Запуск логики истории
+        // Запуск логики сессии и истории
         initVisitTracking();
     </script>
 </body>
