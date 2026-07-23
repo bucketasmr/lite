@@ -23,7 +23,6 @@
   body.fancy-bg { background: radial-gradient(ellipse at bottom, #050505 0%, #0a0a1f 100%); }
   .overlay { position: absolute; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.4); z-index:3; pointer-events: none; }
   
-  /* Отступ снизу увеличен до 90px под баннер, чтобы контент не перекрывался */
   .container { position: relative; z-index: 10; display:flex; flex-direction: column; align-items:center; padding: 20px 20px 90px 20px; height: 100vh; box-sizing: border-box; }
   
   .title-bar { display:flex; align-items:center; gap:15px; margin-bottom:15px; z-index: 1000; transition: opacity 0.5s; }
@@ -39,7 +38,7 @@
   .live-dot { width: 6px; height: 6px; background: #ff3030; border-radius: 50%; animation: blink 1.5s infinite; }
   @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
-  #helpBtn { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.3); width: 35px; height: 35px; border-radius: 50%; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px); font-weight: bold; font-size: 18px; }
+  #settingsBtn { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.3); padding: 0 12px; height: 35px; border-radius: 20px; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px); font-weight: bold; font-size: 13px; gap: 5px; }
   .lang-btn-ui { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.4); padding: 8px 16px; border-radius: 10px; color: white; cursor: pointer; font-weight: bold; min-width: 45px; }
 
   .controls { margin-bottom:15px; display:flex; gap:10px; flex-wrap: wrap; justify-content: center; align-items: center; z-index: 10; transition: opacity 0.5s; }
@@ -47,7 +46,6 @@
   
   #randomBtn { background: rgba(138, 43, 226, 0.4); border: 1px solid rgba(138, 43, 226, 0.3); min-width: 80px; }
   #sleepBtn.active { background: #ffb400; border: 1px solid #ffb400; color: black; box-shadow: 0 0 15px rgba(255, 180, 0, 0.4); }
-  #linksBtnRed { background: rgba(226, 43, 43, 0.4); border: 1px solid rgba(226, 43, 43, 0.3); min-width: 80px; }
 
   .sound-grid { 
     display: grid; grid-template-columns: repeat(auto-fill, minmax(85px, 1fr)); 
@@ -76,17 +74,15 @@
   .sound-button span { position: relative; z-index: 2; pointer-events: none; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); }
   .sound-button.ready { color: white; background-color: rgba(255,255,255,0.12); }
   
-  /* Фиолетовый светящийся обод для активной кнопки */
   .sound-button.active { 
     color: white; 
     transform: scale(1.03); 
     border: 1px solid #8a2be2 !important; 
-    box-shadow: 0 0 20px rgba(138, 43, 226, 0.6), inset 0 0 10px rgba(138, 43, 226, 0.4); 
+    box-shadow: 0 0 20px rgba(138, 43, 226, var(--fx-opacity, 0.6)), inset 0 0 10px rgba(138, 43, 226, var(--fx-opacity, 0.4)); 
   }
   .sound-button.is-fav { border: 1px solid #ffb400; }
   .sound-button.active.is-fav { border: 1px solid #8a2be2 !important; }
   
-  /* Стили для заблокированных кнопок */
   .sound-button.locked {
     border: 1px dashed rgba(255,255,255,0.15) !important;
     background-image: none !important;
@@ -99,10 +95,6 @@
     position: absolute; top: 8px; left: 8px; font-size: 12px; z-index: 3; color: #ffb400;
     background: rgba(0,0,0,0.6); padding: 3px 5px; border-radius: 6px; line-height: 1;
   }
-
-  .mute-btn { position: absolute; top: 5px; right: 5px; width: 22px; height: 22px; background: rgba(0,0,0,0.5); border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 10px; border: 1px solid rgba(255,255,255,0.2); z-index: 15; }
-  .active .mute-btn { display: flex; }
-  .mute-btn.muted { background: #ff5050; border-color: #ff8080; }
 
   .custom-select-container { position: relative; }
   .select-trigger { padding: 8px 14px; border-radius: 12px; background: rgba(255, 255, 255, 0.15); color: white; cursor: pointer; font-weight: bold; font-size: 13px; min-width: 90px; text-align: center; }
@@ -121,50 +113,16 @@
   .fav-item input { cursor: pointer; accent-color: #ffb400; }
   .fav-item label { cursor: pointer; font-size: 13px; flex-grow: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-  /* Интерактивный Рекламный Баннер Patreon */
-  .bottom-banner {
-    position: fixed; bottom: 0; left: 0; width: 100%; height: 75px;
-    background: linear-gradient(90deg, #0f0f1e 0%, #1a0f30 50%, #0f0f1e 100%);
-    border-top: 2px solid #8a2be2;
-    z-index: 9999; display: flex; align-items: center; justify-content: space-between;
-    padding: 0 20px; box-shadow: 0 -5px 25px rgba(0,0,0,0.9); box-sizing: border-box;
-    cursor: pointer; text-decoration: none; transition: transform 0.2s, border-color 0.3s;
-  }
-  .bottom-banner:hover {
-    border-top-color: #ffb400;
-    background: linear-gradient(90deg, #131326 0%, #231442 50%, #131326 100%);
-  }
-  .banner-content { display: flex; align-items: center; gap: 12px; }
-  .banner-icon { font-size: 26px; animation: pulse-icon 2s infinite ease-in-out; }
-  .banner-text-box { display: flex; flex-direction: column; gap: 2px; }
-  .banner-badge { font-size: 10px; font-weight: bold; background: #8a2be2; color: white; padding: 1px 6px; border-radius: 4px; width: fit-content; text-transform: uppercase; letter-spacing: 0.5px; }
-  .banner-main-text { font-size: 13px; font-weight: bold; color: white; line-height: 1.2; }
-  .banner-main-text span { color: #ffb400; text-shadow: 0 0 5px rgba(255,180,0,0.3); }
-  
-  .banner-action-btn {
-    background: #ffb400; color: black; font-weight: bold; font-size: 11px;
-    padding: 8px 14px; border-radius: 10px; border: none; cursor: pointer;
-    text-transform: uppercase; box-shadow: 0 0 10px rgba(255, 180, 0, 0.4);
-    white-space: nowrap; transition: 0.2s;
-  }
-  .bottom-banner:hover .banner-action-btn {
-    transform: scale(1.05);
-    box-shadow: 0 0 15px rgba(255, 180, 0, 0.7);
-  }
-
-  @keyframes pulse-icon {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.15); }
-  }
-
-  /* Канвасы эффектов */
   canvas { position: fixed; top:0; left:0; width:100%; height:100%; pointer-events: none; }
   #stars { z-index: 1; transition: opacity 2s; }
   #steamCanvas { z-index: 4; }
   
-  /* Модальные окна */
-  .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 10001; justify-content: center; align-items: center; backdrop-filter: blur(12px); }
-  .modal-content { background: linear-gradient(145deg, #141423, #0a0a0f); border: 1px solid #ffb400; padding: 25px; border-radius: 30px; text-align: left; color: white; max-width: 85%; width: 400px; max-height: 85vh; overflow-y: auto; box-shadow: 0 0 40px rgba(255, 180, 0, 0.2); position: relative; }
+  .modal { 
+    display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+    background: rgba(0,0,0,0.45); z-index: 10001; justify-content: center; align-items: center; 
+    backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px);
+  }
+  .modal-content { background: linear-gradient(145deg, #141423, #0a0a1f); border: 1px solid #ffb400; padding: 25px; border-radius: 30px; text-align: left; color: white; max-width: 85%; width: 400px; max-height: 85vh; overflow-y: auto; box-shadow: 0 0 40px rgba(255, 180, 0, 0.2); position: relative; }
   .modal-tabs { display: flex; gap: 10px; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
   .tab-btn { background: none; border: none; color: #666; font-weight: bold; cursor: pointer; font-size: 14px; padding: 5px 0; position: relative; }
   .tab-btn.active { color: #ffb400; }
@@ -177,58 +135,25 @@
   .help-list li span { color: #ffb400; }
   .modal-btn { background:#ffb400; border:none; padding:14px; border-radius:15px; font-weight:bold; cursor:pointer; color:black; font-size: 15px; width: 100%; margin-top: 15px; text-transform: uppercase; text-align: center; text-decoration: none; display: block; box-sizing: border-box; }
 
-  /* Окно разблокировки (Реклама премиума вместо плеера) */
-  #unlockModal .modal-content { text-align: center; }
-  .ad-patreon-promo {
-    width: 100%; padding: 20px; background: rgba(138, 43, 226, 0.1); border-radius: 20px; margin: 15px 0;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    border: 1px solid rgba(138, 43, 226, 0.3); position: relative; overflow: hidden;
-    text-decoration: none; color: white; transition: background 0.3s; box-sizing: border-box;
+  /* Элементы управления в Настройках */
+  .settings-group { margin-bottom: 18px; }
+  .settings-group label { display: block; font-size: 13px; font-weight: bold; color: #ffb400; margin-bottom: 8px; }
+  .settings-select, .settings-range {
+    width: 100%; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+    color: white; padding: 10px; border-radius: 12px; font-size: 13px; outline: none; box-sizing: border-box;
   }
-  .ad-patreon-promo:hover { background: rgba(138, 43, 226, 0.18); }
-  .ad-progress {
-    position: absolute; bottom: 0; left: 0; height: 4px; background: #ffb400; width: 0%;
+  .settings-select option { background: #141423; color: white; }
+  .settings-range { accent-color: #ffb400; cursor: pointer; height: 6px; padding: 0; }
+  .range-container { display: flex; align-items: center; gap: 10px; }
+  .range-value { font-size: 12px; color: #ccc; min-width: 35px; text-align: right; }
+
+  .help-open-btn {
+    background: rgba(255, 180, 0, 0.15); border: 1px solid #ffb400; color: #ffb400;
+    padding: 12px; border-radius: 15px; font-weight: bold; cursor: pointer; width: 100%;
+    margin-bottom: 20px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px;
   }
-  
-  
-  /* Кнопка соцсетей (Ссылки) */
-  #linksBtn {
-    background: rgba(255, 180, 0, 0.15);
-    border: 1px solid rgba(255, 180, 0, 0.4);
-    box-shadow: 0 0 10px rgba(255, 180, 0, 0.15);
-  }
-  #linksBtn:hover {
-    background: rgba(255, 180, 0, 0.25);
-    border-color: #ffb400;
-  }
-  .links-dropdown button {
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-  }
-  .links-dropdown a {
-    display: block;
-    width: 100%;
-    padding: 12px;
-    box-sizing: border-box;
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 13px;
-    transition: background 0.2s;
-  }
-  .links-dropdown a:hover {
-    background: rgba(255, 255, 255, 0.08);
-  }
-  .links-dropdown a:last-child {
-    border-bottom: none;
-  }
-  /* Полное отключение и скрытие кнопки mute-btn */
-.mute-btn {
-  display: none !important;
-  pointer-events: none !important;
-}
-.active .mute-btn {
-  display: none !important;
-}
+
+  .mute-btn { display: none !important; pointer-events: none !important; }
 </style>
 </head>
 <body class="fancy-bg">
@@ -236,6 +161,67 @@
 <canvas id="stars"></canvas>
 <canvas id="steamCanvas"></canvas>
 <div class="overlay"></div>
+
+<!-- Настройки -->
+<div id="settingsModal" class="modal">
+  <div class="modal-content">
+    <h2 style="color: #ffb400; margin: 0 0 18px 0; font-size: 20px;" id="settingsTitle">Settings</h2>
+    
+    <button class="help-open-btn" id="openHelpFromSettings">
+      <span>❓</span> <span id="helpBtnLabel">Help / Guide</span>
+    </button>
+
+    <div class="settings-group">
+      <label id="lblFxStyle">Effect Style</label>
+      <select id="fxStyleSelect" class="settings-select">
+        <option value="steam">💨 Steam (Color)</option>
+        <option value="rain">💧 Rain Drops</option>
+        <option value="snow">❄️ Snowflakes</option>
+        <option value="comets">☄️ Comets & Asteroids</option>
+        <option value="neondust">✨ Neon Dust</option>
+        <option value="aura">🌀 Pulsing Aura</option>
+        <option value="random">🔀 Random Effect</option>
+      </select>
+    </div>
+
+    <div class="settings-group" id="randomIntervalGroup" style="display: none;">
+      <label id="lblFxRandomInterval">Random Change Interval</label>
+      <div class="range-container">
+        <input type="range" id="fxRandomIntervalRange" class="settings-range" min="3" max="30" step="1" value="8">
+        <span class="range-value" id="valFxRandomInterval">8s</span>
+      </div>
+    </div>
+
+    <div class="settings-group">
+      <label id="lblFxOpacity">Opacity / Glow</label>
+      <div class="range-container">
+        <input type="range" id="fxOpacityRange" class="settings-range" min="0.1" max="1" step="0.05" value="0.7">
+        <span class="range-value" id="valFxOpacity">70%</span>
+      </div>
+    </div>
+
+    <div class="settings-group">
+      <label id="lblFxSpeed">Effect Speed</label>
+      <div class="range-container">
+        <input type="range" id="fxSpeedRange" class="settings-range" min="0.2" max="2.5" step="0.1" value="0.4">
+        <span class="range-value" id="valFxSpeed">0.4x</span>
+      </div>
+    </div>
+
+    <button class="modal-btn" id="closeSettings">OK</button>
+  </div>
+</div>
+
+<!-- Новое уведомление: Случайные эффекты -->
+<div id="fxPromoModal" class="modal">
+  <div class="modal-content" style="text-align: center;">
+    <h2 style="color: #ffb400; margin: 0 0 10px 0; font-size: 20px;" id="fxPromoTitle">New Feature: Effects</h2>
+    <p style="font-size: 14px; color: #ddd; margin-bottom: 20px; line-height: 1.4;" id="fxPromoDesc">Click Yes to activate automatic switching of visual effects.</p>
+    <button class="modal-btn" id="fxPromoEnableBtn" style="background: #8a2be2; color: white; margin-top: 5px;">Yes, activate all effects</button>
+    <button class="modal-btn" id="fxPromoKeepBtn" style="background: rgba(255,255,255,0.1); color: white; margin-top: 10px; padding: 12px;">Keep current effect</button>
+    <p style="font-size: 11px; color: #888; margin-top: 15px; margin-bottom: 0;" id="fxPromoPs">P.S. You can change this later in Settings.</p>
+  </div>
+</div>
 
 <div id="idleModal" class="modal">
   <div class="modal-content" style="text-align: center;">
@@ -250,19 +236,7 @@
 <div id="unlockModal" class="modal">
   <div class="modal-content">
     <h3 style="color: #ffb400; margin: 0 0 10px 0; font-size: 20px;" id="unlockTitle">Unlock Sound</h3>
-    <p style="font-size: 13px; color: #ccc; margin: 0;" id="unlockDesc">Unlock this premium trigger or get the permanent Full App version!</p>
-
-
-    
-    <a href="https://www.patreon.com/bucket_asmr/posts/asmr-app-accept-160833268" target="_blank" class="ad-patreon-promo" id="adBox">
-        <span style="font-size: 36px; margin-bottom: 8px;">💎</span>
-        <div id="adStatus" style="font-size: 14px; font-weight: bold; color: white; line-height: 1.4; max-width: 280px;">
-           Get the <span>Full Version</span> on Patreon for just <span>$3.50</span>! Permanent Access to all sounds.
-        </div>
-        <div class="ad-progress" id="adProgress"></div>
-    </a>
-
-    <a href="https://www.patreon.com/bucket_asmr/posts/asmr-app-accept-160833268" target="_blank" class="modal-btn" id="buyFullBtn" style="background: #ffb400; color: black;">🛒 Buy Full Version</a>
+    <p style="font-size: 13px; color: #ccc; margin: 0;" id="unlockDesc">Unlock this trigger!</p>
     <button class="modal-btn" id="unlockTriggerBtn" style="background: #8a2be2; color: white; margin-top: 10px;">🔓 Unlock Sound</button>
     <button class="modal-btn" id="cancelUnlock" style="background: rgba(255,255,255,0.1); color: white; margin-top: 10px; padding: 12px;">Close</button>
   </div>
@@ -295,7 +269,7 @@
       <div class="live-dot"></div>
       <span id="online-count">—</span> LIVE
     </div>
-    <div id="helpBtn" onclick="showHelp()">?</div>
+    <div id="settingsBtn" onclick="openSettings()">⚙ Custom</div>
     <button id="langBtn" class="lang-btn-ui lang-switcher-btn">EN</button>
   </div>
 
@@ -304,12 +278,11 @@
   <div class="custom-select-container" id="linksSelectContainer">
     <div class="select-trigger" id="linksTrigger" style="background: rgba(226, 43, 43, 0.4); border: 1px solid rgba(226, 43, 43, 0.3); min-width: 80px; color: #fff; font-weight: bold;">Links</div>
     
-<div class="custom-dropdown" id="linksOptions">
-  <button onclick="trackLinkClick('youtube', 'https://www.youtube.com/@BucketASMR')">YouTube</button>
-  <button onclick="trackLinkClick('tiktok', 'https://www.tiktok.com/@bucket_asmr')">TikTok</button>
-  <button onclick="trackLinkClick('instagram', 'https://www.instagram.com/bucket_asmr')">Instagram</button>
-</div>
-    
+    <div class="custom-dropdown" id="linksOptions">
+      <button onclick="trackLinkClick('youtube', 'https://www.youtube.com/@BucketASMR')">YouTube</button>
+      <button onclick="trackLinkClick('tiktok', 'https://www.tiktok.com/@bucket_asmr')">TikTok</button>
+      <button onclick="trackLinkClick('instagram', 'https://www.instagram.com/bucket_asmr')">Instagram</button>
+    </div>
   </div>
 	
     <div class="custom-select-container">
@@ -327,25 +300,11 @@
             <button onclick="setSpeed(34, 'medium')" id="spMed">Medium</button>
             <button onclick="setSpeed(52, 'slow')" id="spSlow">Slow</button>
         </div>
-		
     </div>
   </div>
   
   <div id="soundGrid" class="sound-grid"></div>
 </div>
-
-<a href="https://www.patreon.com/bucket_asmr/posts/asmr-app-accept-160833268" target="_blank" class="bottom-banner" id="bannerBlock">
-  <div class="banner-content">
-    <div class="banner-icon">💎</div>
-    <div class="banner-text-box">
-      <div class="banner-badge" id="bannerBadge">Premium Code</div>
-      <div class="banner-text-box">
-        <div class="banner-main-text" id="bannerMainText">Get source code on Patreon for <span>$3.50</span>. Full App Access!</div>
-      </div>
-    </div>
-  </div>
-  <button class="banner-action-btn" id="bannerBtn">Get Access</button>
-</a>
 
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
@@ -358,68 +317,45 @@ const firebaseConfig = {
   databaseURL: "https://bucket-asmr-premium-default-rtdb.firebaseio.com"
 };
 
-// === ИНИЦИАЛИЗАЦИЯ FIREBASE (КРИТИЧЕСКИ ВАЖНО, НЕ УДАЛЯТЬ) ===
 if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
 }
 
-// Настройка путей в базе данных
 const database = firebase.database();
-const connectionsRef = database.ref('online_users'); // Путь для подсчета онлайна
-const viewsRef = database.ref('page_views');         // Путь для подсчета общих просмотров
+const connectionsRef = database.ref('online_users');
+const viewsRef = database.ref('page_views');
 let presenceRef = null;
 let liveInterval = null;
 
-
-// === УНИВЕРСАЛЬНАЯ ФУНКЦИЯ ЛОГИРОВАНИЯ НАЖАТИЙ КНОПОК (С ПОДДЕРЖКОЙ ЖИВОЙ ЛЕНТЫ КЛИКОВ) ===
 function logButtonClick(buttonId) {
   try {
     if (typeof firebase !== 'undefined' && firebase.database) {
-      // 1. Инкрементируем общий счетчик для статистики в цифрах
       const btnRef = firebase.database().ref('button_clicks/' + buttonId);
-      btnRef.transaction((currentValue) => {
-        return (currentValue || 0) + 1;
-      });
+      btnRef.transaction((currentValue) => (currentValue || 0) + 1);
 
-      // 2. Добавляем клик в живую ленту для индикаторов-лампочек
       const recentRef = firebase.database().ref('recent_clicks');
-      recentRef.push({
-        button_id: buttonId,
-        timestamp: Date.now()
-      });
+      recentRef.push({ button_id: buttonId, timestamp: Date.now() });
     }
   } catch (error) {
     console.error("Firebase tracking error:", error);
   }
 }
 
-
-// === НАДЁЖНАЯ ФУНКЦИЯ СЧЕТЧИКА КЛИКОВ ДЛЯ IOS / IPHONE ===
 function trackLinkClick(platform, url) {
-  // Записываем детальный клик по ссылке соцсети в button_clicks и recent_clicks
   logButtonClick('link_social_' + platform);
-
-  // 1. Сразу открываем ссылку (синхронно), чтобы iOS не заблокировала окно
-  const newWindow = window.open(url, '_blank');
-
+  window.open(url, '_blank');
   try {
     const clickRef = firebase.database().ref('link_clicks/' + platform);
-    // 2. В фоне отправляем транзакцию в базу данных
-    clickRef.transaction((currentValue) => {
-      return (currentValue || 0) + 1;
-    });
+    clickRef.transaction((currentValue) => (currentValue || 0) + 1);
   } catch (error) {
     console.error("Firebase tracking error:", error);
   }
 }
-// =========================================================
 
 let wakeLock = null;
 async function requestWakeLock() {
   try {
-    if ('wakeLock' in navigator) {
-      wakeLock = await navigator.wakeLock.request('screen');
-    }
+    if ('wakeLock' in navigator) wakeLock = await navigator.wakeLock.request('screen');
   } catch (err) {}
 }
 
@@ -433,17 +369,108 @@ const sounds = [
   { "file": "strawberry.mp3", "img": "strawberry.png", "name": { "en": "Strawberry", "pt": "Morango", "ru": "Клубника", "uk": "Полуниця" }, "color": "#ff69b4", "locked": false },
   { "file": "oldphone.mp3", "img": "oldphone.png", "name": { "en": "Old Phone", "pt": "Telefone Antigo", "ru": "Телефон", "uk": "Телефон" }, "color": "#323232", "locked": false },
   { "file": "carrot.mp3", "img": "carrot.png", "name": { "en": "Carrot", "pt": "Cenoura", "ru": "Морковь", "uk": "Морква" }, "color": "#ff8c00", "locked": false },
-  
-  { "file": "pinksoftbrush.mp3", "img": "pinksoftbrush.png", "name": { "en": "Soft Brush", "pt": "Pincel Macio", "ru": "Мягкая кисть", "uk": "М’який пензель" }, "color": "#ffb6c1", "locked": true },
-  { "file": "greybrush.mp3", "img": "greybrush.png", "name": { "en": "Grey Brush", "pt": "Pincel Cinза", "ru": "Серая кисть", "uk": "Сірий пензель" }, "color": "#8c8c8c", "locked": true },
-  { "file": "wood.mp3", "img": "wood.png", "name": { "en": "Wood", "pt": "Madeira", "ru": "Дерево", "uk": "Дерево" }, "color": "#ffff00", "locked": true }
+  { "file": "pinksoftbrush.mp3", "img": "pinksoftbrush.png", "name": { "en": "Soft Brush", "pt": "Pincel Macio", "ru": "Мягкая кисть", "uk": "М’який пензель" }, "color": "#ffb6c1", "locked": false },
+  { "file": "greybrush.mp3", "img": "greybrush.png", "name": { "en": "Grey Brush", "pt": "Pincel Cinza", "ru": "Серая кисть", "uk": "Сірий пензель" }, "color": "#8c8c8c", "locked": false },
+  { "file": "wood.mp3", "img": "wood.png", "name": { "en": "Wood", "pt": "Madeira", "ru": "Дерево", "uk": "Дерево" }, "color": "#ffff00", "locked": false }
 ];
 
 const uiTL = {
-  en: { code: "EN", title: "BUCKET ASMR", play: "Play", pause: "Pause", repair: "REPAIR", sleep: "Sleep", tabFeatures: "Functions", tabGuide: "Guide", features: ["<span>✦</span> <b>Free Version:</b> Support with ads.", "<span>✦</span> <b>Unlockable Content:</b> Unlock remaining 6 triggers to press.", "<span>✦</span> <b>Stay Awake:</b> Screen won't turn off automatically.", "<span>✦</span> <b>Mixer:</b> Play multiple sounds at the same time." , "<span>✦</span> <b>Not Work?:</b> Turn off Silent Mode."], guide: ["<b>1. Unlock:</b> Tap locked icons to open Patreon link and wait 10s to open the sound.", "<b>2. Manual:</b> Click unlocked icons to start/stop sounds.", "<b>3. Auto:</b> Press <b>PLAY</b> for random switching (only unlocked sounds)."], speeds: { slow: "Slow", medium: "Medium", fast: "Fast" }, unlockTitle: "Unlock Trigger", unlockDesc: "Unlock this trigger or get permanent Premium access!", buyFull: "🛒 Buy Full Version", unlockBtn: "🔓 Unlock Sound", closeBtn: "Close", promoText: "Get the <span style='color:#ffb400;'>Full Version</span> on Patreon for just <span style='color:#ffb400;'>$3.50</span>! Permanent Access to all sounds.", idleTitle: "Start playing?", idleDesc: "Would you like to start the ASMR session?", idleDisable: "Don't show again", bannerBadge: "Premium Code", bannerText: "Get source code on Patreon for <span>$3.50</span>. Full App Access!", bannerBtn: "Get Access" },
-  pt: { code: "PT", title: "BALDE ASMR", play: "Tocar", pause: "Pausa", repair: "REPARAR", sleep: "Dormir", tabFeatures: "Funções", tabGuide: "Guia", features: ["<span>✦</span> <b>Versão Grátis:</b> Suporte com anúncios.", "<span>✦</span> <b>Conteúdo Desbloqueável:</b> Abra mais 6 sons acessando o Patreon.", "<span>✦</span> <b>Sempre Ativo:</b> A tela não apaga durante o uso.", "<span>✦</span> <b>Mixer:</b> Toque vários sons ao mesmo tempo.", "<span>✦</span> <b>Não funcionou?:</b> Desative o modo silencioso."], guide: ["<b>1. Desbloquear:</b> Toque nos cadeados, veja a oferta do Patreon e aguarde 10s.", "<b>2. Manual:</b> Clique nos ícones liberados para iniciar/parar sons.", "<b>3. Auto:</b> Pressione <b>Tocar</b> para troca aleatória."], speeds: { slow: "Lento", medium: "Médio", fast: "Rápido" }, unlockTitle: "Desbloquear Som", unlockDesc: "Desbloqueie este som ou obtenha acesso Premium permanente!", buyFull: "🛒 Comprar Versão Completa", unlockBtn: "🔓 Desbloquear Som", closeBtn: "Fechar", promoText: "Obtenha a <span style='color:#ffb400;'>Versão Completa</span> no Patreon por apenas <span style='color:#ffb400;'>$3.50</span>! Acesso permanente a tudo.", idleTitle: "Começar a tocar?", idleDesc: "Você está inativo. Gostaria de iniciar a sessão de ASMR?", idleDisable: "Não mostrar novamente", bannerBadge: "Código Premium", bannerText: "Obtenha o código no Patreon por <span>$3.50</span>. Acesso total!", bannerBtn: "Obter Acesso" },
-  uk: { code: "UK", title: "ВІДРО АСМР", play: "Грати", pause: "Пауза", repair: "ЛАГОДИТИ", sleep: "Сон", tabFeatures: "Функції", tabGuide: "Інструкція", features: ["<span>✦</span> <b>Безкоштовна версія:</b> Робота за рахунок реклами.", "<span>✦</span> <b>Контент за посилання:</b> Відкривайте інші 6 звуків, переходячи на Патреон.", "<span>✦</span> <b>Без Сну:</b> Екран не згасає автоматично.", "<span>✦</span> <b>Міксер:</b> Грайте кілька звуків одночасно.", "<span>✦</span> <b>Не працює?:</b> Вимкніть беззвучний режим."], guide: ["<b>1. Розблокування:</b> Натисніть на закритий звук, перейдіть на Patreon та зачекайте 10 сек.", "<b>2. Ручний:</b> Натискайте на відкриті плитки для міксу.", "<b>3. Auto:</b> Кнопка <b>ГРАТИ</b> запускає випадковий режим."], speeds: { slow: "Повільно", medium: "Середньо", fast: "Швидко" }, unlockTitle: "Відкрити звук", unlockDesc: "Розблокуйте цей тригер або придбайте повну версію додатка!", buyFull: "🛒 Купити повну версію", unlockBtn: "🔓 Розблокувати звук", closeBtn: "Закрити", promoText: "Отримай <span style='color:#ffb400;'>Повну Версію</span> на Patreon всього за <span style='color:#ffb400;'>$3.50</span>! Постійний доступ до всіх звуків.", idleTitle: "Запустити програвання?", idleDesc: "Ви нічого не натискали. Бажаєте увімкнути випадковий режим АСМР?", idleDisable: "Приховати нагадування", bannerBadge: "Преміум Код", bannerText: "Отримай вихідний код на Patreon за <span>$3.50</span>. Повний доступ!", bannerBtn: "Отримати" },
-  ru: { code: "RU", title: "ВЕДРО АСМР", play: "Играть", pause: "Пауза", repair: "ЧИНИТЬ", sleep: "Сон", tabFeatures: "Функции", tabGuide: "Инструкция", features: ["<span>✦</span> <b>Бесплатная версия:</b> Работа за счет рекламы.", "<span>✦</span> <b>Контент за переход:</b> Открывайте остальные 6 звуков, посещая Патреон.", "<span>✦</span> <b>Бодрость:</b> Экран не гаснет во время сеанса.", "<span>✦</span> <b>Микшер:</b> Запуск нескольких звуков одновременно.", "<span>✦</span> <b>Не работает?:</b> Отключите беззвучный режим."], guide: ["<b>1. Разблокировка:</b> Нажмите на закритый звук, перейдите на Patreon и подождите 10 сек.", "<b>2. Ручной:</b> Нажимайте на открытые плитки для микса звуков.", "<b>3. Авто:</b> Кнопка <b>ИГРАТЬ</b> включит случайный режим."], speeds: { slow: "Медленно", medium: "Средне", fast: "Быстро" }, unlockTitle: "Открыть звук", unlockDesc: "Разблокируйте этот триггер или приобретите полную версию приложения!", buyFull: "🛒 Купить полную версию", unlockBtn: "🔓 Разблокировать звук", closeBtn: "Закрыть", promoText: "Получи <span style='color:#ffb400;'>Полную Версию</span> на Patreon всего за <span style='color:#ffb400;'>$3.50</span>! Постоянный доступ ко всем звукам без ограничений.", idleTitle: "Запустити проигрывание?", idleDesc: "Вы ничего не нажимали. Хотите включить случайный режим АСМР?", idleDisable: "Скрыть напоминание", bannerBadge: "Премииум Код", bannerText: "Получи исходный код на Patreon за <span>$3.50</span>. Полный доступ к приложению!", bannerBtn: "Получить доступ" }
+  en: { 
+    code: "EN", customBtn: "⚙ Custom", title: "BUCKET ASMR", play: "Play", pause: "Pause", repair: "REPAIR", sleep: "Sleep", tabFeatures: "Functions", tabGuide: "Guide", 
+    features: [
+      "<span>✦</span> <b>Full Access:</b> All ASMR triggers are available.", 
+      "<span>✦</span> <b>Stay Awake:</b> Screen won't turn off automatically.", 
+      "<span>✦</span> <b>Mixer:</b> Play multiple sounds at the same time.", 
+      "<span>✦</span> <b>Not Working?:</b> Turn off Silent Mode."
+    ], 
+    guide: [
+      "<b>1. Manual:</b> Tap any sound icon to start/stop audio mix.", 
+      "<b>2. Auto:</b> Press <b>PLAY</b> for random automatic switching.", 
+      "<b>3. Favorites:</b> Use <b>⭐ Fav</b> to select specific triggers for auto-play."
+    ], 
+    speeds: { slow: "Slow", medium: "Medium", fast: "Fast" }, 
+    unlockTitle: "Unlock Trigger", unlockDesc: "Unlock this trigger!", 
+    unlockBtn: "🔓 Unlock Sound", closeBtn: "Close", idleTitle: "Start playing?", idleDesc: "Would you like to start the ASMR session?", idleDisable: "Don't show again",
+    settingsTitle: "Settings", helpBtnLabel: "Help / Guide", lblFxStyle: "Effect Style", lblFxOpacity: "Opacity / Glow", lblFxSpeed: "Effect Speed", lblFxRandomInterval: "Random Change Interval",
+    fxNames: { steam: "💨 Steam (Color)", rain: "💧 Rain Drops", snow: "❄️ Snowflakes", comets: "☄️ Comets & Asteroids", neondust: "✨ Neon Dust", aura: "🌀 Pulsing Aura", random: "🔀 Random Effect" },
+    fxPromoTitle: "New Feature: Effects",
+    fxPromoDesc: "Click Yes to activate automatic switching of visual effects.",
+    fxPromoEnable: "Yes, activate all effects",
+    fxPromoKeep: "Keep current effect",
+    fxPromoPs: "P.S. You can change this later in Settings."
+  },
+  pt: { 
+    code: "PT", customBtn: "⚙ Personalizar", title: "BALDE ASMR", play: "Tocar", pause: "Pausa", repair: "REPARAR", sleep: "Dormir", tabFeatures: "Funções", tabGuide: "Guia", 
+    features: [
+      "<span>✦</span> <b>Acesso Total:</b> Todos os sons estão disponíveis.", 
+      "<span>✦</span> <b>Sempre Ativo:</b> A tela não apaga durante o uso.", 
+      "<span>✦</span> <b>Mixer:</b> Toque vários sons ao mesmo tempo.", 
+      "<span>✦</span> <b>Não funcionou?:</b> Desative o modo silencioso."
+    ], 
+    guide: [
+      "<b>1. Manual:</b> Clique nos ícones para iniciar/parar sons.", 
+      "<b>2. Auto:</b> Pressione <b>Tocar</b> para troca aleatória.", 
+      "<b>3. Favoritos:</b> Use <b>⭐ Fav</b> para escolher sons específicos no modo auto."
+    ], 
+    speeds: { slow: "Lento", medium: "Médio", fast: "Rápido" }, 
+    unlockTitle: "Desbloquear Som", unlockDesc: "Desbloqueie este som!", 
+    unlockBtn: "🔓 Desbloquear Som", closeBtn: "Fechar", idleTitle: "Começar a tocar?", idleDesc: "Você está inativo. Gostaria de iniciar a sessão de ASMR?", idleDisable: "Não mostrar novamente",
+    settingsTitle: "Configurações", helpBtnLabel: "Ajuda / Guia", lblFxStyle: "Estilo do Efeito", lblFxOpacity: "Opacidade / Brilho", lblFxSpeed: "Velocidade do Efeito", lblFxRandomInterval: "Intervalo de Troca Aleatória",
+    fxNames: { steam: "💨 Vapor (Colorido)", rain: "💧 Gotas de Chuva", snow: "❄️ Flocos de Neve", comets: "☄️ Cometas e Asteroides", neondust: "✨ Poeira Neon", aura: "🌀 Aura Pulsante", random: "🔀 Efeito Aleatório" },
+    fxPromoTitle: "Nova Função: Efeitos",
+    fxPromoDesc: "Clique em Sim para ativar a troca automática de efeitos visuais.",
+    fxPromoEnable: "Sim, ativar todos os efeitos",
+    fxPromoKeep: "Manter efeito atual",
+    fxPromoPs: "P.S. Você pode alterar isso mais tarde nas Configurações."
+  },
+  uk: { 
+    code: "UK", customBtn: "⚙ Налаштування", title: "ВІДРО АСМР", play: "Грати", pause: "Пауза", repair: "ЛАГОДИТИ", sleep: "Сон", tabFeatures: "Функції", tabGuide: "Інструкція", 
+    features: [
+      "<span>✦</span> <b>Повний доступ:</b> Усі тригери розблоковано.", 
+      "<span>✦</span> <b>Без Сну:</b> Екран не згасає автоматично.", 
+      "<span>✦</span> <b>Міксер:</b> Грайте кілька звуків одночасно.", 
+      "<span>✦</span> <b>Не працює?:</b> Вимкніть беззвучний режим."
+    ], 
+    guide: [
+      "<b>1. Ручний:</b> Натискайте на будь-які плитки для міксу звуків.", 
+      "<b>2. Авто:</b> Кнопка <b>ГРАТИ</b> запускає випадковий режим.", 
+      "<b>3. Обране:</b> Використовуйте <b>⭐ Fav</b> для вибору тригерів у авто-режимі."
+    ], 
+    speeds: { slow: "Повільно", medium: "Середньо", fast: "Швидко" }, 
+    unlockTitle: "Відкрити звук", unlockDesc: "Розблокуйте цей тригер!", 
+    unlockBtn: "🔓 Розблокувати звук", closeBtn: "Закрити", idleTitle: "Запустити програвання?", idleDesc: "Ви нічого не натискали. Бажаєте увімкнути випадковий режим АСМР?", idleDisable: "Приховати нагадування",
+    settingsTitle: "Налаштування", helpBtnLabel: "Допомога / Інструкція", lblFxStyle: "Стиль ефекту", lblFxOpacity: "Прозорість / Сяйво", lblFxSpeed: "Швидкість ефекту", lblFxRandomInterval: "Інтервал зміни рандому",
+    fxNames: { steam: "💨 Кольорова пара", rain: "💧 Краплі дощу", snow: "❄️ Сніжинки", comets: "☄️ Комети та астероїди", neondust: "✨ Магічні іскри", aura: "🌀 Пульсуюча аура", random: "🔀 Рандомний ефект" },
+    fxPromoTitle: "Нова функція ефекти.",
+    fxPromoDesc: "натисніть так щоб активувати автоматичну зміну ефектів",
+    fxPromoEnable: "так, активувати всі ефекти",
+    fxPromoKeep: "Залишити поточний ефект",
+    fxPromoPs: "PS: Ви зможете змінити це в розділі Налаштування."
+  },
+  ru: { 
+    code: "RU", customBtn: "⚙ Настройки", title: "ВЕДРО АСМР", play: "Играть", pause: "Пауза", repair: "ЧИНИТЬ", sleep: "Сон", tabFeatures: "Функции", tabGuide: "Инструкция", 
+    features: [
+      "<span>✦</span> <b>Полный доступ:</b> Все звуки разблокированы.", 
+      "<span>✦</span> <b>Бодрость:</b> Экран не гаснет во время сеанса.", 
+      "<span>✦</span> <b>Микшер:</b> Запуск нескольких звуков одновременно.", 
+      "<span>✦</span> <b>Не работает?:</b> Отключите беззвучный режим."
+    ], 
+    guide: [
+      "<b>1. Ручной:</b> Нажимайте на любые плитки для микса звуков.", 
+      "<b>2. Авто:</b> Кнопка <b>ИГРАТЬ</b> включит случайный автоматический режим.", 
+      "<b>3. Избранное:</b> Используйте <b>⭐ Fav</b> для отбора звуков в авто-режиме."
+    ], 
+    speeds: { slow: "Медленно", medium: "Средне", fast: "Быстро" }, 
+    unlockTitle: "Открыть звук", unlockDesc: "Разблокируйте этот триггер!", 
+    unlockBtn: "🔓 Разблокировать звук", closeBtn: "Закрыть", idleTitle: "Запустить проигрывание?", idleDesc: "Вы ничего не нажимали. Хотите включить случайный режим АСМР?", idleDisable: "Скрыть напоминание",
+    settingsTitle: "Настройки", helpBtnLabel: "Помощь / Инструкция", lblFxStyle: "Стиль эффекта", lblFxOpacity: "Прозрачность / Свечение", lblFxSpeed: "Скорость эффекта", lblFxRandomInterval: "Интервал смены рандома",
+    fxNames: { steam: "💨 Цветной пар", rain: "💧 Капли дождя", snow: "❄️ Снежинки", comets: "☄️ Кометы и астероиды", neondust: "✨ Магические искры", aura: "🌀 Пульсирующая аура", random: "🔀 Рандом" },
+    fxPromoTitle: "Новая функция эффекты.",
+    fxPromoDesc: "нажмите да что-бы активировать автоматическую смену эффектов",
+    fxPromoEnable: "да, активировать все эффекты",
+    fxPromoKeep: "Оставить текущий эффект",
+    fxPromoPs: "PS: Вы сможете изменить это в разделе Настройки."
+  }
 };
 
 let audioElements = [], randomActive = false, sleepMode = false, langIdx = 0;
@@ -453,7 +480,55 @@ const langOrder = ['en', 'pt', 'uk', 'ru'];
 let steamParticles = [];
 let pendingUnlockElement = null;
 let adTimerInterval = null;
-let steamHue = 270; // Стартуем с фиолетового цвета
+let steamHue = 270;
+
+// Логика промо-таймера эффектов
+let fxTimerStarted = false;
+let fxTimerId = null;
+
+function triggerFirstAudioPlay() {
+  if (!fxTimerStarted) {
+    fxTimerStarted = true;
+    fxTimerId = setTimeout(() => {
+      if (fxConfig.style !== 'random') {
+        logButtonClick('ui_fx_promo_modal_shown');
+        document.getElementById('fxPromoModal').style.display = 'flex';
+      }
+    }, 20000);
+  }
+}
+
+// Глобальные переменные эффектов
+let fxConfig = {
+  style: 'steam',
+  activeStyle: 'steam', // фактический визуальный эффект при режиме 'random'
+  opacity: 0.7,
+  speed: 0.4,
+  randomInterval: 8 // секунды
+};
+
+let randomFxTimer = null;
+const availableEffects = ['steam', 'rain', 'snow', 'comets', 'neondust', 'aura'];
+
+function pickRandomEffect() {
+  const otherFx = availableEffects.filter(e => e !== fxConfig.activeStyle);
+  fxConfig.activeStyle = otherFx[Math.floor(Math.random() * otherFx.length)];
+}
+
+function startRandomFxLoop() {
+  stopRandomFxLoop();
+  pickRandomEffect();
+  randomFxTimer = setInterval(() => {
+    pickRandomEffect();
+  }, fxConfig.randomInterval * 1000);
+}
+
+function stopRandomFxLoop() {
+  if (randomFxTimer) {
+    clearInterval(randomFxTimer);
+    randomFxTimer = null;
+  }
+}
 
 let idleTimer = null;
 let isIdleSystemEnabled = true;
@@ -510,14 +585,12 @@ sounds.forEach((s, idx) => {
   };
 
   btn.onclick = () => {
-    // Получаем чистое имя файла без расширения .mp3 для красоты в логах
     const cleanSoundName = state.fileName.replace('.mp3', '');
-    
     if (state.locked) {
-        logButtonClick('sound_locked_' + cleanSoundName); // Логируем попытку нажать на закрытый звук
+        logButtonClick('sound_locked_' + cleanSoundName);
         openUnlockModal(state);
     } else {
-        logButtonClick('sound_' + cleanSoundName);        // Логируем успешное включение звука
+        logButtonClick('sound_' + cleanSoundName);
         loadAudio(state);
         state.active ? fadeOut(state) : fadeIn(state);
     }
@@ -546,16 +619,11 @@ function openUnlockModal(el) {
     
     document.getElementById('unlockTitle').innerText = t.unlockTitle;
     document.getElementById('unlockDesc').innerText = t.unlockDesc;
-    document.getElementById('buyFullBtn').innerText = t.buyFull;
     document.getElementById('unlockTriggerBtn').innerText = t.unlockBtn;
     document.getElementById('cancelUnlock').innerText = t.closeBtn;
-    document.getElementById('adStatus').innerHTML = t.promoText;
     
-    document.getElementById('adProgress').style.width = "0%";
-    document.getElementById('adProgress').style.transition = "none";
     document.getElementById('unlockTriggerBtn').disabled = false;
     document.getElementById('unlockTriggerBtn').style.opacity = "1";
-    
     document.getElementById('unlockModal').style.display = 'flex';
 }
 
@@ -567,61 +635,37 @@ document.getElementById('cancelUnlock').onclick = () => {
     resetIdleTimer();
 };
 
-// Логируем клик по баннеру перехода к покупке полной версии в модалке
-document.getElementById('buyFullBtn').onclick = () => {
-    logButtonClick('link_modal_buy_full_patreon');
-};
-
-// Логируем клик по нижнему закрепленному баннеру
-document.getElementById('bannerBlock').onclick = (e) => {
-    // Чтобы клик по кнопке внутри баннера не дублировался
-    logButtonClick('link_bottom_banner_patreon');
-};
-
 document.getElementById('unlockTriggerBtn').onclick = () => {
     if (!pendingUnlockElement) return;
-    
-    logButtonClick('link_unlock_trigger_patreon'); // Логируем запуск таймера разблокировки звука
-    
-    // Переход на Патреон в новой вкладке
-    window.open("https://www.patreon.com/bucket_asmr/posts/asmr-app-accept-160833268", "_blank");
+    logButtonClick('link_unlock_trigger');
     
     document.getElementById('unlockTriggerBtn').disabled = true;
     document.getElementById('unlockTriggerBtn').style.opacity = "0.3";
     
     let timeLeft = 10;
-    document.getElementById('adStatus').innerText = `Unlocking sound... (${timeLeft}s)`;
-    document.getElementById('adProgress').style.width = "100%";
-    document.getElementById('adProgress').style.transition = "width 10s linear";
-    
     adTimerInterval = setInterval(() => {
         timeLeft--;
-        if (timeLeft > 0) {
-            document.getElementById('adStatus').innerText = `Unlocking sound... (${timeLeft}s)`;
-        } else {
+        if (timeLeft <= 0) {
             clearInterval(adTimerInterval);
-            document.getElementById('adStatus').innerText = "Unlocked! 🎉";
-            setTimeout(() => {
-                if (pendingUnlockElement) {
-                    pendingUnlockElement.locked = false;
-                    pendingUnlockElement.btn.classList.remove('locked');
-                    const lockIcon = pendingUnlockElement.btn.querySelector('.lock-icon');
-                    if (lockIcon) lockIcon.remove();
-                    
-                    loadAudio(pendingUnlockElement);
-                    
-                    document.getElementById('unlockModal').style.display = 'none';
-                    pendingUnlockElement = null;
-                    updateUI();
-                    resetIdleTimer();
-                }
-            }, 800);
+            if (pendingUnlockElement) {
+                pendingUnlockElement.locked = false;
+                pendingUnlockElement.btn.classList.remove('locked');
+                const lockIcon = pendingUnlockElement.btn.querySelector('.lock-icon');
+                if (lockIcon) lockIcon.remove();
+                
+                loadAudio(pendingUnlockElement);
+                document.getElementById('unlockModal').style.display = 'none';
+                pendingUnlockElement = null;
+                updateUI();
+                resetIdleTimer();
+            }
         }
     }, 1000);
 };
 
 function fadeIn(el) {
   if(el.locked) return;
+  triggerFirstAudioPlay();
   if(el.fadeInterval) clearInterval(el.fadeInterval);
   el.active = true; el.btn.classList.add('active');
   el.btn.style.backgroundColor = el.color + "44";
@@ -649,6 +693,7 @@ function fadeOut(el) {
 }
 
 function startRandomPlaying() {
+  triggerFirstAudioPlay();
   randomActive = true;
   const favs = audioElements.filter(el => el.isFav && !el.locked);
   if(favs.length > 0) favs.forEach(el => loadAudio(el));
@@ -671,7 +716,7 @@ function stopRandomPlaying() {
 }
 
 document.getElementById('randomBtn').onclick = () => {
-  logButtonClick('ui_random_play'); // Логируем запуск / остановку авто-режима
+  logButtonClick('ui_random_play');
   if (!randomActive) { 
     startRandomPlaying();
   } else { 
@@ -711,6 +756,7 @@ function runRandom() {
 function updateUI() {
   const t = uiTL[langOrder[langIdx]];
   document.getElementById('title').innerText = t.title;
+  document.getElementById('settingsBtn').innerText = t.customBtn;
   document.querySelectorAll('.lang-switcher-btn').forEach(btn => btn.innerText = t.code);
   document.getElementById('randomBtn').innerText = randomActive ? t.pause : t.play;
   document.getElementById('repairBtn').innerText = t.repair;
@@ -729,20 +775,30 @@ function updateUI() {
   document.getElementById('idleDesc').innerText = t.idleDesc;
   document.getElementById('idleDisableBtn').innerText = t.idleDisable;
 
-  // Локализация окна разблокировки (если оно не активно в данный момент таймера)
+  document.getElementById('settingsTitle').innerText = t.settingsTitle;
+  document.getElementById('helpBtnLabel').innerText = t.helpBtnLabel;
+  document.getElementById('lblFxStyle').innerText = t.lblFxStyle;
+  document.getElementById('lblFxOpacity').innerText = t.lblFxOpacity;
+  document.getElementById('lblFxSpeed').innerText = t.lblFxSpeed;
+  document.getElementById('lblFxRandomInterval').innerText = t.lblFxRandomInterval;
+
+  document.getElementById('fxPromoTitle').innerText = t.fxPromoTitle;
+  document.getElementById('fxPromoDesc').innerText = t.fxPromoDesc;
+  document.getElementById('fxPromoEnableBtn').innerText = t.fxPromoEnable;
+  document.getElementById('fxPromoKeepBtn').innerText = t.fxPromoKeep;
+  document.getElementById('fxPromoPs').innerText = t.fxPromoPs;
+
+  const select = document.getElementById('fxStyleSelect');
+  Array.from(select.options).forEach(opt => {
+    if (t.fxNames[opt.value]) opt.text = t.fxNames[opt.value];
+  });
+
   if (!pendingUnlockElement || !document.getElementById('unlockTriggerBtn').disabled) {
       document.getElementById('unlockTitle').innerText = t.unlockTitle;
       document.getElementById('unlockDesc').innerText = t.unlockDesc;
-      document.getElementById('buyFullBtn').innerText = t.buyFull;
       document.getElementById('unlockTriggerBtn').innerText = t.unlockBtn;
       document.getElementById('cancelUnlock').innerText = t.closeBtn;
-      document.getElementById('adStatus').innerHTML = t.promoText;
   }
-
-  // Локализация текстов баннера Patreon
-  document.getElementById('bannerBadge').innerText = t.bannerBadge;
-  document.getElementById('bannerMainText').innerHTML = t.bannerText;
-  document.getElementById('bannerBtn').innerText = t.bannerBtn;
 
   audioElements.forEach((el, i) => {
       const name = sounds[i].name[langOrder[langIdx]];
@@ -760,42 +816,52 @@ function updateUI() {
   });
 }
 
-// === ЕДИНЫЙ РЕАКТИВНЫЙ ЦЕНТР ОБНОВЛЕНИЯ ОНЛАЙНА И ПРОСМОТРОВ ===
+// Обработчики кнопок промо-окна эффектов
+document.getElementById('fxPromoEnableBtn').onclick = () => {
+  logButtonClick('ui_fx_promo_enable');
+  fxConfig.style = 'random';
+  document.getElementById('fxStyleSelect').value = 'random';
+  document.getElementById('randomIntervalGroup').style.display = 'block';
+  startRandomFxLoop();
+  document.getElementById('fxPromoModal').style.display = 'none';
+  resetIdleTimer();
+};
+
+document.getElementById('fxPromoKeepBtn').onclick = () => {
+  logButtonClick('ui_fx_promo_keep');
+  document.getElementById('fxPromoModal').style.display = 'none';
+  resetIdleTimer();
+};
+
 function updateConnections() {
     if (typeof firebase === 'undefined' || !firebase.database) return;
     
-    // Очищаем старую локальную ссылку перед созданием новой сессии
     if (presenceRef) {
         try { presenceRef.remove(); } catch(e) {}
         presenceRef = null;
     }
 
-    // Создаем чистую валидную запись true в базе
     presenceRef = connectionsRef.push(true);
     presenceRef.onDisconnect().remove();
 
-    // Снимаем прошлые слушатели, чтобы не дублировать их
     connectionsRef.off();
 
-    // Живой слушатель: как только сокет проснется — цифра сразу обновится сама
     connectionsRef.on('value', (snap) => {
         const count = snap.numChildren() || 1;
         document.getElementById('online-count').innerText = count;
-        console.log("[Firebase] Живой онлайн обновлен:", count);
     });
 
-    // === ФИКС ПРОБЛЕМЫ: ДОБАВЛЯЕМ ОТПРАВКУ ПРОСМОТРОВ ===
     if (!sessionStorage.getItem('page_view_counted')) {
         viewsRef.set(firebase.database.ServerValue.increment(1))
             .then(() => {
                 sessionStorage.setItem('page_view_counted', 'true');
-                console.log("[Firebase] Просмотр успешно засчитан!");
             })
-            .catch(err => console.error("Ошибка обновления счётчика просмотров:", err));
+            .catch(err => console.error("Ошибка просмотра:", err));
     }
 }
+
 function setSpeed(v, label) {
-    logButtonClick('ui_speed_' + label); // Логируем переключение скорости авто-режима
+    logButtonClick('ui_speed_' + label);
     currentSpeedValue = v;
     document.getElementById('speedDropdown').classList.remove('open');
     updateUI();
@@ -805,14 +871,14 @@ function setSpeed(v, label) {
 document.getElementById('speedTrigger').onclick = (e) => { e.stopPropagation(); favDropdown.classList.remove('open'); document.getElementById('speedDropdown').classList.toggle('open'); };
 document.getElementById('favBtn').onclick = (e) => { 
     e.stopPropagation(); 
-    logButtonClick('ui_fav_menu'); // Логируем открытие меню Избранного
+    logButtonClick('ui_fav_menu');
     document.getElementById('speedDropdown').classList.remove('open'); 
     favDropdown.classList.toggle('open'); 
 };
 document.addEventListener('click', () => { document.getElementById('speedDropdown').classList.remove('open'); favDropdown.classList.remove('open'); });
 
 document.getElementById('repairBtn').onclick = () => {
-    logButtonClick('ui_repair'); // Логируем использование кнопки REPAIR
+    logButtonClick('ui_repair');
     location.reload();
 };
 
@@ -826,19 +892,18 @@ document.querySelectorAll('.lang-switcher-btn').forEach(btn => {
     btn.onclick = (e) => { 
         e.stopPropagation(); 
         langIdx = (langIdx + 1) % 4; 
-        logButtonClick('ui_lang_change_' + langOrder[langIdx]); // Логируем смену языка интерфейса
+        logButtonClick('ui_lang_change_' + langOrder[langIdx]);
         updateUI(); 
     }; 
 });
 
 document.getElementById('sleepBtn').onclick = () => {
-    logButtonClick('ui_sleep_mode'); // Логируем переключение эко-режима сна
+    logButtonClick('ui_sleep_mode');
     sleepMode = !sleepMode;
     document.body.style.background = sleepMode ? "#000" : "";
     document.getElementById('stars').style.opacity = sleepMode ? "0" : "1";
     document.getElementById('sleepBtn').classList.toggle('active', sleepMode);
     document.getElementById('soundGrid').classList.toggle('hidden', sleepMode);
-    document.getElementById('bannerBlock').style.display = sleepMode ? "none" : "flex";
     if (sleepMode) {
       if(presenceRef) presenceRef.remove();
       presenceRef = null;
@@ -853,19 +918,18 @@ document.getElementById('sleepBtn').onclick = () => {
     updateUI();
 };
 
-// ================= СИСТЕМА ОБНАРУЖЕНИЯ БЕЗДЕЙСТВИЯ (IDLE TIMEOUT) =================
 function resetIdleTimer() {
-  if (!isIdleSystemEnabled || randomActive || sleepMode || document.getElementById('unlockModal').style.display === 'flex') {
+  if (!isIdleSystemEnabled || randomActive || sleepMode || document.getElementById('unlockModal').style.display === 'flex' || document.getElementById('settingsModal').style.display === 'flex' || document.getElementById('fxPromoModal').style.display === 'flex') {
     clearTimeout(idleTimer);
     return;
   }
   clearTimeout(idleTimer);
-  idleTimer = setTimeout(showIdleModal, 24000); // 24 секунд бездействия
+  idleTimer = setTimeout(showIdleModal, 120000);
 }
 
 function showIdleModal() {
-  if (document.getElementById('welcomeModal').style.display !== 'flex' && !randomActive && document.getElementById('unlockModal').style.display !== 'flex') {
-    logButtonClick('ui_idle_modal_shown'); // Запишем факт появления окна бездействия
+  if (document.getElementById('welcomeModal').style.display !== 'flex' && !randomActive && document.getElementById('unlockModal').style.display !== 'flex' && document.getElementById('settingsModal').style.display !== 'flex' && document.getElementById('fxPromoModal').style.display !== 'flex') {
+    logButtonClick('ui_idle_modal_shown');
     document.getElementById('idleModal').style.display = 'flex';
   }
 }
@@ -892,9 +956,69 @@ document.getElementById('idleDisableBtn').onclick = () => {
 document.addEventListener('click', () => {
   resetIdleTimer();
 });
-// =================================================================================
 
-// Инициализация Эффектов Canvas
+// Управление окнами Настроек и Помощи
+function openSettings() {
+  logButtonClick('ui_settings_open');
+  document.getElementById('settingsModal').style.display = 'flex';
+  clearTimeout(idleTimer);
+}
+
+document.getElementById('closeSettings').onclick = () => {
+  logButtonClick('ui_settings_close');
+  document.getElementById('settingsModal').style.display = 'none';
+  resetIdleTimer();
+};
+
+document.getElementById('openHelpFromSettings').onclick = () => {
+  logButtonClick('ui_settings_open_help');
+  document.getElementById('settingsModal').style.display = 'none';
+  showHelp();
+};
+
+function showHelp() { 
+    logButtonClick('ui_help_question_btn');
+    document.getElementById('welcomeModal').style.display = 'flex'; 
+    clearTimeout(idleTimer); 
+}
+
+// Обработчики изменений настроек
+document.getElementById('fxStyleSelect').onchange = (e) => {
+  fxConfig.style = e.target.value;
+  
+  const randomGroup = document.getElementById('randomIntervalGroup');
+  if (fxConfig.style === 'random') {
+    randomGroup.style.display = 'block';
+    startRandomFxLoop();
+  } else {
+    randomGroup.style.display = 'none';
+    stopRandomFxLoop();
+    fxConfig.activeStyle = fxConfig.style;
+  }
+  
+  logButtonClick('ui_fx_style_' + fxConfig.style);
+};
+
+document.getElementById('fxRandomIntervalRange').oninput = (e) => {
+  fxConfig.randomInterval = parseInt(e.target.value, 10);
+  document.getElementById('valFxRandomInterval').innerText = fxConfig.randomInterval + 's';
+  if (fxConfig.style === 'random') {
+    startRandomFxLoop();
+  }
+};
+
+document.getElementById('fxOpacityRange').oninput = (e) => {
+  fxConfig.opacity = parseFloat(e.target.value);
+  document.getElementById('valFxOpacity').innerText = Math.round(fxConfig.opacity * 100) + '%';
+  document.documentElement.style.setProperty('--fx-opacity', fxConfig.opacity);
+};
+
+document.getElementById('fxSpeedRange').oninput = (e) => {
+  fxConfig.speed = parseFloat(e.target.value);
+  document.getElementById('valFxSpeed').innerText = fxConfig.speed.toFixed(1) + 'x';
+};
+
+// Canvas Effects
 const canvas = document.getElementById('stars'), ctx = canvas.getContext('2d');
 const steamCanvas = document.getElementById('steamCanvas'), sCtx = steamCanvas.getContext('2d');
 
@@ -906,26 +1030,144 @@ window.onresize = resize; resize();
 
 const starsArr = Array.from({length: 70}, () => ({ x: Math.random() * innerWidth, y: Math.random() * innerHeight, r: Math.random() * 1.5, a: Math.random(), s: Math.random() * 0.01 }));
 
+// Функция генерации частиц
 function spawnSteam() {
   if (sleepMode) return;
-  
-  steamHue = (steamHue + 0.2) % 360; 
+  steamHue = (steamHue + 0.2 * fxConfig.speed) % 360; 
+
+  const activeFx = (fxConfig.style === 'random') ? fxConfig.activeStyle : fxConfig.style;
 
   audioElements.forEach(el => {
     if (el.active && !el.locked) {
       const rect = el.btn.getBoundingClientRect();
-      if (Math.random() < 0.15) { 
-        steamParticles.push({
-          x: rect.left + Math.random() * rect.width,
-          y: rect.top + rect.height * 0.7,
-          vx: (Math.random() - 0.5) * 0.4,
-          vy: -(Math.random() * 0.3 + 0.2),
-          size: Math.random() * 15 + 10,
-          alpha: Math.random() * 0.3 + 0.2,
-          growth: Math.random() * 0.1 + 0.05,
-          hue: steamHue 
-        });
+      
+      // 1. STEAM (Цветной пар)
+      if (activeFx === 'steam') {
+        if (Math.random() < 0.15) { 
+          steamParticles.push({
+            type: 'steam',
+            x: rect.left + Math.random() * rect.width,
+            y: rect.top + rect.height * 0.7,
+            vx: (Math.random() - 0.5) * 0.4 * fxConfig.speed,
+            vy: -(Math.random() * 0.3 + 0.2) * fxConfig.speed,
+            size: Math.random() * 15 + 10,
+            alpha: (Math.random() * 0.3 + 0.2) * fxConfig.opacity,
+            growth: (Math.random() * 0.1 + 0.05) * fxConfig.speed,
+            hue: steamHue 
+          });
+        }
       }
+      
+      // 2. RAIN (Капли дождя)
+      else if (activeFx === 'rain') {
+        if (Math.random() < 0.3) {
+          steamParticles.push({
+            type: 'rain',
+            x: rect.left + Math.random() * rect.width,
+            y: rect.bottom - 5,
+            vy: (Math.random() * 3 + 2) * fxConfig.speed,
+            length: Math.random() * 10 + 8,
+            alpha: (Math.random() * 0.4 + 0.3) * fxConfig.opacity
+          });
+        }
+      }
+
+      // 3. SNOW (Снежинки)
+      else if (activeFx === 'snow') {
+        if (Math.random() < 0.2) {
+          steamParticles.push({
+            type: 'snow',
+            x: rect.left + Math.random() * rect.width,
+            y: rect.bottom,
+            vx: (Math.random() - 0.5) * 0.5 * fxConfig.speed,
+            vy: (Math.random() * 0.8 + 0.5) * fxConfig.speed,
+            size: Math.random() * 3 + 2,
+            alpha: (Math.random() * 0.5 + 0.4) * fxConfig.opacity
+          });
+        }
+      }
+
+      // 4. COMETS & ASTEROIDS
+      else if (activeFx === 'comets') {
+        if (Math.random() < 0.067) { 
+          const isAst = Math.random() < 0.4;
+          const palettes = ['#ffb400', '#00e5ff', '#8a2be2'];
+          const chosenColor = palettes[Math.floor(Math.random() * palettes.length)];
+
+          const angle = Math.random() * Math.PI * 2;
+          const speedMag = (Math.random() * 1.5 + 0.5) * fxConfig.speed;
+          const vx = Math.cos(angle) * speedMag;
+          const vy = Math.sin(angle) * speedMag;
+
+          if (isAst) {
+            const sides = Math.floor(Math.random() * 3) + 5;
+            const radius = Math.random() * 6 + 4;
+            const vertices = [];
+            for (let i = 0; i < sides; i++) {
+              const a = (i / sides) * Math.PI * 2;
+              const r = radius * (0.7 + Math.random() * 0.6);
+              vertices.push({ x: Math.cos(a) * r, y: Math.sin(a) * r });
+            }
+
+            steamParticles.push({
+              type: 'comet_ast',
+              x: rect.left + Math.random() * rect.width,
+              y: rect.top + Math.random() * rect.height,
+              vx: vx,
+              vy: vy,
+              rot: Math.random() * Math.PI * 2,
+              vRot: (Math.random() - 0.5) * 0.05 * fxConfig.speed,
+              vertices: vertices,
+              alpha: 0.9 * fxConfig.opacity
+            });
+          } else {
+            steamParticles.push({
+              type: 'comet_tail',
+              x: rect.left + Math.random() * rect.width,
+              y: rect.top + Math.random() * rect.height,
+              vx: vx,
+              vy: vy,
+              size: Math.random() * 2.5 + 1.5,
+              color: chosenColor,
+              alpha: 0.95 * fxConfig.opacity,
+              history: []
+            });
+          }
+        }
+      }
+
+      // 5. NEON DUST (Неоновые искры)
+      else if (activeFx === 'neondust') {
+        if (Math.random() < 0.25) {
+          steamParticles.push({
+            type: 'neondust',
+            x: rect.left + Math.random() * rect.width,
+            y: rect.top + Math.random() * rect.height,
+            vx: (Math.random() - 0.5) * 1.2 * fxConfig.speed,
+            vy: -(Math.random() * 1.5 + 0.5) * fxConfig.speed,
+            size: Math.random() * 2.5 + 1,
+            alpha: fxConfig.opacity,
+            hue: steamHue
+          });
+        }
+      }
+
+      // 6. AURA (Пульсирующая аура)
+      else if (activeFx === 'aura') {
+        if (Math.random() < 0.04) {
+          steamParticles.push({
+            type: 'aura',
+            cx: rect.left + rect.width / 2,
+            cy: rect.top + rect.height / 2,
+            radius: rect.width / 2,
+            maxRadius: rect.width * 0.9,
+            alpha: 0.6 * fxConfig.opacity,
+            growth: (Math.random() * 0.4 + 0.2) * fxConfig.speed,
+            color: el.color
+          });
+        }
+      }
+
     }
   });
 }
@@ -941,31 +1183,145 @@ function draw() {
   } else { ctx.clearRect(0,0,innerWidth,innerHeight); }
 
   sCtx.clearRect(0, 0, innerWidth, innerHeight);
-  if (!sleepMode && steamParticles.length > 0) {
+  if (!sleepMode) {
     spawnSteam();
     
     for (let i = steamParticles.length - 1; i >= 0; i--) {
       let p = steamParticles[i];
-      p.x += p.vx; p.y += p.vy; p.size += p.growth; p.alpha -= 0.0005;
 
-      if (p.alpha <= 0) {
-        steamParticles.splice(i, 1);
-        continue;
+      // Отрисовка: STEAM
+      if (p.type === 'steam') {
+        p.x += p.vx; p.y += p.vy; p.size += p.growth; p.alpha -= 0.0005 * fxConfig.speed;
+        if (p.alpha <= 0) { steamParticles.splice(i, 1); continue; }
+
+        sCtx.beginPath();
+        let gradient = sCtx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size);
+        gradient.addColorStop(0, `hsla(${p.hue}, 80%, 60%, ${p.alpha})`);
+        gradient.addColorStop(0.5, `hsla(${p.hue}, 80%, 60%, ${p.alpha * 0.4})`);
+        gradient.addColorStop(1, `hsla(${p.hue}, 80%, 60%, 0)`);
+        sCtx.fillStyle = gradient;
+        sCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        sCtx.fill();
       }
 
-      sCtx.beginPath();
-      let gradient = sCtx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size);
-      
-      gradient.addColorStop(0, `hsla(${p.hue}, 80%, 60%, ${p.alpha})`);
-      gradient.addColorStop(0.5, `hsla(${p.hue}, 80%, 60%, ${p.alpha * 0.4})`);
-      gradient.addColorStop(1, `hsla(${p.hue}, 80%, 60%, 0)`);
-      
-      sCtx.fillStyle = gradient;
-      sCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-      sCtx.fill();
+      // Отрисовка: RAIN
+      else if (p.type === 'rain') {
+        p.y += p.vy;
+        p.alpha -= 0.005 * fxConfig.speed;
+        if (p.alpha <= 0 || p.y > innerHeight) { steamParticles.splice(i, 1); continue; }
+
+        sCtx.beginPath();
+        sCtx.strokeStyle = `rgba(180, 210, 255, ${p.alpha})`;
+        sCtx.lineWidth = 1.5;
+        sCtx.moveTo(p.x, p.y);
+        sCtx.lineTo(p.x, p.y + p.length);
+        sCtx.stroke();
+      }
+
+      // Отрисовка: SNOW
+      else if (p.type === 'snow') {
+        p.x += p.vx + Math.sin(p.y * 0.05) * 0.3;
+        p.y += p.vy;
+        p.alpha -= 0.002 * fxConfig.speed;
+        if (p.alpha <= 0 || p.y > innerHeight) { steamParticles.splice(i, 1); continue; }
+
+        sCtx.beginPath();
+        sCtx.fillStyle = `rgba(220, 235, 255, ${p.alpha})`;
+        sCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        sCtx.fill();
+      }
+
+      // Отрисовка: COMETS & ASTEROIDS
+      else if (p.type === 'comet_ast') {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.rot += p.vRot;
+        p.alpha -= 0.004 * fxConfig.speed;
+
+        if (p.alpha <= 0 || p.x < 0 || p.x > innerWidth || p.y < 0 || p.y > innerHeight) { steamParticles.splice(i, 1); continue; }
+
+        sCtx.save();
+        sCtx.translate(p.x, p.y);
+        sCtx.rotate(p.rot);
+        sCtx.beginPath();
+        p.vertices.forEach((v, idx) => {
+          if (idx === 0) sCtx.moveTo(v.x, v.y);
+          else sCtx.lineTo(v.x, v.y);
+        });
+        sCtx.closePath();
+        sCtx.fillStyle = `rgba(160, 160, 180, ${p.alpha})`;
+        sCtx.strokeStyle = `rgba(210, 210, 230, ${p.alpha})`;
+        sCtx.lineWidth = 1;
+        sCtx.fill();
+        sCtx.stroke();
+        sCtx.restore();
+      }
+      else if (p.type === 'comet_tail') {
+        p.history.push({ x: p.x, y: p.y });
+        if (p.history.length > 10) p.history.shift();
+
+        p.x += p.vx;
+        p.y += p.vy;
+        p.alpha -= 0.005 * fxConfig.speed;
+
+        if (p.alpha <= 0 || p.x < 0 || p.x > innerWidth || p.y < 0 || p.y > innerHeight) { steamParticles.splice(i, 1); continue; }
+
+        // Рисуем шлейф
+        if (p.history.length > 1) {
+          sCtx.beginPath();
+          sCtx.moveTo(p.history[0].x, p.history[0].y);
+          for (let h = 1; h < p.history.length; h++) {
+            sCtx.lineTo(p.history[h].x, p.history[h].y);
+          }
+          sCtx.lineTo(p.x, p.y);
+          sCtx.strokeStyle = p.color;
+          sCtx.globalAlpha = p.alpha * 0.6;
+          sCtx.lineWidth = p.size;
+          sCtx.stroke();
+          sCtx.globalAlpha = 1.0;
+        }
+
+        // Ядро кометы
+        sCtx.beginPath();
+        sCtx.fillStyle = '#ffffff';
+        sCtx.shadowBlur = 6;
+        sCtx.shadowColor = p.color;
+        sCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        sCtx.fill();
+        sCtx.shadowBlur = 0;
+      }
+
+      // Отрисовка: NEON DUST
+      else if (p.type === 'neondust') {
+        p.x += p.vx; p.y += p.vy;
+        p.alpha -= 0.012 * fxConfig.speed;
+        if (p.alpha <= 0) { steamParticles.splice(i, 1); continue; }
+
+        sCtx.beginPath();
+        sCtx.fillStyle = `hsla(${p.hue}, 100%, 65%, ${p.alpha})`;
+        sCtx.shadowBlur = 8;
+        sCtx.shadowColor = `hsl(${p.hue}, 100%, 50%)`;
+        sCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        sCtx.fill();
+        sCtx.shadowBlur = 0;
+      }
+
+      // Отрисовка: AURA
+      else if (p.type === 'aura') {
+        p.radius += p.growth;
+        p.alpha -= 0.008 * fxConfig.speed;
+        if (p.alpha <= 0 || p.radius >= p.maxRadius) { steamParticles.splice(i, 1); continue; }
+
+        sCtx.beginPath();
+        sCtx.strokeStyle = p.color;
+        sCtx.globalAlpha = p.alpha;
+        sCtx.lineWidth = 2;
+        sCtx.arc(p.cx, p.cy, p.radius, 0, Math.PI * 2);
+        sCtx.stroke();
+        sCtx.globalAlpha = 1;
+      }
+
     }
-  } else if (!sleepMode) {
-    spawnSteam();
   }
 
   requestAnimationFrame(draw);
@@ -983,19 +1339,14 @@ audioElements.forEach(el => {
 });
 
 function switchTab(event, tabId) {
-    logButtonClick('ui_welcome_tab_switch_' + tabId); // Замерим вкладки инструкции
+    logButtonClick('ui_welcome_tab_switch_' + tabId);
     document.querySelectorAll('.help-section').forEach(s => s.classList.remove('active'));
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     document.getElementById(tabId).classList.add('active');
     event.currentTarget.classList.add('active');
 }
-function showHelp() { 
-    logButtonClick('ui_help_question_btn');
-    document.getElementById('welcomeModal').style.display = 'flex'; 
-    clearTimeout(idleTimer); 
-}
 
-// === ЛОГИКА ЭКРАНА "CONTINUE" ПРИ РАЗБЛОКИРОВКЕ ДЛЯ IOS ===
+// iOS Wakeup Overlay
 const wakeUpOverlay = document.createElement('div');
 wakeUpOverlay.style.cssText = `
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -1030,13 +1381,11 @@ function handleContinueClick() {
     logButtonClick('ui_ios_wake_continue');
     try {
         if (typeof firebase !== 'undefined' && firebase.database) {
-            console.log("Пробиваем заморозку iOS 18...");
             firebase.database().goOffline();
             
             setTimeout(() => {
                 firebase.database().goOnline();
                 updateConnections();
-                console.log("Сеть Firebase успешно перезапущена!");
             }, 300);
         }
     } catch (e) {
@@ -1058,7 +1407,7 @@ window.addEventListener('pageshow', (event) => {
     if (event.persisted) showWakeUpScreen();
 });
 
-// Логика для выпадающего списка соцсетей (Links)
+// Dropdown Links
 const linksTrigger = document.getElementById('linksTrigger');
 const linksOptions = document.getElementById('linksOptions');
 const speedDropdown = document.getElementById('speedDropdown');
