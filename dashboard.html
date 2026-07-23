@@ -41,15 +41,45 @@
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
         }
 
-        h1 {
-            font-size: 1.8rem;
-            font-weight: 600;
-            text-align: center;
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 2rem;
+        }
+
+        h1 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin: 0;
             letter-spacing: -0.5px;
             background: linear-gradient(to right, #fff, var(--text-muted));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+        }
+
+        .refresh-btn {
+            background: rgba(56, 189, 248, 0.15);
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            color: var(--accent-viewers);
+            padding: 8px 14px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .refresh-btn:hover {
+            background: rgba(56, 189, 248, 0.3);
+            transform: scale(1.03);
+        }
+
+        .refresh-btn:active {
+            transform: scale(0.97);
         }
 
         .stats-grid {
@@ -101,7 +131,7 @@
             color: var(--badge-green);
             background: rgba(16, 185, 129, 0.12);
             border: 1px solid rgba(16, 185, 129, 0.3);
-            padding: 3px 8px;
+            padding: 4px 10px;
             border-radius: 12px;
             margin-top: 8px;
             display: inline-flex;
@@ -145,6 +175,7 @@
         .details-row {
             display: flex;
             justify-content: space-between;
+            align-items: center;
             font-size: 0.9rem;
             color: var(--text-muted);
         }
@@ -152,6 +183,43 @@
         .details-row span:last-child {
             color: var(--text-main);
             font-weight: 600;
+        }
+
+        /* Индикатор лампочки свежей активности */
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+            flex-shrink: 0;
+        }
+
+        .dot-latest {
+            background-color: #10b981;
+            box-shadow: 0 0 8px #10b981;
+            animation: pulse-dot 1.5s infinite;
+        }
+
+        .dot-recent {
+            background-color: #38bdf8;
+            box-shadow: 0 0 6px #38bdf8;
+        }
+
+        .dot-older {
+            background-color: #a855f7;
+            opacity: 0.7;
+        }
+
+        .dot-none {
+            background-color: #475569;
+            opacity: 0.3;
+        }
+
+        @keyframes pulse-dot {
+            0% { transform: scale(0.9); opacity: 0.8; }
+            50% { transform: scale(1.3); opacity: 1; }
+            100% { transform: scale(0.9); opacity: 0.8; }
         }
 
         .status {
@@ -182,7 +250,10 @@
 <body>
 
     <div class="dashboard">
-        <h1>ASMR Premium Live Status</h1>
+        <div class="header-container">
+            <h1>ASMR Live Status</h1>
+            <button class="refresh-btn" id="btn-refresh">🔄 Обновить данные</button>
+        </div>
         
         <div class="stats-grid">
             <!-- ЗРИТЕЛИ ОНЛАЙН -->
@@ -195,14 +266,14 @@
             <div class="card" style="border-left: 4px solid var(--accent-sub, #10b981); display: flex; flex-direction: column;">
                 <span class="card-label">Всего просмотров</span>
                 <span class="card-value" id="views-count" style="color: var(--accent-sub, #10b981);">0</span>
-                <div class="delta-badge" id="views-delta">+0 визит / +0 сут.</div>
+                <div class="delta-badge" id="views-delta">+0 за неделю / +0 за месяц</div>
             </div>
             
             <!-- ВСЕГО КЛИКОВ ПО ССЫЛКАМ -->
             <div class="card clicks">
                 <span class="card-label">Всего кликов по ссылкам</span>
                 <span class="card-value" id="clicks-count">0</span>
-                <div class="delta-badge" id="clicks-delta">+0 визит / +0 сут.</div>
+                <div class="delta-badge" id="clicks-delta">+0 за неделю / +0 за месяц</div>
                 
                 <div class="clicks-details" id="clicks-platforms"></div>
             </div>
@@ -215,12 +286,12 @@
                     <div class="counter-item">
                         <span class="counter-sublabel">Всего нажатий</span>
                         <span class="card-value" id="total-button-clicks" style="color: var(--accent-purple);">0</span>
-                        <div class="delta-badge" id="total-btn-delta">+0 визит / +0 сут.</div>
+                        <div class="delta-badge" id="total-btn-delta">+0 за неделю / +0 за месяц</div>
                     </div>
                     <div class="counter-item">
                         <span class="counter-sublabel">Только звуки</span>
                         <span class="card-value" id="sound-button-clicks" style="color: var(--accent-viewers);">0</span>
-                        <div class="delta-badge" id="sound-btn-delta">+0 визит / +0 сут.</div>
+                        <div class="delta-badge" id="sound-btn-delta">+0 за неделю / +0 за месяц</div>
                     </div>
                 </div>
 
@@ -238,7 +309,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getDatabase, ref, onValue, get, set, push } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+        import { getDatabase, ref, onValue, get, set, push, query, limitToLast, orderByChild } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "1:977463565728:web:a35a91ce071d1f0d2a98c5", 
@@ -260,6 +331,7 @@
         const totalButtonClicksElem = document.getElementById('total-button-clicks');
         const soundButtonClicksElem = document.getElementById('sound-button-clicks');
         const buttonContainer = document.getElementById('button-clicks-container');
+        const btnRefresh = document.getElementById('btn-refresh');
 
         // Элементы дельты
         const viewsDeltaElem = document.getElementById('views-delta');
@@ -267,123 +339,195 @@
         const totalBtnDeltaElem = document.getElementById('total-btn-delta');
         const soundBtnDeltaElem = document.getElementById('sound-btn-delta');
 
-        // Текущее live-состояние
+        // Текущее состояние
         let currentLiveState = { page_views: 0, link_clicks: 0, total_buttons: 0, sound_buttons: 0 };
+        let recentClickMap = new Map(); // Карта последних кликов: button_id -> positionIndex (0 - самый свежий)
         
-        // Якори отсчета
-        let sessionStartState = null; // Старт текущей сессии (не сбрасывается от F5)
-        let dayAgoState = null;        // Срез за вчера
+        // Исторические точки (неделя и месяц)
+        let state7DaysAgo = null;
+        let state30DaysAgo = null;
 
-        const getTodayKey = () => new Date().toISOString().split('T')[0];
-        const getYesterdayKey = () => {
-            const d = new Date();
-            d.setDate(d.getDate() - 1);
-            return d.toISOString().split('T')[0];
+        const safeNum = (val) => {
+            const n = Number(val);
+            return isNaN(n) ? 0 : n;
         };
 
-        async function initVisitTracking() {
+        async function fetchHistoryAndCalculatePeriods() {
             try {
-                // 1. ПРОВЕРЯЕМ СЕССИЮ В БРАУЗЕРЕ
-                const savedSession = sessionStorage.getItem('dashboard_session_start');
+                const visitsRef = ref(database, 'dashboard_stats/visits_history');
+                const visitsSnap = await get(visitsRef);
                 
-                if (savedSession) {
-                    sessionStartState = JSON.parse(savedSession);
-                } else {
-                    // Если это новый заход — читаем последнюю запись до нас из Firebase
-                    const visitsRef = ref(database, 'dashboard_stats/visits_history');
-                    const visitsSnap = await get(visitsRef);
-                    
-                    if (visitsSnap.exists()) {
-                        const visitsData = Object.values(visitsSnap.val());
-                        sessionStartState = visitsData[visitsData.length - 1];
-                    } else {
-                        sessionStartState = { page_views: 0, link_clicks: 0, total_buttons: 0, sound_buttons: 0 };
+                if (visitsSnap.exists()) {
+                    const rawVisitsData = visitsSnap.val();
+                    const visitsList = Object.values(rawVisitsData)
+                        .filter(v => v && typeof v === 'object' && v.timestamp)
+                        .sort((a, b) => a.timestamp - b.timestamp);
+
+                    if (visitsList.length > 0) {
+                        const now = Date.now();
+                        const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
+                        const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000;
+
+                        const target7 = now - SEVEN_DAYS_MS;
+                        let found7 = [...visitsList].reverse().find(v => v.timestamp <= target7);
+                        state7DaysAgo = found7 || visitsList[0];
+
+                        const target30 = now - THIRTY_DAYS_MS;
+                        let found30 = [...visitsList].reverse().find(v => v.timestamp <= target30);
+                        state30DaysAgo = found30 || visitsList[0];
                     }
-                    // Запоминаем якорь в памяти сессии браузера
-                    sessionStorage.setItem('dashboard_session_start', JSON.stringify(sessionStartState));
                 }
-
-                // 2. ПОЛУЧАЕМ СУТОЧНЫЙ СРЕЗ (За вчера)
-                const yesterdayRef = ref(database, `daily_history/${getYesterdayKey()}`);
-                const yesterdaySnap = await get(yesterdayRef);
-                if (yesterdaySnap.exists()) {
-                    dayAgoState = yesterdaySnap.val();
-                }
-
-                // 3. ЗАПИСЫВАЕМ СНИМОК В БАЗУ ДЛЯ БУДУЩИХ ЗАХОДОВ (с задержкой 3 сек)
-                setTimeout(async () => {
-                    if (currentLiveState.total_buttons > 0 || currentLiveState.page_views > 0) {
-                        const newVisitRef = push(ref(database, 'dashboard_stats/visits_history'));
-                        await set(newVisitRef, {
-                            timestamp: Date.now(),
-                            ...currentLiveState
-                        });
-
-                        const todayRef = ref(database, `daily_history/${getTodayKey()}`);
-                        const todaySnap = await get(todayRef);
-                        if (!todaySnap.exists()) {
-                            await set(todayRef, {
-                                timestamp: Date.now(),
-                                ...currentLiveState
-                            });
-                        }
-                    }
-                }, 3000);
-
             } catch (err) {
-                console.error("Ошибка инициализации истории:", err);
+                console.error("Ошибка при получении истории периодов:", err);
             }
         }
 
         function updateDeltas() {
-            const calcDelta = (current, startStateVal, dayAgoStateVal) => {
-                const startVal = typeof startStateVal === 'number' ? startStateVal : current;
-                const vDiff = Math.max(0, current - startVal);
+            const calcDelta = (currentVal, state7, state30) => {
+                const cur = safeNum(currentVal);
                 
-                const dayVal = typeof dayAgoStateVal === 'number' ? dayAgoStateVal : current;
-                const dDiff = Math.max(0, current - dayVal);
+                const val7 = state7 !== null && state7 !== undefined ? safeNum(state7) : cur;
+                const diff7 = Math.max(0, cur - val7);
 
-                return `+${vDiff} визит / +${dDiff} сут.`;
+                const val30 = state30 !== null && state30 !== undefined ? safeNum(state30) : cur;
+                const diff30 = Math.max(0, cur - val30);
+
+                return `+${diff7} за неделю / +${diff30} за месяц`;
             };
 
             viewsDeltaElem.textContent = calcDelta(
                 currentLiveState.page_views, 
-                sessionStartState?.page_views, 
-                dayAgoState?.page_views
+                state7DaysAgo?.page_views, 
+                state30DaysAgo?.page_views
             );
             clicksDeltaElem.textContent = calcDelta(
                 currentLiveState.link_clicks, 
-                sessionStartState?.link_clicks, 
-                dayAgoState?.link_clicks
+                state7DaysAgo?.link_clicks, 
+                state30DaysAgo?.link_clicks
             );
             totalBtnDeltaElem.textContent = calcDelta(
                 currentLiveState.total_buttons, 
-                sessionStartState?.total_buttons, 
-                dayAgoState?.total_buttons
+                state7DaysAgo?.total_buttons, 
+                state30DaysAgo?.total_buttons
             );
             soundBtnDeltaElem.textContent = calcDelta(
                 currentLiveState.sound_buttons, 
-                sessionStartState?.sound_buttons, 
-                dayAgoState?.sound_buttons
+                state7DaysAgo?.sound_buttons, 
+                state30DaysAgo?.sound_buttons
             );
         }
 
-        // --- СЛУШАТЕЛИ REALTIME DATABASE ---
+        async function refreshDataAndDeltas() {
+            try {
+                btnRefresh.textContent = "Проверка...";
+                await fetchHistoryAndCalculatePeriods();
 
-        // 1. Онлайн зрители
+                const viewsSnap = await get(ref(database, 'page_views'));
+                if (viewsSnap.exists()) {
+                    currentLiveState.page_views = safeNum(viewsSnap.val());
+                    viewsElement.textContent = currentLiveState.page_views;
+                }
+
+                const clicksSnap = await get(ref(database, 'link_clicks'));
+                if (clicksSnap.exists()) {
+                    const data = clicksSnap.val();
+                    let total = 0;
+                    for (let p in data) { total += safeNum(data[p]); }
+                    currentLiveState.link_clicks = total;
+                    clicksElement.textContent = total;
+                }
+
+                const btnsSnap = await get(ref(database, 'button_clicks'));
+                if (btnsSnap.exists()) {
+                    const data = btnsSnap.val();
+                    let totalBtn = 0;
+                    let soundBtn = 0;
+                    for (let b in data) {
+                        const count = safeNum(data[b]);
+                        totalBtn += count;
+                        if (b.startsWith('sound_')) soundBtn += count;
+                    }
+                    currentLiveState.total_buttons = totalBtn;
+                    currentLiveState.sound_buttons = soundBtn;
+                    
+                    totalButtonClicksElem.textContent = totalBtn;
+                    soundButtonClicksElem.textContent = soundBtn;
+                }
+
+                updateDeltas();
+
+                btnRefresh.textContent = "✓ Обновлено!";
+                setTimeout(() => {
+                    btnRefresh.textContent = "🔄 Обновить данные";
+                }, 1500);
+
+            } catch (err) {
+                console.error("Ошибка при ручном обновлении:", err);
+                btnRefresh.textContent = "Ошибка!";
+                setTimeout(() => {
+                    btnRefresh.textContent = "🔄 Обновить данные";
+                }, 2000);
+            }
+        }
+
+        async function logPeriodicSnapshot() {
+            try {
+                if (currentLiveState.page_views > 0 || currentLiveState.total_buttons > 0) {
+                    const visitsRef = ref(database, 'dashboard_stats/visits_history');
+                    const newVisitRef = push(visitsRef);
+                    await set(newVisitRef, {
+                        timestamp: Date.now(),
+                        page_views: safeNum(currentLiveState.page_views),
+                        link_clicks: safeNum(currentLiveState.link_clicks),
+                        total_buttons: safeNum(currentLiveState.total_buttons),
+                        sound_buttons: safeNum(currentLiveState.sound_buttons)
+                    });
+                }
+            } catch (e) {
+                console.error("Ошибка автоматической фиксации снимка:", e);
+            }
+        }
+
+        btnRefresh.addEventListener('click', refreshDataAndDeltas);
+
+        // --- REALTIME LISTENERS ---
+
+        // 1. Последние 50 кликов (Слушатель лампочек)
+        const recentClicksQuery = query(ref(database, 'recent_clicks'), orderByChild('timestamp'), limitToLast(50));
+        onValue(recentClicksQuery, (snapshot) => {
+            recentClickMap.clear();
+            if (snapshot.exists()) {
+                const list = [];
+                snapshot.forEach((child) => {
+                    list.push(child.val());
+                });
+                // Сортируем от самых свежих к старым
+                list.sort((a, b) => b.timestamp - a.timestamp);
+                
+                list.forEach((item, index) => {
+                    if (item.button_id && !recentClickMap.has(item.button_id)) {
+                        recentClickMap.set(item.button_id, index);
+                    }
+                });
+            }
+            // Вызываем перерисисовку кнопок для обновления лампочек
+            refreshButtonListUI();
+        });
+
+        // 2. Онлайн зрители
         onValue(ref(database, 'online_users'), (snapshot) => {
             viewersElement.textContent = snapshot.exists() ? Object.keys(snapshot.val()).length : 0;
         });
 
-        // 2. Просмотры
+        // 3. Просмотры
         onValue(ref(database, 'page_views'), (snapshot) => {
-            const val = snapshot.exists() ? snapshot.val() : 0;
+            const val = snapshot.exists() ? safeNum(snapshot.val()) : 0;
             viewsElement.textContent = val;
             currentLiveState.page_views = val;
             updateDeltas();
         });
 
-        // 3. Клики по ссылкам
+        // 4. Клики по ссылкам
         onValue(ref(database, 'link_clicks'), (snapshot) => {
             if (snapshot.exists()) {
                 const platformsData = snapshot.val();
@@ -391,17 +535,15 @@
                 let htmlDetails = '';
 
                 for (const platform in platformsData) {
-                    const clicks = platformsData[platform];
-                    if (typeof clicks === 'number') {
-                        totalClicks += clicks;
-                        const platformName = platform.charAt(0).toUpperCase() + platform.slice(1);
-                        htmlDetails += `
-                            <div class="details-row">
-                                <span>${platformName}:</span>
-                                <span>${clicks}</span>
-                            </div>
-                        `;
-                    }
+                    const clicks = safeNum(platformsData[platform]);
+                    totalClicks += clicks;
+                    const platformName = platform.charAt(0).toUpperCase() + platform.slice(1);
+                    htmlDetails += `
+                        <div class="details-row">
+                            <span>${platformName}:</span>
+                            <span>${clicks}</span>
+                        </div>
+                    `;
                 }
                 clicksElement.textContent = totalClicks;
                 platformsContainer.innerHTML = htmlDetails;
@@ -414,53 +556,89 @@
             updateDeltas();
         });
 
-        // 4. Кнопки и звуки
+        // 5. Кнопки и звуки
+        let rawButtonDataCache = null;
+
+        function refreshButtonListUI() {
+            if (!rawButtonDataCache) return;
+
+            let totalAllClicks = 0;
+            let totalSoundClicks = 0;
+            let htmlDetails = '';
+
+            const sortedButtons = Object.entries(rawButtonDataCache).sort((a, b) => safeNum(b[1]) - safeNum(a[1]));
+
+            sortedButtons.forEach(([btnName, count]) => {
+                const clickNum = safeNum(count);
+                totalAllClicks += clickNum;
+
+                if (btnName.startsWith('sound_')) {
+                    totalSoundClicks += clickNum;
+                }
+
+                let displayName = btnName
+                    .replace("sound_", "🔊 ")
+                    .replace("ui_", "⚙️ ")
+                    .replace("link_", "🔗 ");
+
+                // Определение класса лампочки
+                let dotClass = "dot-none";
+                let dotTitle = "Не нажималась в последних 50 кликах";
+                
+                if (recentClickMap.has(btnName)) {
+                    const pos = recentClickMap.get(btnName);
+                    if (pos === 0) {
+                        dotClass = "dot-latest";
+                        dotTitle = "Самый последний клик!";
+                    } else if (pos < 5) {
+                        dotClass = "dot-recent";
+                        dotTitle = `Недавно использовалась (Клик #${pos + 1} назад)`;
+                    } else {
+                        dotClass = "dot-older";
+                        dotTitle = `Входит в топ-50 последних кликов (Клик #${pos + 1} назад)`;
+                    }
+                }
+                
+                htmlDetails += `
+                    <div class="details-row" style="padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                        <div style="display: flex; align-items: center;">
+                            <span class="status-dot ${dotClass}" title="${dotTitle}"></span>
+                            <span style="color: var(--text-muted); text-transform: capitalize;">${displayName}</span>
+                        </div>
+                        <span style="font-weight: 600; color: var(--text-main); margin-left: 10px;">${clickNum}</span>
+                    </div>
+                `;
+            });
+
+            totalButtonClicksElem.textContent = totalAllClicks;
+            soundButtonClicksElem.textContent = totalSoundClicks;
+            buttonContainer.innerHTML = htmlDetails;
+
+            currentLiveState.total_buttons = totalAllClicks;
+            currentLiveState.sound_buttons = totalSoundClicks;
+            updateDeltas();
+        }
+
         onValue(ref(database, 'button_clicks'), (snapshot) => {
             if (snapshot.exists()) {
-                const clicksData = snapshot.val();
-                let totalAllClicks = 0;
-                let totalSoundClicks = 0;
-                let htmlDetails = '';
-
-                const sortedButtons = Object.entries(clicksData).sort((a, b) => b[1] - a[1]);
-
-                sortedButtons.forEach(([btnName, count]) => {
-                    const clickNum = Number(count) || 0;
-                    totalAllClicks += clickNum;
-
-                    if (btnName.startsWith('sound_')) {
-                        totalSoundClicks += clickNum;
-                    }
-
-                    let displayName = btnName
-                        .replace("sound_", "🔊 ")
-                        .replace("ui_", "⚙️ ")
-                        .replace("link_", "🔗 ");
-                    
-                    htmlDetails += `
-                        <div class="details-row" style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem;">
-                            <span style="color: var(--text-muted); text-transform: capitalize;">${displayName}</span>
-                            <span style="font-weight: 600; color: var(--text-main); margin-left: 10px;">${clickNum}</span>
-                        </div>
-                    `;
-                });
-
-                totalButtonClicksElem.textContent = totalAllClicks;
-                soundButtonClicksElem.textContent = totalSoundClicks;
-                buttonContainer.innerHTML = htmlDetails;
-
-                currentLiveState.total_buttons = totalAllClicks;
-                currentLiveState.sound_buttons = totalSoundClicks;
+                rawButtonDataCache = snapshot.val();
+                refreshButtonListUI();
             } else {
+                rawButtonDataCache = null;
                 totalButtonClicksElem.textContent = 0;
                 soundButtonClicksElem.textContent = 0;
                 buttonContainer.innerHTML = '<div style="color: var(--text-muted); text-align: center;">Кликов пока нет</div>';
             }
-            updateDeltas();
         });
 
-        // Запуск логики сессии и истории
-        initVisitTracking();
+        // Запуск при старте
+        async function initDashboard() {
+            await fetchHistoryAndCalculatePeriods();
+            updateDeltas();
+            setTimeout(logPeriodicSnapshot, 5000);
+        }
+
+        initDashboard();
     </script>
 </body>
 </html>
