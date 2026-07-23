@@ -371,13 +371,21 @@ let presenceRef = null;
 let liveInterval = null;
 
 
-// === УНИВЕРСАЛЬНАЯ ФУНКЦИЯ ЛОГИРОВАНИЯ НАЖАТИЙ КНОПОК ===
+// === УНИВЕРСАЛЬНАЯ ФУНКЦИЯ ЛОГИРОВАНИЯ НАЖАТИЙ КНОПОК (С ПОДДЕРЖКОЙ ЖИВОЙ ЛЕНТЫ КЛИКОВ) ===
 function logButtonClick(buttonId) {
   try {
     if (typeof firebase !== 'undefined' && firebase.database) {
+      // 1. Инкрементируем общий счетчик для статистики в цифрах
       const btnRef = firebase.database().ref('button_clicks/' + buttonId);
       btnRef.transaction((currentValue) => {
         return (currentValue || 0) + 1;
+      });
+
+      // 2. Добавляем клик в живую ленту для индикаторов-лампочек
+      const recentRef = firebase.database().ref('recent_clicks');
+      recentRef.push({
+        button_id: buttonId,
+        timestamp: Date.now()
       });
     }
   } catch (error) {
@@ -388,7 +396,7 @@ function logButtonClick(buttonId) {
 
 // === НАДЁЖНАЯ ФУНКЦИЯ СЧЕТЧИКА КЛИКОВ ДЛЯ IOS / IPHONE ===
 function trackLinkClick(platform, url) {
-  // Записываем детальный клик по ссылке соцсети в button_clicks
+  // Записываем детальный клик по ссылке соцсети в button_clicks и recent_clicks
   logButtonClick('link_social_' + platform);
 
   // 1. Сразу открываем ссылку (синхронно), чтобы iOS не заблокировала окно
