@@ -16,35 +16,91 @@
   /* Основной интерфейс */
   body, html {
     margin: 0; padding: 0; height: 100%;
-    background: #050505; transition: background 1s ease;
+    background: #050505; 
+    transition: background 1.5s ease;
     font-family: 'Segoe UI', sans-serif; color: white; overflow: hidden;
     touch-action: manipulation; -webkit-user-select: none; user-select: none;
   }
-  body.fancy-bg { background: radial-gradient(ellipse at bottom, #050505 0%, #0a0a1f 100%); }
-  .overlay { position: absolute; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.4); z-index:3; pointer-events: none; }
   
+  /* Градиенты времени суток */
+  body.tod-morning { background: linear-gradient(180deg, #ff9a9e 0%, #fecfef 50%, #a1c4fd 100%); }
+  body.tod-noon { background: linear-gradient(180deg, #4facfe 0%, #00f2fe 100%); }
+  body.tod-evening { background: linear-gradient(180deg, #2c3e50 0%, #fd746c 70%, #ff8235 100%); }
+  body.tod-night { background: radial-gradient(ellipse at bottom, #050505 0%, #0a0a1f 100%); }
+
+  .overlay { 
+    position: absolute; top:0; left:0; right:0; bottom:0; 
+    background: rgba(0,0,0,0.3); z-index:3; pointer-events: none; 
+    transition: background 1.5s ease;
+  }
+
+  /* Вспышка молнии при грозе */
+  .lightning-flash {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: #ffffff;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 8;
+    transition: opacity 0.05s ease-out;
+  }
+  
+  /* Контейнер для облаков */
+  .clouds-container {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 2; overflow: hidden;
+    opacity: 0; transition: opacity 2s ease-in-out;
+  }
+  .clouds-container.visible { opacity: 0.85; }
+
+  .cloud {
+    position: absolute;
+    background: rgba(200, 210, 225, 0.55);
+    border-radius: 100px;
+    filter: blur(10px);
+    animation: floatClouds linear infinite;
+  }
+  .cloud::before, .cloud::after {
+    content: ''; position: absolute; background: rgba(200, 210, 225, 0.55); border-radius: 50%;
+  }
+  .cloud1 { width: 220px; height: 65px; top: 5%; left: -240px; animation-duration: 35s; }
+  .cloud1::before { width: 100px; height: 100px; top: -45px; left: 30px; }
+  .cloud1::after { width: 80px; height: 80px; top: -35px; left: 100px; }
+
+  .cloud2 { width: 320px; height: 95px; top: 12%; left: -350px; animation-duration: 50s; animation-delay: 10s; }
+  .cloud2::before { width: 140px; height: 140px; top: -65px; left: 50px; }
+  .cloud2::after { width: 110px; height: 110px; top: -45px; left: 150px; }
+
+  .cloud3 { width: 180px; height: 50px; top: 22%; left: -200px; animation-duration: 28s; animation-delay: 5s; }
+  .cloud3::before { width: 70px; height: 70px; top: -30px; left: 20px; }
+  .cloud3::after { width: 60px; height: 60px; top: -25px; left: 75px; }
+
+  @keyframes floatClouds {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(calc(100vw + 450px)); }
+  }
+
   .container { position: relative; z-index: 10; display:flex; flex-direction: column; align-items:center; padding: 20px 20px 90px 20px; height: 100vh; box-sizing: border-box; }
   
   .title-bar { display:flex; align-items:center; gap:15px; margin-bottom:15px; z-index: 1000; transition: opacity 0.5s; }
-  h1 { margin:0; font-size:24px; color:#ffb400; text-shadow:0 0 10px #ffb400; }
+  h1 { margin:0; font-size:24px; color:#ffb400; text-shadow:0 0 10px rgba(0,0,0,0.5); }
   
   .live-counter {
     background: rgba(255, 50, 50, 0.15);
     border: 1px solid rgba(255, 50, 50, 0.4);
     padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: bold; color: #ff8080;
-	display: none !important; 
+    display: none !important; 
     display: flex; align-items: center; gap: 5px; text-transform: uppercase;
   }
   .live-dot { width: 6px; height: 6px; background: #ff3030; border-radius: 50%; animation: blink 1.5s infinite; }
   @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
-  #settingsBtn { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.3); padding: 0 12px; height: 35px; border-radius: 20px; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px); font-weight: bold; font-size: 13px; gap: 5px; }
-  .lang-btn-ui { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.4); padding: 8px 16px; border-radius: 10px; color: white; cursor: pointer; font-weight: bold; min-width: 45px; }
+  #settingsBtn { background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.3); padding: 0 12px; height: 35px; border-radius: 20px; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px); font-weight: bold; font-size: 13px; gap: 5px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+  .lang-btn-ui { background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.4); padding: 8px 16px; border-radius: 10px; color: white; cursor: pointer; font-weight: bold; min-width: 45px; }
 
   .controls { margin-bottom:15px; display:flex; gap:10px; flex-wrap: wrap; justify-content: center; align-items: center; z-index: 10; transition: opacity 0.5s; }
-  .controls > button { padding:8px 14px; border:none; border-radius:12px; background: rgba(255,255,255,0.15); color:white; cursor:pointer; font-weight:bold; backdrop-filter: blur(5px); font-size: 13px; transition: 0.3s; }
+  .controls > button { padding:8px 14px; border:none; border-radius:12px; background: rgba(255,255,255,0.2); color:white; cursor:pointer; font-weight:bold; backdrop-filter: blur(5px); font-size: 13px; transition: 0.3s; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
   
-  #randomBtn { background: rgba(138, 43, 226, 0.4); border: 1px solid rgba(138, 43, 226, 0.3); min-width: 80px; }
+  #randomBtn { background: rgba(138, 43, 226, 0.5); border: 1px solid rgba(138, 43, 226, 0.4); min-width: 80px; }
   #sleepBtn.active { background: #ffb400; border: 1px solid #ffb400; color: black; box-shadow: 0 0 15px rgba(255, 180, 0, 0.4); }
 
   .sound-grid { 
@@ -55,8 +111,8 @@
   .sound-grid.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
 
   .sound-button { 
-    aspect-ratio: 1/1; border: 1px solid rgba(255,255,255,0.05); border-radius: 20px;
-    background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.3); 
+    aspect-ratio: 1/1; border: 1px solid rgba(255,255,255,0.1); border-radius: 20px;
+    background: rgba(0,0,0,0.2); color: rgba(255,255,255,0.7); 
     font-weight: bold; cursor: pointer; display: flex; flex-direction: column; 
     justify-content: center; align-items: center; backdrop-filter: blur(8px);
     transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); font-size: 11px; text-align: center; 
@@ -84,7 +140,7 @@
   .sound-button.active.is-fav { border: 1px solid #8a2be2 !important; }
   
   .sound-button.locked {
-    border: 1px dashed rgba(255,255,255,0.15) !important;
+    border: 1px dashed rgba(255,255,255,0.25) !important;
     background-image: none !important;
     cursor: pointer;
   }
@@ -97,7 +153,7 @@
   }
 
   .custom-select-container { position: relative; }
-  .select-trigger { padding: 8px 14px; border-radius: 12px; background: rgba(255, 255, 255, 0.15); color: white; cursor: pointer; font-weight: bold; font-size: 13px; min-width: 90px; text-align: center; }
+  .select-trigger { padding: 8px 14px; border-radius: 12px; background: rgba(255, 255, 255, 0.2); color: white; cursor: pointer; font-weight: bold; font-size: 13px; min-width: 90px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
   
   .custom-dropdown, .fav-dropdown { 
     display: none; position: absolute; top: 40px; left: 50%; transform: translateX(-50%); 
@@ -115,12 +171,13 @@
 
   canvas { position: fixed; top:0; left:0; width:100%; height:100%; pointer-events: none; }
   #stars { z-index: 1; transition: opacity 2s; }
+  #weatherCanvas { z-index: 3; }
   #steamCanvas { z-index: 4; }
   
   .modal { 
     display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-    background: rgba(0,0,0,0.45); z-index: 10001; justify-content: center; align-items: center; 
-    backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px);
+    background: rgba(0,0,0,0.6); z-index: 10001; justify-content: center; align-items: center; 
+    backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
   }
   .modal-content { background: linear-gradient(145deg, #141423, #0a0a1f); border: 1px solid #ffb400; padding: 25px; border-radius: 30px; text-align: left; color: white; max-width: 85%; width: 400px; max-height: 85vh; overflow-y: auto; box-shadow: 0 0 40px rgba(255, 180, 0, 0.2); position: relative; }
   .modal-tabs { display: flex; gap: 10px; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
@@ -156,11 +213,18 @@
   .mute-btn { display: none !important; pointer-events: none !important; }
 </style>
 </head>
-<body class="fancy-bg">
+<body class="tod-night">
 
 <canvas id="stars"></canvas>
+<div class="lightning-flash" id="lightningFlash"></div>
+<div class="clouds-container" id="cloudsContainer">
+  <div class="cloud cloud1" id="cloudEl1"></div>
+  <div class="cloud cloud2" id="cloudEl2"></div>
+  <div class="cloud cloud3" id="cloudEl3"></div>
+</div>
+<canvas id="weatherCanvas"></canvas>
 <canvas id="steamCanvas"></canvas>
-<div class="overlay"></div>
+<div class="overlay" id="envOverlay"></div>
 
 <!-- Настройки -->
 <div id="settingsModal" class="modal">
@@ -170,6 +234,31 @@
     <button class="help-open-btn" id="openHelpFromSettings">
       <span>❓</span> <span id="helpBtnLabel">Help / Guide</span>
     </button>
+
+    <!-- Выпадающее меню: Время суток -->
+    <div class="settings-group">
+      <label id="lblTimeOfDay">Time of Day</label>
+      <select id="timeOfDaySelect" class="settings-select">
+        <option value="morning">🌅 Morning</option>
+        <option value="noon">☀️ Noon</option>
+        <option value="evening">🌆 Evening</option>
+        <option value="night" selected>🌙 Night</option>
+        <option value="full_cycle">🔄 Full 24h Cycle (120s)</option>
+      </select>
+    </div>
+
+    <!-- Выпадающее меню: Погода -->
+    <div class="settings-group">
+      <label id="lblWeather">Weather</label>
+      <select id="weatherSelect" class="settings-select">
+        <option value="clear" selected>☀️ Clear</option>
+        <option value="cloudy">☁️ Clouds + Rain</option>
+        <option value="thunder">🌩️ Thunderstorm</option>
+        <option value="random">🔀 Random Weather (120s)</option>
+      </select>
+    </div>
+
+    <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 18px 0;">
 
     <div class="settings-group">
       <label id="lblFxStyle">Effect Style</label>
@@ -392,6 +481,9 @@ const uiTL = {
     unlockTitle: "Unlock Trigger", unlockDesc: "Unlock this trigger!", 
     unlockBtn: "🔓 Unlock Sound", closeBtn: "Close", idleTitle: "Start playing?", idleDesc: "Would you like to start the ASMR session?", idleDisable: "Don't show again",
     settingsTitle: "Settings", helpBtnLabel: "Help / Guide", lblFxStyle: "Effect Style", lblFxOpacity: "Opacity / Glow", lblFxSpeed: "Effect Speed", lblFxRandomInterval: "Random Change Interval",
+    lblTimeOfDay: "Time of Day", lblWeather: "Weather",
+    todNames: { morning: "🌅 Morning", noon: "☀️ Noon", evening: "🌆 Evening", night: "🌙 Night", full_cycle: "🔄 Full 24h Cycle (120s)" },
+    weatherNames: { clear: "☀️ Clear", cloudy: "☁️ Clouds + Rain", thunder: "🌩️ Thunderstorm", random: "🔀 Random Weather (120s)" },
     fxNames: { steam: "💨 Steam (Color)", rain: "💧 Rain Drops", snow: "❄️ Snowflakes", comets: "☄️ Comets & Asteroids", neondust: "✨ Neon Dust", aura: "🌀 Pulsing Aura", random: "🔀 Random Effect" },
     fxPromoTitle: "New Feature: Effects",
     fxPromoDesc: "Click Yes to activate automatic switching of visual effects.",
@@ -416,6 +508,9 @@ const uiTL = {
     unlockTitle: "Desbloquear Som", unlockDesc: "Desbloqueie este som!", 
     unlockBtn: "🔓 Desbloquear Som", closeBtn: "Fechar", idleTitle: "Começar a tocar?", idleDesc: "Você está inativo. Gostaria de iniciar a sessão de ASMR?", idleDisable: "Não mostrar novamente",
     settingsTitle: "Configurações", helpBtnLabel: "Ajuda / Guia", lblFxStyle: "Estilo do Efeito", lblFxOpacity: "Opacidade / Brilho", lblFxSpeed: "Velocidade do Efeito", lblFxRandomInterval: "Intervalo de Troca Aleatória",
+    lblTimeOfDay: "Hora do Dia", lblWeather: "Clima",
+    todNames: { morning: "🌅 Manhã", noon: "☀️ Meio-dia", evening: "🌆 Tarde / Noite", night: "🌙 Noite", full_cycle: "🔄 Ciclo de 24h (120s)" },
+    weatherNames: { clear: "☀️ Limpo", cloudy: "☁️ Nuvens + Chuva", thunder: "🌩️ Tempestade", random: "🔀 Clima Aleatório (120s)" },
     fxNames: { steam: "💨 Vapor (Colorido)", rain: "💧 Gotas de Chuva", snow: "❄️ Flocos de Neve", comets: "☄️ Cometas e Asteroides", neondust: "✨ Poeira Neon", aura: "🌀 Aura Pulsante", random: "🔀 Efeito Aleatório" },
     fxPromoTitle: "Nova Função: Efeitos",
     fxPromoDesc: "Clique em Sim para ativar a troca automática de efeitos visuais.",
@@ -440,6 +535,9 @@ const uiTL = {
     unlockTitle: "Відкрити звук", unlockDesc: "Розблокуйте цей тригер!", 
     unlockBtn: "🔓 Розблокувати звук", closeBtn: "Закрити", idleTitle: "Запустити програвання?", idleDesc: "Ви нічого не натискали. Бажаєте увімкнути випадковий режим АСМР?", idleDisable: "Приховати нагадування",
     settingsTitle: "Налаштування", helpBtnLabel: "Допомога / Інструкція", lblFxStyle: "Стиль ефекту", lblFxOpacity: "Прозорість / Сяйво", lblFxSpeed: "Швидкість ефекту", lblFxRandomInterval: "Інтервал зміни рандому",
+    lblTimeOfDay: "Час доби", lblWeather: "Погода",
+    todNames: { morning: "🌅 Ранок", noon: "☀️ Полдень", evening: "🌆 Вечір", night: "🌙 Ніч", full_cycle: "🔄 Повні добу (120с)" },
+    weatherNames: { clear: "☀️ Ясно", cloudy: "☁️ Хмари + Дощ", thunder: "🌩️ Гроза", random: "🔀 Рандомна погода (120с)" },
     fxNames: { steam: "💨 Кольорова пара", rain: "💧 Краплі дощу", snow: "❄️ Сніжинки", comets: "☄️ Комети та астероїди", neondust: "✨ Магічні іскри", aura: "🌀 Пульсуюча аура", random: "🔀 Рандомний ефект" },
     fxPromoTitle: "Нова функція ефекти.",
     fxPromoDesc: "натисніть так щоб активувати автоматичну зміну ефектів",
@@ -464,6 +562,9 @@ const uiTL = {
     unlockTitle: "Открыть звук", unlockDesc: "Разблокируйте этот триггер!", 
     unlockBtn: "🔓 Разблокировать звук", closeBtn: "Закрыть", idleTitle: "Запустить проигрывание?", idleDesc: "Вы ничего не нажимали. Хотите включить случайный режим АСМР?", idleDisable: "Скрыть напоминание",
     settingsTitle: "Настройки", helpBtnLabel: "Помощь / Инструкция", lblFxStyle: "Стиль эффекта", lblFxOpacity: "Прозрачность / Свечение", lblFxSpeed: "Скорость эффекта", lblFxRandomInterval: "Интервал смены рандома",
+    lblTimeOfDay: "Время суток", lblWeather: "Погода",
+    todNames: { morning: "🌅 Утро", noon: "☀️ Полдень", evening: "🌆 Вечер", night: "🌙 Ночь", full_cycle: "🔄 Полные сутки (120 сек)" },
+    weatherNames: { clear: "☀️ Ясно", cloudy: "☁️ Тучи + Дождь", thunder: "🌩️ Гроза", random: "🔀 Рандомная погода (120 сек)" },
     fxNames: { steam: "💨 Цветной пар", rain: "💧 Капли дождя", snow: "❄️ Снежинки", comets: "☄️ Кометы и астероиды", neondust: "✨ Магические искры", aura: "🌀 Пульсирующая аура", random: "🔀 Рандом" },
     fxPromoTitle: "Новая функция эффекты.",
     fxPromoDesc: "нажмите да что-бы активировать автоматическую смену эффектов",
@@ -478,6 +579,8 @@ let currentSpeedValue = 34, nextCycleTimeout = null;
 const langOrder = ['en', 'pt', 'uk', 'ru'];
 
 let steamParticles = [];
+let weatherParticles = []; // ЧАСТИЦЫ ПОГОДЫ (ДОЖДЬ/ГРОЗА)
+let lightningTimer = null;
 let pendingUnlockElement = null;
 let adTimerInterval = null;
 let steamHue = 270;
@@ -506,6 +609,17 @@ let fxConfig = {
   speed: 0.4,
   randomInterval: 8 // секунды
 };
+
+// Глобальные настройки Времени суток и Погоды
+let envConfig = {
+  timeOfDay: 'night', // 'morning', 'noon', 'evening', 'night', 'full_cycle'
+  weather: 'clear'      // 'clear', 'cloudy', 'thunder', 'random'
+};
+
+let activeWeatherState = 'clear'; // 'clear', 'cloudy', 'thunder' при рандоме
+let weatherStateStartTime = 0;
+let cycleAnimationReq = null;
+let cycleStartTime = null;
 
 let randomFxTimer = null;
 const availableEffects = ['steam', 'rain', 'snow', 'comets', 'neondust', 'aura'];
@@ -781,6 +895,8 @@ function updateUI() {
   document.getElementById('lblFxOpacity').innerText = t.lblFxOpacity;
   document.getElementById('lblFxSpeed').innerText = t.lblFxSpeed;
   document.getElementById('lblFxRandomInterval').innerText = t.lblFxRandomInterval;
+  document.getElementById('lblTimeOfDay').innerText = t.lblTimeOfDay;
+  document.getElementById('lblWeather').innerText = t.lblWeather;
 
   document.getElementById('fxPromoTitle').innerText = t.fxPromoTitle;
   document.getElementById('fxPromoDesc').innerText = t.fxPromoDesc;
@@ -788,9 +904,19 @@ function updateUI() {
   document.getElementById('fxPromoKeepBtn').innerText = t.fxPromoKeep;
   document.getElementById('fxPromoPs').innerText = t.fxPromoPs;
 
-  const select = document.getElementById('fxStyleSelect');
-  Array.from(select.options).forEach(opt => {
+  const selectFx = document.getElementById('fxStyleSelect');
+  Array.from(selectFx.options).forEach(opt => {
     if (t.fxNames[opt.value]) opt.text = t.fxNames[opt.value];
+  });
+
+  const selectTod = document.getElementById('timeOfDaySelect');
+  Array.from(selectTod.options).forEach(opt => {
+    if (t.todNames[opt.value]) opt.text = t.todNames[opt.value];
+  });
+
+  const selectWeather = document.getElementById('weatherSelect');
+  Array.from(selectWeather.options).forEach(opt => {
+    if (t.weatherNames[opt.value]) opt.text = t.weatherNames[opt.value];
   });
 
   if (!pendingUnlockElement || !document.getElementById('unlockTriggerBtn').disabled) {
@@ -815,6 +941,181 @@ function updateUI() {
       }
   });
 }
+
+// Управление временем суток и погодой
+function applyEnvironmentSettings() {
+  const body = document.body;
+  const stars = document.getElementById('stars');
+  const overlay = document.getElementById('envOverlay');
+  const clouds = document.getElementById('cloudsContainer');
+
+  if (cycleAnimationReq) {
+    cancelAnimationFrame(cycleAnimationReq);
+    cycleAnimationReq = null;
+  }
+
+  body.className = '';
+
+  if (envConfig.timeOfDay === 'morning') {
+    body.classList.add('tod-morning');
+    stars.style.opacity = '0.2';
+    overlay.style.background = 'rgba(255, 150, 100, 0.15)';
+  } else if (envConfig.timeOfDay === 'noon') {
+    body.classList.add('tod-noon');
+    stars.style.opacity = '0';
+    overlay.style.background = 'rgba(255, 255, 255, 0.05)';
+  } else if (envConfig.timeOfDay === 'evening') {
+    body.classList.add('tod-evening');
+    stars.style.opacity = '0.4';
+    overlay.style.background = 'rgba(200, 50, 50, 0.2)';
+  } else if (envConfig.timeOfDay === 'night') {
+    body.classList.add('tod-night');
+    stars.style.opacity = '1';
+    overlay.style.background = 'rgba(0, 0, 0, 0.4)';
+  } else if (envConfig.timeOfDay === 'full_cycle') {
+    cycleStartTime = performance.now();
+    runFullCycleAnimation();
+  }
+
+  if (envConfig.timeOfDay !== 'full_cycle') {
+    if (envConfig.weather === 'cloudy' || envConfig.weather === 'thunder') {
+      clouds.classList.add('visible');
+    } else if (envConfig.weather === 'clear') {
+      clouds.classList.remove('visible');
+    }
+  }
+
+  if (envConfig.weather !== 'random') {
+    activeWeatherState = envConfig.weather;
+  }
+}
+
+// Эффект импульсивных вспышек молнии
+function triggerLightning() {
+  if (sleepMode) return;
+  const flash = document.getElementById('lightningFlash');
+  
+  // Серия из нескольких коротких импульсов
+  const pulses = Math.floor(Math.random() * 3) + 2;
+  let currentPulse = 0;
+
+  function doPulse() {
+    if (currentPulse >= pulses) return;
+    
+    flash.style.opacity = (Math.random() * 0.5 + 0.5).toString();
+    setTimeout(() => {
+      flash.style.opacity = '0.05'; // эффекты послесвечения
+      setTimeout(() => {
+        flash.style.opacity = '0';
+        currentPulse++;
+        if (currentPulse < pulses) {
+          setTimeout(doPulse, Math.random() * 100 + 40);
+        }
+      }, 60);
+    }, 40);
+  }
+
+  doPulse();
+}
+
+function scheduleNextLightning() {
+  if (lightningTimer) clearTimeout(lightningTimer);
+  const nextDelay = Math.random() * 7000 + 3000; // каждые 3-10 секунд
+  lightningTimer = setTimeout(() => {
+    if ((activeWeatherState === 'thunder' || envConfig.weather === 'thunder') && !sleepMode) {
+      triggerLightning();
+    }
+    scheduleNextLightning();
+  }, nextDelay);
+}
+scheduleNextLightning();
+
+// 120-секундная плавная реалистичная анимация суток и динамической погоды
+function runFullCycleAnimation() {
+  const duration = 120000; // 120 секунд полный круг
+  const clouds = document.getElementById('cloudsContainer');
+  const stars = document.getElementById('stars');
+  const overlay = document.getElementById('envOverlay');
+
+  const keyframes = [
+    { pct: 0.00, color1: [5, 5, 5], color2: [10, 10, 31], stars: 1.0, overlay: [0, 0, 0, 0.4] },       // Ночь
+    { pct: 0.25, color1: [255, 154, 158], color2: [161, 196, 253], stars: 0.2, overlay: [255, 150, 100, 0.15] },       // Утро
+    { pct: 0.50, color1: [79, 172, 254], color2: [0, 242, 254], stars: 0.0, overlay: [255, 255, 255, 0.05] },         // Полдень
+    { pct: 0.75, color1: [44, 62, 80], color2: [255, 130, 53], stars: 0.4, overlay: [200, 50, 50, 0.2] },              // Вечер
+    { pct: 1.00, color1: [5, 5, 5], color2: [10, 10, 31], stars: 1.0, overlay: [0, 0, 0, 0.4] }        // Возврат в Ночь
+  ];
+
+  function interpolate(start, end, factor) {
+    return Math.round(start + (end - start) * factor);
+  }
+
+  function step(now) {
+    if (envConfig.timeOfDay !== 'full_cycle') return;
+
+    let elapsed = (now - cycleStartTime) % duration;
+    let progress = elapsed / duration;
+
+    let kStart = keyframes[0], kEnd = keyframes[1];
+    for (let i = 0; i < keyframes.length - 1; i++) {
+      if (progress >= keyframes[i].pct && progress <= keyframes[i+1].pct) {
+        kStart = keyframes[i];
+        kEnd = keyframes[i+1];
+        break;
+      }
+    }
+
+    let factor = (progress - kStart.pct) / (kEnd.pct - kStart.pct);
+
+    let r1 = interpolate(kStart.color1[0], kEnd.color1[0], factor);
+    let g1 = interpolate(kStart.color1[1], kEnd.color1[1], factor);
+    let b1 = interpolate(kStart.color1[2], kEnd.color1[2], factor);
+
+    let r2 = interpolate(kStart.color2[0], kEnd.color2[0], factor);
+    let g2 = interpolate(kStart.color2[1], kEnd.color2[1], factor);
+    let b2 = interpolate(kStart.color2[2], kEnd.color2[2], factor);
+
+    document.body.style.background = `linear-gradient(180deg, rgb(${r1},${g1},${b1}) 0%, rgb(${r2},${g2},${b2}) 100%)`;
+
+    let starAlpha = kStart.stars + (kEnd.stars - kStart.stars) * factor;
+    stars.style.opacity = starAlpha;
+
+    let oR = interpolate(kStart.overlay[0], kEnd.overlay[0], factor);
+    let oG = interpolate(kStart.overlay[1], kEnd.overlay[1], factor);
+    let oB = interpolate(kStart.overlay[2], kEnd.overlay[2], factor);
+    let oA = kStart.overlay[3] + (kEnd.overlay[3] - kStart.overlay[3]) * factor;
+    overlay.style.background = `rgba(${oR}, ${oG}, ${oB}, ${oA})`;
+
+    // Динамическая логика рандомной погоды внутри цикла
+    if (envConfig.weather === 'random') {
+      const weatherCycle = Math.floor((progress * 120) / 20) % 4; 
+      // 0: clear, 1: cloudy, 2: thunder, 3: cloudy
+      const states = ['clear', 'cloudy', 'thunder', 'cloudy'];
+      activeWeatherState = states[weatherCycle];
+
+      if (activeWeatherState === 'clear') {
+        clouds.classList.remove('visible');
+      } else {
+        clouds.classList.add('visible');
+      }
+    }
+
+    cycleAnimationReq = requestAnimationFrame(step);
+  }
+
+  cycleAnimationReq = requestAnimationFrame(step);
+}
+
+document.getElementById('timeOfDaySelect').onchange = (e) => {
+  envConfig.timeOfDay = e.target.value;
+  logButtonClick('ui_tod_' + envConfig.timeOfDay);
+  applyEnvironmentSettings();
+};
+
+document.getElementById('weatherSelect').onchange = (e) => {
+  envConfig.weather = e.target.value;
+  logButtonClick('ui_weather_' + envConfig.weather);
+  applyEnvironmentSettings();
+};
 
 // Обработчики кнопок промо-окна эффектов
 document.getElementById('fxPromoEnableBtn').onclick = () => {
@@ -902,6 +1203,7 @@ document.getElementById('sleepBtn').onclick = () => {
     sleepMode = !sleepMode;
     document.body.style.background = sleepMode ? "#000" : "";
     document.getElementById('stars').style.opacity = sleepMode ? "0" : "1";
+    document.getElementById('cloudsContainer').style.opacity = sleepMode ? "0" : "";
     document.getElementById('sleepBtn').classList.toggle('active', sleepMode);
     document.getElementById('soundGrid').classList.toggle('hidden', sleepMode);
     if (sleepMode) {
@@ -911,9 +1213,11 @@ document.getElementById('sleepBtn').onclick = () => {
       firebase.database().goOffline();
       document.getElementById('online-count').innerText = "ECO";
       steamParticles = [];
+      weatherParticles = [];
     } else {
       firebase.database().goOnline();
       updateConnections();
+      applyEnvironmentSettings();
     }
     updateUI();
 };
@@ -1018,19 +1322,55 @@ document.getElementById('fxSpeedRange').oninput = (e) => {
   document.getElementById('valFxSpeed').innerText = fxConfig.speed.toFixed(1) + 'x';
 };
 
-// Canvas Effects
+// Canvas
 const canvas = document.getElementById('stars'), ctx = canvas.getContext('2d');
+const wCanvas = document.getElementById('weatherCanvas'), wCtx = wCanvas.getContext('2d');
 const steamCanvas = document.getElementById('steamCanvas'), sCtx = steamCanvas.getContext('2d');
 
 function resize() { 
   canvas.width = innerWidth; canvas.height = innerHeight; 
+  wCanvas.width = innerWidth; wCanvas.height = innerHeight;
   steamCanvas.width = innerWidth; steamCanvas.height = innerHeight;
 }
 window.onresize = resize; resize();
 
 const starsArr = Array.from({length: 70}, () => ({ x: Math.random() * innerWidth, y: Math.random() * innerHeight, r: Math.random() * 1.5, a: Math.random(), s: Math.random() * 0.01 }));
 
-// Функция генерации частиц
+// Функция спавна каплей дождя ИЗ-ПОД ТУЧ
+function spawnCloudRain() {
+  if (sleepMode) return;
+  const targetState = (envConfig.weather === 'random') ? activeWeatherState : envConfig.weather;
+  if (targetState !== 'cloudy' && targetState !== 'thunder') return;
+
+  const isThunder = (targetState === 'thunder');
+  const spawnRate = isThunder ? 0.8 : 0.45; // Усиленный дождь при грозе
+
+  if (Math.random() < spawnRate) {
+    const cloudsArr = [
+      document.getElementById('cloudEl1'),
+      document.getElementById('cloudEl2'),
+      document.getElementById('cloudEl3')
+    ];
+
+    // Случайный выбор облака для реалистичной привязки к источнику
+    const cloudEl = cloudsArr[Math.floor(Math.random() * cloudsArr.length)];
+    if (cloudEl) {
+      const rect = cloudEl.getBoundingClientRect();
+      if (rect.right > 0 && rect.left < innerWidth) {
+        weatherParticles.push({
+          x: rect.left + Math.random() * rect.width,
+          y: rect.bottom - 10,
+          vy: isThunder ? (Math.random() * 8 + 12) : (Math.random() * 5 + 8),
+          vx: (Math.random() - 0.5) * 1.5,
+          length: isThunder ? (Math.random() * 18 + 12) : (Math.random() * 12 + 8),
+          alpha: Math.random() * 0.4 + 0.3
+        });
+      }
+    }
+  }
+}
+
+// Функция генерации частичек эффектов кнопок
 function spawnSteam() {
   if (sleepMode) return;
   steamHue = (steamHue + 0.2 * fxConfig.speed) % 360; 
@@ -1182,6 +1522,29 @@ function draw() {
     });
   } else { ctx.clearRect(0,0,innerWidth,innerHeight); }
 
+  // Отрисовка фонового дождя из под облаков
+  wCtx.clearRect(0, 0, innerWidth, innerHeight);
+  if (!sleepMode) {
+    spawnCloudRain();
+    for (let i = weatherParticles.length - 1; i >= 0; i--) {
+      let p = weatherParticles[i];
+      p.x += p.vx;
+      p.y += p.vy;
+
+      if (p.y > innerHeight) {
+        weatherParticles.splice(i, 1);
+        continue;
+      }
+
+      wCtx.beginPath();
+      wCtx.strokeStyle = `rgba(180, 210, 255, ${p.alpha})`;
+      wCtx.lineWidth = 1.2;
+      wCtx.moveTo(p.x, p.y);
+      wCtx.lineTo(p.x + p.vx * 2, p.y + p.length);
+      wCtx.stroke();
+    }
+  }
+
   sCtx.clearRect(0, 0, innerWidth, innerHeight);
   if (!sleepMode) {
     spawnSteam();
@@ -1331,6 +1694,7 @@ draw();
 
 document.getElementById('welcomeModal').style.display = 'flex';
 updateUI();
+applyEnvironmentSettings();
 
 audioElements.forEach(el => {
   if (!el.locked) {
