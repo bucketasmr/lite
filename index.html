@@ -94,7 +94,23 @@
   .live-dot { width: 6px; height: 6px; background: #ff3030; border-radius: 50%; animation: blink 1.5s infinite; }
   @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
-  #settingsBtn { background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.3); padding: 0 12px; height: 35px; border-radius: 20px; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px); font-weight: bold; font-size: 13px; gap: 5px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+  #settingsBtn {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 0 12px;
+    height: 35px;
+    border-radius: 20px;
+    color: white;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    backdrop-filter: blur(5px);
+    font-weight: bold;
+    font-size: 13px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  }
   .lang-btn-ui { background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.4); padding: 8px 16px; border-radius: 10px; color: white; cursor: pointer; font-weight: bold; min-width: 45px; }
 
   .controls { margin-bottom:15px; display:flex; gap:10px; flex-wrap: wrap; justify-content: center; align-items: center; z-index: 10; transition: opacity 0.5s; }
@@ -211,6 +227,32 @@
   }
 
   .mute-btn { display: none !important; pointer-events: none !important; }
+
+  /* Стиль кнопок выбора погоды */
+  .weather-option-btn {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 180, 0, 0.3);
+    color: white;
+    padding: 12px;
+    border-radius: 15px;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    margin-bottom: 10px;
+    transition: all 0.2s ease;
+  }
+  .weather-option-btn:hover, .weather-option-btn:active {
+    background: rgba(255, 180, 0, 0.2);
+    border-color: #ffb400;
+    transform: translateY(-2px);
+  }
+  .weather-option-btn span.icon {
+    font-size: 20px;
+  }
 </style>
 </head>
 <body class="tod-night">
@@ -276,8 +318,8 @@
     <div class="settings-group" id="randomIntervalGroup" style="display: none;">
       <label id="lblFxRandomInterval">Random Change Interval</label>
       <div class="range-container">
-        <input type="range" id="fxRandomIntervalRange" class="settings-range" min="3" max="30" step="1" value="8">
-        <span class="range-value" id="valFxRandomInterval">8s</span>
+        <input type="range" id="fxRandomIntervalRange" class="settings-range" min="3" max="30" step="1" value="14">
+        <span class="range-value" id="valFxRandomInterval">14s</span>
       </div>
     </div>
 
@@ -292,12 +334,33 @@
     <div class="settings-group">
       <label id="lblFxSpeed">Effect Speed</label>
       <div class="range-container">
-        <input type="range" id="fxSpeedRange" class="settings-range" min="0.2" max="2.5" step="0.1" value="0.4">
-        <span class="range-value" id="valFxSpeed">0.4x</span>
+        <input type="range" id="fxSpeedRange" class="settings-range" min="0.2" max="2.5" step="0.1" value="0.3">
+        <span class="range-value" id="valFxSpeed">0.3x</span>
       </div>
     </div>
 
     <button class="modal-btn" id="closeSettings">OK</button>
+  </div>
+</div>
+
+<!-- Модальное окно выбора погоды (через 10 секунд) -->
+<div id="weatherChoiceModal" class="modal">
+  <div class="modal-content" style="text-align: center;">
+    <h2 style="color: #ffb400; margin: 0 0 15px 0; font-size: 20px;" id="weatherChoiceTitle">Select Weather</h2>
+    <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 15px;">
+      <button class="weather-option-btn" onclick="selectWeatherMode('clear')">
+        <span class="icon">☀️</span> <span id="btnWClear">Clear sky</span>
+      </button>
+      <button class="weather-option-btn" onclick="selectWeatherMode('cloudy')">
+        <span class="icon">🌧️</span> <span id="btnWClouds">Clouds & Rain</span>
+      </button>
+      <button class="weather-option-btn" onclick="selectWeatherMode('thunder')">
+        <span class="icon">🌩️</span> <span id="btnWThunder">Thunderstorm</span>
+      </button>
+      <button class="weather-option-btn" onclick="selectWeatherMode('random')">
+        <span class="icon">🎲</span> <span id="btnWRandom">Random</span>
+      </button>
+    </div>
   </div>
 </div>
 
@@ -358,7 +421,7 @@
       <div class="live-dot"></div>
       <span id="online-count">—</span> LIVE
     </div>
-    <div id="settingsBtn" onclick="openSettings()">⚙ Custom</div>
+    <div id="settingsBtn" onclick="openSettings()">⚙ Settings</div>
     <button id="langBtn" class="lang-btn-ui lang-switcher-btn">EN</button>
   </div>
 
@@ -465,9 +528,9 @@ const sounds = [
 
 const uiTL = {
   en: { 
-    code: "EN", customBtn: "⚙ Custom", title: "BUCKET ASMR", play: "Play", pause: "Pause", repair: "REPAIR", sleep: "Sleep", tabFeatures: "Functions", tabGuide: "Guide", 
+    code: "EN", customBtn: "⚙ Settings", title: "BUCKET ASMR", play: "Play", pause: "Pause", repair: "REPAIR", sleep: "Sleep", tabFeatures: "Functions", tabGuide: "Guide", 
     features: [
-      "<span>✦</span> <b>Full Access:</b> All ASMR triggers are available.", 
+      "<span>✦</span> New visual effects, weather and day-and-night cycle added to the background.", 
       "<span>✦</span> <b>Stay Awake:</b> Screen won't turn off automatically.", 
       "<span>✦</span> <b>Mixer:</b> Play multiple sounds at the same time.", 
       "<span>✦</span> <b>Not Working?:</b> Turn off Silent Mode."
@@ -489,12 +552,14 @@ const uiTL = {
     fxPromoDesc: "Click Yes to activate automatic switching of visual effects.",
     fxPromoEnable: "Yes, activate all effects",
     fxPromoKeep: "Keep current effect",
-    fxPromoPs: "P.S. You can change this later in Settings."
+    fxPromoPs: "P.S. You can change this later in Settings.",
+    weatherChoiceTitle: "Select Weather",
+    wClear: "Clear sky", wClouds: "Clouds & Rain", wThunder: "Thunderstorm", wRandom: "Random"
   },
   pt: { 
     code: "PT", customBtn: "⚙ Personalizar", title: "BALDE ASMR", play: "Tocar", pause: "Pausa", repair: "REPARAR", sleep: "Dormir", tabFeatures: "Funções", tabGuide: "Guia", 
     features: [
-      "<span>✦</span> <b>Acesso Total:</b> Todos os sons estão disponíveis.", 
+      "<span>✦</span> Novos efeitos visuais, clima e ciclo dia/noite adicionados ao fundo.", 
       "<span>✦</span> <b>Sempre Ativo:</b> A tela não apaga durante o uso.", 
       "<span>✦</span> <b>Mixer:</b> Toque vários sons ao mesmo tempo.", 
       "<span>✦</span> <b>Não funcionou?:</b> Desative o modo silencioso."
@@ -516,12 +581,14 @@ const uiTL = {
     fxPromoDesc: "Clique em Sim para ativar a troca automática de efeitos visuais.",
     fxPromoEnable: "Sim, ativar todos os efeitos",
     fxPromoKeep: "Manter efeito atual",
-    fxPromoPs: "P.S. Você pode alterar isso mais tarde nas Configurações."
+    fxPromoPs: "P.S. Você pode alterar isso mais tarde nas Configurações.",
+    weatherChoiceTitle: "Selecionar Clima",
+    wClear: "Céu limpo", wClouds: "Nuvens e Chuva", wThunder: "Tempestade", wRandom: "Aleatório"
   },
   uk: { 
     code: "UK", customBtn: "⚙ Налаштування", title: "ВІДРО АСМР", play: "Грати", pause: "Пауза", repair: "ЛАГОДИТИ", sleep: "Сон", tabFeatures: "Функції", tabGuide: "Інструкція", 
     features: [
-      "<span>✦</span> <b>Повний доступ:</b> Усі тригери розблоковано.", 
+      "<span>✦</span> Додано нові візуальні ефекти, погоду та зміну дня і ночі на фон.", 
       "<span>✦</span> <b>Без Сну:</b> Екран не згасає автоматично.", 
       "<span>✦</span> <b>Міксер:</b> Грайте кілька звуків одночасно.", 
       "<span>✦</span> <b>Не працює?:</b> Вимкніть беззвучний режим."
@@ -543,12 +610,14 @@ const uiTL = {
     fxPromoDesc: "натисніть так щоб активувати автоматичну зміну ефектів",
     fxPromoEnable: "так, активувати всі ефекти",
     fxPromoKeep: "Залишити поточний ефект",
-    fxPromoPs: "PS: Ви зможете змінити це в розділі Налаштування."
+    fxPromoPs: "PS: Ви зможете змінити це в розділі Налаштування.",
+    weatherChoiceTitle: "Оберіть погоду",
+    wClear: "Чисте небо", wClouds: "Хмари та Дощ", wThunder: "Гроза", wRandom: "Рандом"
   },
   ru: { 
     code: "RU", customBtn: "⚙ Настройки", title: "ВЕДРО АСМР", play: "Играть", pause: "Пауза", repair: "ЧИНИТЬ", sleep: "Сон", tabFeatures: "Функции", tabGuide: "Инструкция", 
     features: [
-      "<span>✦</span> <b>Полный доступ:</b> Все звуки разблокированы.", 
+      "<span>✦</span> Добавлены новые визуальные эффекты, погода и смена дня и ночи на фон.", 
       "<span>✦</span> <b>Бодрость:</b> Экран не гаснет во время сеанса.", 
       "<span>✦</span> <b>Микшер:</b> Запуск нескольких звуков одновременно.", 
       "<span>✦</span> <b>Не работает?:</b> Отключите беззвучный режим."
@@ -570,7 +639,9 @@ const uiTL = {
     fxPromoDesc: "нажмите да что-бы активировать автоматическую смену эффектов",
     fxPromoEnable: "да, активировать все эффекты",
     fxPromoKeep: "Оставить текущий эффект",
-    fxPromoPs: "PS: Вы сможете изменить это в разделе Настройки."
+    fxPromoPs: "PS: Вы сможете изменить это в разделе Настройки.",
+    weatherChoiceTitle: "Выберите погоду",
+    wClear: "Чистое небо", wClouds: "Тучи и Дождь", wThunder: "Гроза", wRandom: "Рандом"
   }
 };
 
@@ -589,6 +660,10 @@ let steamHue = 270;
 let fxTimerStarted = false;
 let fxTimerId = null;
 
+// Логика таймера появления окна погоды (через 10 сек после нажатия)
+let weatherTimerStarted = false;
+let weatherTimerId = null;
+
 function triggerFirstAudioPlay() {
   if (!fxTimerStarted) {
     fxTimerStarted = true;
@@ -599,6 +674,23 @@ function triggerFirstAudioPlay() {
       }
     }, 20000);
   }
+
+  if (!weatherTimerStarted) {
+    weatherTimerStarted = true;
+    weatherTimerId = setTimeout(() => {
+      logButtonClick('ui_weather_choice_modal_shown');
+      document.getElementById('weatherChoiceModal').style.display = 'flex';
+    }, 10000);
+  }
+}
+
+function selectWeatherMode(mode) {
+  logButtonClick('ui_weather_choice_select_' + mode);
+  envConfig.weather = mode;
+  document.getElementById('weatherSelect').value = mode;
+  applyEnvironmentSettings();
+  document.getElementById('weatherChoiceModal').style.display = 'none';
+  resetIdleTimer();
 }
 
 // Глобальные переменные эффектов
@@ -606,8 +698,8 @@ let fxConfig = {
   style: 'steam',
   activeStyle: 'steam', // фактический визуальный эффект при режиме 'random'
   opacity: 0.7,
-  speed: 0.4,
-  randomInterval: 8 // секунды
+  speed: 0.3,
+  randomInterval: 14 // секунды
 };
 
 // Глобальные настройки Времени суток и Погоды
@@ -904,6 +996,12 @@ function updateUI() {
   document.getElementById('fxPromoKeepBtn').innerText = t.fxPromoKeep;
   document.getElementById('fxPromoPs').innerText = t.fxPromoPs;
 
+  document.getElementById('weatherChoiceTitle').innerText = t.weatherChoiceTitle;
+  document.getElementById('btnWClear').innerText = t.wClear;
+  document.getElementById('btnWClouds').innerText = t.wClouds;
+  document.getElementById('btnWThunder').innerText = t.wThunder;
+  document.getElementById('btnWRandom').innerText = t.wRandom;
+
   const selectFx = document.getElementById('fxStyleSelect');
   Array.from(selectFx.options).forEach(opt => {
     if (t.fxNames[opt.value]) opt.text = t.fxNames[opt.value];
@@ -1121,7 +1219,10 @@ document.getElementById('weatherSelect').onchange = (e) => {
 document.getElementById('fxPromoEnableBtn').onclick = () => {
   logButtonClick('ui_fx_promo_enable');
   fxConfig.style = 'random';
+  fxConfig.randomInterval = 14;
   document.getElementById('fxStyleSelect').value = 'random';
+  document.getElementById('fxRandomIntervalRange').value = 14;
+  document.getElementById('valFxRandomInterval').innerText = '14s';
   document.getElementById('randomIntervalGroup').style.display = 'block';
   startRandomFxLoop();
   document.getElementById('fxPromoModal').style.display = 'none';
@@ -1223,7 +1324,7 @@ document.getElementById('sleepBtn').onclick = () => {
 };
 
 function resetIdleTimer() {
-  if (!isIdleSystemEnabled || randomActive || sleepMode || document.getElementById('unlockModal').style.display === 'flex' || document.getElementById('settingsModal').style.display === 'flex' || document.getElementById('fxPromoModal').style.display === 'flex') {
+  if (!isIdleSystemEnabled || randomActive || sleepMode || document.getElementById('unlockModal').style.display === 'flex' || document.getElementById('settingsModal').style.display === 'flex' || document.getElementById('fxPromoModal').style.display === 'flex' || document.getElementById('weatherChoiceModal').style.display === 'flex') {
     clearTimeout(idleTimer);
     return;
   }
@@ -1232,7 +1333,7 @@ function resetIdleTimer() {
 }
 
 function showIdleModal() {
-  if (document.getElementById('welcomeModal').style.display !== 'flex' && !randomActive && document.getElementById('unlockModal').style.display !== 'flex' && document.getElementById('settingsModal').style.display !== 'flex' && document.getElementById('fxPromoModal').style.display !== 'flex') {
+  if (document.getElementById('welcomeModal').style.display !== 'flex' && !randomActive && document.getElementById('unlockModal').style.display !== 'flex' && document.getElementById('settingsModal').style.display !== 'flex' && document.getElementById('fxPromoModal').style.display !== 'flex' && document.getElementById('weatherChoiceModal').style.display !== 'flex') {
     logButtonClick('ui_idle_modal_shown');
     document.getElementById('idleModal').style.display = 'flex';
   }
