@@ -253,6 +253,31 @@
   .weather-option-btn span.icon {
     font-size: 20px;
   }
+
+  /* Красивое кастомное уведомление для Soon */
+  #soonToast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: linear-gradient(145deg, #1e1e2d, #141423);
+    border: 1px solid #ffb400;
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: bold;
+    z-index: 100002;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6), 0 0 15px rgba(255, 180, 0, 0.3);
+    opacity: 0;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease;
+    pointer-events: none;
+    text-align: center;
+  }
+  #soonToast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
 </style>
 </head>
 <body class="tod-night">
@@ -267,6 +292,9 @@
 <canvas id="weatherCanvas"></canvas>
 <canvas id="steamCanvas"></canvas>
 <div class="overlay" id="envOverlay"></div>
+
+<!-- Кастомное всплывающее уведомление вместо системного alert -->
+<div id="soonToast">This sound will be available soon!</div>
 
 <!-- Настройки -->
 <div id="settingsModal" class="modal">
@@ -293,8 +321,8 @@
     <div class="settings-group">
       <label id="lblWeather">Weather</label>
       <select id="weatherSelect" class="settings-select">
-        <option value="clear" selected>☀️ Clear</option>
-        <option value="cloudy">☁️ Clouds + Rain</option>
+        <option value="clear">☀️ Clear</option>
+        <option value="cloudy" selected>☁️ Clouds + Rain</option>
         <option value="thunder">🌩️ Thunderstorm</option>
         <option value="random">🔀 Random Weather (120s)</option>
       </select>
@@ -335,7 +363,7 @@
       <label id="lblFxSpeed">Effect Speed</label>
       <div class="range-container">
         <input type="range" id="fxSpeedRange" class="settings-range" min="0.2" max="2.5" step="0.1" value="0.3">
-        <span class="range-value" id="valFxSpeed">0.3x</span>
+        <span class="range-value" id="valFxSpeed">0.5x</span>
       </div>
     </div>
 
@@ -359,6 +387,11 @@
       </button>
       <button class="weather-option-btn" onclick="selectWeatherMode('random')">
         <span class="icon">🎲</span> <span id="btnWRandom">Random</span>
+      </button>
+      
+      <!-- Кнопка ОК для закрытия окна -->
+      <button class="weather-option-btn" onclick="closeWeatherModal()" style="margin-top: 10px; background-color: #ffb400; color: #000; font-weight: bold; justify-content: center;">
+        <span>OK</span>
       </button>
     </div>
   </div>
@@ -425,17 +458,17 @@
     <button id="langBtn" class="lang-btn-ui lang-switcher-btn">EN</button>
   </div>
 
-<div class="controls" id="uiControls">
-  <button id="randomBtn">Play</button>
-  <div class="custom-select-container" id="linksSelectContainer">
-    <div class="select-trigger" id="linksTrigger" style="background: rgba(226, 43, 43, 0.4); border: 1px solid rgba(226, 43, 43, 0.3); min-width: 80px; color: #fff; font-weight: bold;">Links</div>
-    
-    <div class="custom-dropdown" id="linksOptions">
-      <button onclick="trackLinkClick('youtube', 'https://www.youtube.com/@BucketASMR')">YouTube</button>
-      <button onclick="trackLinkClick('tiktok', 'https://www.tiktok.com/@bucket_asmr')">TikTok</button>
-      <button onclick="trackLinkClick('instagram', 'https://www.instagram.com/bucket_asmr')">Instagram</button>
+  <div class="controls" id="uiControls">
+    <button id="randomBtn">Play</button>
+    <div class="custom-select-container" id="linksSelectContainer">
+      <div class="select-trigger" id="linksTrigger" style="background: rgba(226, 43, 43, 0.4); border: 1px solid rgba(226, 43, 43, 0.3); min-width: 80px; color: #fff; font-weight: bold;">Links</div>
+      
+      <div class="custom-dropdown" id="linksOptions">
+        <button onclick="trackLinkClick('youtube', 'https://www.youtube.com/@BucketASMR')">YouTube</button>
+        <button onclick="trackLinkClick('tiktok', 'https://www.tiktok.com/@bucket_asmr')">TikTok</button>
+        <button onclick="trackLinkClick('instagram', 'https://www.instagram.com/bucket_asmr')">Instagram</button>
+      </div>
     </div>
-  </div>
 	
     <div class="custom-select-container">
         <button id="favBtn" class="select-trigger" style="background: rgba(255, 180, 0, 0.2); border: 1px solid #ffb400; min-width: 60px;">⭐ Fav</button>
@@ -516,21 +549,22 @@ requestWakeLock();
 
 const sounds = [
   { "file": "purplebrush.mp3", "img": "purplebrush.png", "name": { "en": "Purple Brush", "pt": "Pincel Roxo", "ru": "Фиолетовая кисть", "uk": "Фіолетовий пензель" }, "color": "#9664ff", "locked": false },
+  { "file": "", "img": "Soon.png", "name": { "en": "Soon", "pt": "Breve", "ru": "Скоро", "uk": "Незабаром" }, "color": "#ffb6c1", "locked": false },
   { "file": "wax.mp3", "img": "wax.png", "name": { "en": "Wax", "pt": "Cera", "ru": "Воск", "uk": "Віск" }, "color": "#ffa500", "locked": false },
   { "file": "choko.mp3", "img": "choko.png", "name": { "en": "Choco", "pt": "Chocolate", "ru": "Шоколад", "uk": "Шоколад" }, "color": "#8b4513", "locked": false },
   { "file": "strawberry.mp3", "img": "strawberry.png", "name": { "en": "Strawberry", "pt": "Morango", "ru": "Клубника", "uk": "Полуниця" }, "color": "#ff69b4", "locked": false },
   { "file": "oldphone.mp3", "img": "oldphone.png", "name": { "en": "Old Phone", "pt": "Telefone Antigo", "ru": "Телефон", "uk": "Телефон" }, "color": "#323232", "locked": false },
   { "file": "carrot.mp3", "img": "carrot.png", "name": { "en": "Carrot", "pt": "Cenoura", "ru": "Морковь", "uk": "Морква" }, "color": "#ff8c00", "locked": false },
-  { "file": "pinksoftbrush.mp3", "img": "pinksoftbrush.png", "name": { "en": "Soft Brush", "pt": "Pincel Macio", "ru": "Мягкая кисть", "uk": "М’який пензель" }, "color": "#ffb6c1", "locked": false },
   { "file": "greybrush.mp3", "img": "greybrush.png", "name": { "en": "Grey Brush", "pt": "Pincel Cinza", "ru": "Серая кисть", "uk": "Сірий пензель" }, "color": "#8c8c8c", "locked": false },
   { "file": "wood.mp3", "img": "wood.png", "name": { "en": "Wood", "pt": "Madeira", "ru": "Дерево", "uk": "Дерево" }, "color": "#ffff00", "locked": false }
+  
 ];
 
 const uiTL = {
   en: { 
     code: "EN", customBtn: "Settings", title: "BUCKET ASMR", play: "Play", pause: "Pause", repair: "REPAIR", sleep: "Sleep", tabFeatures: "Functions", tabGuide: "Guide", 
     features: [
-      "<span>✦</span> New visual effects, weather and day-and-night cycle added to the background.", 
+      "<span>✦</span> <b>New visual effects:</b> Weather and day & night cycle added to the background.", 
       "<span>✦</span> <b>Stay Awake:</b> Screen won't turn off automatically.", 
       "<span>✦</span> <b>Mixer:</b> Play multiple sounds at the same time.", 
       "<span>✦</span> <b>Not Working?:</b> Turn off Silent Mode."
@@ -554,12 +588,13 @@ const uiTL = {
     fxPromoKeep: "Keep current effect",
     fxPromoPs: "P.S. You can change this later in Settings.",
     weatherChoiceTitle: "Select Weather",
-    wClear: "Clear sky", wClouds: "Clouds & Rain", wThunder: "Thunderstorm", wRandom: "Random"
+    wClear: "Clear sky", wClouds: "Clouds & Rain", wThunder: "Thunderstorm", wRandom: "Random",
+    soundSoon: "This sound will be available soon!"
   },
   pt: { 
     code: "PT", customBtn: "Personalizar", title: "BALDE ASMR", play: "Tocar", pause: "Pausa", repair: "REPARAR", sleep: "Dormir", tabFeatures: "Funções", tabGuide: "Guia", 
     features: [
-      "<span>✦</span> Novos efeitos visuais, clima e ciclo dia/noite adicionados ao fundo.", 
+      "<span>✦</span> <b>Novos efeitos visuais:</b> Clima e ciclo dia/noite adicionados ao fundo.", 
       "<span>✦</span> <b>Sempre Ativo:</b> A tela não apaga durante o uso.", 
       "<span>✦</span> <b>Mixer:</b> Toque vários sons ao mesmo tempo.", 
       "<span>✦</span> <b>Não funcionou?:</b> Desative o modo silencioso."
@@ -583,12 +618,13 @@ const uiTL = {
     fxPromoKeep: "Manter efeito atual",
     fxPromoPs: "P.S. Você pode alterar isso mais tarde nas Configurações.",
     weatherChoiceTitle: "Selecionar Clima",
-    wClear: "Céu limpo", wClouds: "Nuvens e Chuva", wThunder: "Tempestade", wRandom: "Aleatório"
+    wClear: "Céu limpo", wClouds: "Nuvens e Chuva", wThunder: "Tempestade", wRandom: "Aleatório",
+    soundSoon: "Este som estará disponível em breve!"
   },
   uk: { 
     code: "UK", customBtn: "Налаштування", title: "ВІДРО АСМР", play: "Грати", pause: "Пауза", repair: "ЛАГОДИТИ", sleep: "Сон", tabFeatures: "Функції", tabGuide: "Інструкція", 
     features: [
-      "<span>✦</span> Додано нові візуальні ефекти, погоду та зміну дня і ночі на фон.", 
+      "<span>✦</span> <b>Додано нові візуальні ефекти:</b> Погоду та зміну дня і ночі на фон.", 
       "<span>✦</span> <b>Без Сну:</b> Екран не згасає автоматично.", 
       "<span>✦</span> <b>Міксер:</b> Грайте кілька звуків одночасно.", 
       "<span>✦</span> <b>Не працює?:</b> Вимкніть беззвучний режим."
@@ -612,12 +648,13 @@ const uiTL = {
     fxPromoKeep: "Залишити поточний ефект",
     fxPromoPs: "PS: Ви зможете змінити це в розділі Налаштування.",
     weatherChoiceTitle: "Оберіть погоду",
-    wClear: "Чисте небо", wClouds: "Хмари та Дощ", wThunder: "Гроза", wRandom: "Рандом"
+    wClear: "Чисте небо", wClouds: "Хмари та Дощ", wThunder: "Гроза", wRandom: "Рандом",
+    soundSoon: "Цей звук скоро буде доступний!"
   },
   ru: { 
     code: "RU", customBtn: "Настройки", title: "ВЕДРО АСМР", play: "Играть", pause: "Пауза", repair: "ЧИНИТЬ", sleep: "Сон", tabFeatures: "Функции", tabGuide: "Инструкция", 
     features: [
-      "<span>✦</span> Добавлены новые визуальные эффекты, погода и смена дня и ночи на фон.", 
+      "<span>✦</span> <b>Добавлены новые визуальные эффекты:</b> Погода и смена дня и ночи на фон.", 
       "<span>✦</span> <b>Бодрость:</b> Экран не гаснет во время сеанса.", 
       "<span>✦</span> <b>Микшер:</b> Запуск нескольких звуков одновременно.", 
       "<span>✦</span> <b>Не работает?:</b> Отключите беззвучный режим."
@@ -641,7 +678,8 @@ const uiTL = {
     fxPromoKeep: "Оставить текущий эффект",
     fxPromoPs: "PS: Вы сможете изменить это в разделе Настройки.",
     weatherChoiceTitle: "Выберите погоду",
-    wClear: "Чистое небо", wClouds: "Тучи и Дождь", wThunder: "Гроза", wRandom: "Рандом"
+    wClear: "Чистое небо", wClouds: "Тучи и Дождь", wThunder: "Гроза", wRandom: "Рандом",
+    soundSoon: "Этот звук скоро будет доступний!"
   }
 };
 
@@ -650,19 +688,34 @@ let currentSpeedValue = 34, nextCycleTimeout = null;
 const langOrder = ['en', 'pt', 'uk', 'ru'];
 
 let steamParticles = [];
-let weatherParticles = []; // ЧАСТИЦЫ ПОГОДЫ (ДОЖДЬ/ГРОЗА)
+let weatherParticles = []; 
 let lightningTimer = null;
 let pendingUnlockElement = null;
 let adTimerInterval = null;
 let steamHue = 270;
 
-// Логика промо-таймера эффектов
 let fxTimerStarted = false;
 let fxTimerId = null;
 
-// Логика таймера появления окна погоды (через 10 сек после нажатия)
 let weatherTimerStarted = false;
 let weatherTimerId = null;
+
+function showSoonToast() {
+  const toast = document.getElementById('soonToast');
+  const t = uiTL[langOrder[langIdx]];
+  toast.innerText = t.soundSoon || "This sound will be available soon!";
+  toast.classList.add('show');
+  setTimeout(() => {
+    toast.classList.remove('show');
+  }, 3000);
+}
+
+function closeWeatherModal() {
+  const modal = document.getElementById('weatherChoiceModal');
+  if (modal) {
+    modal.style.display = 'none';
+  }
+}
 
 function triggerFirstAudioPlay() {
   if (!fxTimerStarted) {
@@ -693,22 +746,20 @@ function selectWeatherMode(mode) {
   resetIdleTimer();
 }
 
-// Глобальные переменные эффектов
 let fxConfig = {
   style: 'steam',
-  activeStyle: 'steam', // фактический визуальный эффект при режиме 'random'
+  activeStyle: 'steam', 
   opacity: 0.7,
-  speed: 0.3,
-  randomInterval: 14 // секунды
+  speed: 0.5,
+  randomInterval: 14 
 };
 
-// Глобальные настройки Времени суток и Погоды
 let envConfig = {
-  timeOfDay: 'night', // 'morning', 'noon', 'evening', 'night', 'full_cycle'
-  weather: 'clear'      // 'clear', 'cloudy', 'thunder', 'random'
+  timeOfDay: 'night', 
+  weather: 'cloudy'      
 };
 
-let activeWeatherState = 'clear'; // 'clear', 'cloudy', 'thunder' при рандоме
+let activeWeatherState = 'clear'; 
 let weatherStateStartTime = 0;
 let cycleAnimationReq = null;
 let cycleStartTime = null;
@@ -796,6 +847,10 @@ sounds.forEach((s, idx) => {
         logButtonClick('sound_locked_' + cleanSoundName);
         openUnlockModal(state);
     } else {
+        if (!state.fileName || state.fileName.trim() === "") {
+            showSoonToast();
+            return;
+        }
         logButtonClick('sound_' + cleanSoundName);
         loadAudio(state);
         state.active ? fadeOut(state) : fadeIn(state);
@@ -932,10 +987,12 @@ document.getElementById('randomBtn').onclick = () => {
 
 function runRandom() {
   if (!randomActive) return;
+  
+  clearTimeout(nextCycleTimeout);
 
-  let pool = audioElements.filter(el => el.isFav && !el.muted && !el.locked);
+  let pool = audioElements.filter(el => el.isFav && !el.muted && !el.locked && el.fileName !== "");
   if (pool.length === 0) {
-      pool = audioElements.filter(el => !el.muted && !el.locked);
+      pool = audioElements.filter(el => !el.muted && !el.locked && el.fileName !== "");
   }
 
   const unloadedInPool = pool.filter(el => !el.loaded);
@@ -949,7 +1006,7 @@ function runRandom() {
   const toPlay = pool.sort(() => 0.5 - Math.random()).slice(0, count);
   
   audioElements.forEach(el => {
-    if (toPlay.includes(el)) { 
+    if (toPlay.includes(el) && el.fileName !== "") { 
         if(!el.active) fadeIn(el); 
     } else { 
         if(el.active) fadeOut(el); 
@@ -957,6 +1014,18 @@ function runRandom() {
   });
 
   nextCycleTimeout = setTimeout(runRandom, currentSpeedValue * 1000);
+}
+
+function setSpeed(v, label) {
+    logButtonClick('ui_speed_' + label);
+    currentSpeedValue = v;
+    document.getElementById('speedDropdown').classList.remove('open');
+    updateUI();
+    
+    if(randomActive) { 
+        clearTimeout(nextCycleTimeout); 
+        runRandom(); 
+    }
 }
 
 function updateUI() {
@@ -1040,7 +1109,6 @@ function updateUI() {
   });
 }
 
-// Управление временем суток и погодой
 function applyEnvironmentSettings() {
   const body = document.body;
   const stars = document.getElementById('stars');
@@ -1088,12 +1156,10 @@ function applyEnvironmentSettings() {
   }
 }
 
-// Эффект импульсивных вспышек молнии
 function triggerLightning() {
   if (sleepMode) return;
   const flash = document.getElementById('lightningFlash');
   
-  // Серия из нескольких коротких импульсов
   const pulses = Math.floor(Math.random() * 3) + 2;
   let currentPulse = 0;
 
@@ -1102,7 +1168,7 @@ function triggerLightning() {
     
     flash.style.opacity = (Math.random() * 0.5 + 0.5).toString();
     setTimeout(() => {
-      flash.style.opacity = '0.05'; // эффекты послесвечения
+      flash.style.opacity = '0.05'; 
       setTimeout(() => {
         flash.style.opacity = '0';
         currentPulse++;
@@ -1118,7 +1184,7 @@ function triggerLightning() {
 
 function scheduleNextLightning() {
   if (lightningTimer) clearTimeout(lightningTimer);
-  const nextDelay = Math.random() * 7000 + 3000; // каждые 3-10 секунд
+  const nextDelay = Math.random() * 7000 + 3000; 
   lightningTimer = setTimeout(() => {
     if ((activeWeatherState === 'thunder' || envConfig.weather === 'thunder') && !sleepMode) {
       triggerLightning();
@@ -1128,19 +1194,18 @@ function scheduleNextLightning() {
 }
 scheduleNextLightning();
 
-// 120-секундная плавная реалистичная анимация суток и динамической погоды
 function runFullCycleAnimation() {
-  const duration = 120000; // 120 секунд полный круг
+  const duration = 120000; 
   const clouds = document.getElementById('cloudsContainer');
   const stars = document.getElementById('stars');
   const overlay = document.getElementById('envOverlay');
 
   const keyframes = [
-    { pct: 0.00, color1: [5, 5, 5], color2: [10, 10, 31], stars: 1.0, overlay: [0, 0, 0, 0.4] },       // Ночь
-    { pct: 0.25, color1: [255, 154, 158], color2: [161, 196, 253], stars: 0.2, overlay: [255, 150, 100, 0.15] },       // Утро
-    { pct: 0.50, color1: [79, 172, 254], color2: [0, 242, 254], stars: 0.0, overlay: [255, 255, 255, 0.05] },         // Полдень
-    { pct: 0.75, color1: [44, 62, 80], color2: [255, 130, 53], stars: 0.4, overlay: [200, 50, 50, 0.2] },              // Вечер
-    { pct: 1.00, color1: [5, 5, 5], color2: [10, 10, 31], stars: 1.0, overlay: [0, 0, 0, 0.4] }        // Возврат в Ночь
+    { pct: 0.00, color1: [5, 5, 5], color2: [10, 10, 31], stars: 1.0, overlay: [0, 0, 0, 0.4] },       
+    { pct: 0.25, color1: [255, 154, 158], color2: [161, 196, 253], stars: 0.2, overlay: [255, 150, 100, 0.15] },       
+    { pct: 0.50, color1: [79, 172, 254], color2: [0, 242, 254], stars: 0.0, overlay: [255, 255, 255, 0.05] },         
+    { pct: 0.75, color1: [44, 62, 80], color2: [255, 130, 53], stars: 0.4, overlay: [200, 50, 50, 0.2] },              
+    { pct: 1.00, color1: [5, 5, 5], color2: [10, 10, 31], stars: 1.0, overlay: [0, 0, 0, 0.4] }        
   ];
 
   function interpolate(start, end, factor) {
@@ -1183,10 +1248,8 @@ function runFullCycleAnimation() {
     let oA = kStart.overlay[3] + (kEnd.overlay[3] - kStart.overlay[3]) * factor;
     overlay.style.background = `rgba(${oR}, ${oG}, ${oB}, ${oA})`;
 
-    // Динамическая логика рандомной погоды внутри цикла
     if (envConfig.weather === 'random') {
       const weatherCycle = Math.floor((progress * 120) / 20) % 4; 
-      // 0: clear, 1: cloudy, 2: thunder, 3: cloudy
       const states = ['clear', 'cloudy', 'thunder', 'cloudy'];
       activeWeatherState = states[weatherCycle];
 
@@ -1215,7 +1278,6 @@ document.getElementById('weatherSelect').onchange = (e) => {
   applyEnvironmentSettings();
 };
 
-// Обработчики кнопок промо-окна эффектов
 document.getElementById('fxPromoEnableBtn').onclick = () => {
   logButtonClick('ui_fx_promo_enable');
   fxConfig.style = 'random';
@@ -1260,14 +1322,6 @@ function updateConnections() {
             })
             .catch(err => console.error("Ошибка просмотра:", err));
     }
-}
-
-function setSpeed(v, label) {
-    logButtonClick('ui_speed_' + label);
-    currentSpeedValue = v;
-    document.getElementById('speedDropdown').classList.remove('open');
-    updateUI();
-    if(randomActive) { clearTimeout(nextCycleTimeout); runRandom(); }
 }
 
 document.getElementById('speedTrigger').onclick = (e) => { e.stopPropagation(); favDropdown.classList.remove('open'); document.getElementById('speedDropdown').classList.toggle('open'); };
@@ -1362,7 +1416,6 @@ document.addEventListener('click', () => {
   resetIdleTimer();
 });
 
-// Управление окнами Настроек и Помощи
 function openSettings() {
   logButtonClick('ui_settings_open');
   document.getElementById('settingsModal').style.display = 'flex';
@@ -1387,7 +1440,6 @@ function showHelp() {
     clearTimeout(idleTimer); 
 }
 
-// Обработчики изменений настроек
 document.getElementById('fxStyleSelect').onchange = (e) => {
   fxConfig.style = e.target.value;
   
@@ -1423,7 +1475,6 @@ document.getElementById('fxSpeedRange').oninput = (e) => {
   document.getElementById('valFxSpeed').innerText = fxConfig.speed.toFixed(1) + 'x';
 };
 
-// Canvas
 const canvas = document.getElementById('stars'), ctx = canvas.getContext('2d');
 const wCanvas = document.getElementById('weatherCanvas'), wCtx = wCanvas.getContext('2d');
 const steamCanvas = document.getElementById('steamCanvas'), sCtx = steamCanvas.getContext('2d');
@@ -1437,14 +1488,13 @@ window.onresize = resize; resize();
 
 const starsArr = Array.from({length: 70}, () => ({ x: Math.random() * innerWidth, y: Math.random() * innerHeight, r: Math.random() * 1.5, a: Math.random(), s: Math.random() * 0.01 }));
 
-// Функция спавна каплей дождя ИЗ-ПОД ТУЧ
 function spawnCloudRain() {
   if (sleepMode) return;
   const targetState = (envConfig.weather === 'random') ? activeWeatherState : envConfig.weather;
   if (targetState !== 'cloudy' && targetState !== 'thunder') return;
 
   const isThunder = (targetState === 'thunder');
-  const spawnRate = isThunder ? 0.8 : 0.45; // Усиленный дождь при грозе
+  const spawnRate = isThunder ? 0.8 : 0.45; 
 
   if (Math.random() < spawnRate) {
     const cloudsArr = [
@@ -1453,7 +1503,6 @@ function spawnCloudRain() {
       document.getElementById('cloudEl3')
     ];
 
-    // Случайный выбор облака для реалистичной привязки к источнику
     const cloudEl = cloudsArr[Math.floor(Math.random() * cloudsArr.length)];
     if (cloudEl) {
       const rect = cloudEl.getBoundingClientRect();
@@ -1471,7 +1520,6 @@ function spawnCloudRain() {
   }
 }
 
-// Функция генерации частичек эффектов кнопок
 function spawnSteam() {
   if (sleepMode) return;
   steamHue = (steamHue + 0.2 * fxConfig.speed) % 360; 
@@ -1482,7 +1530,6 @@ function spawnSteam() {
     if (el.active && !el.locked) {
       const rect = el.btn.getBoundingClientRect();
       
-      // 1. STEAM (Цветной пар)
       if (activeFx === 'steam') {
         if (Math.random() < 0.15) { 
           steamParticles.push({
@@ -1498,8 +1545,6 @@ function spawnSteam() {
           });
         }
       }
-      
-      // 2. RAIN (Капли дождя)
       else if (activeFx === 'rain') {
         if (Math.random() < 0.3) {
           steamParticles.push({
@@ -1512,8 +1557,6 @@ function spawnSteam() {
           });
         }
       }
-
-      // 3. SNOW (Снежинки)
       else if (activeFx === 'snow') {
         if (Math.random() < 0.2) {
           steamParticles.push({
@@ -1527,8 +1570,6 @@ function spawnSteam() {
           });
         }
       }
-
-      // 4. COMETS & ASTEROIDS
       else if (activeFx === 'comets') {
         if (Math.random() < 0.067) { 
           const isAst = Math.random() < 0.4;
@@ -1576,8 +1617,6 @@ function spawnSteam() {
           }
         }
       }
-
-      // 5. NEON DUST (Неоновые искры)
       else if (activeFx === 'neondust') {
         if (Math.random() < 0.25) {
           steamParticles.push({
@@ -1592,8 +1631,6 @@ function spawnSteam() {
           });
         }
       }
-
-      // 6. AURA (Пульсирующая аура)
       else if (activeFx === 'aura') {
         if (Math.random() < 0.04) {
           steamParticles.push({
@@ -1608,7 +1645,6 @@ function spawnSteam() {
           });
         }
       }
-
     }
   });
 }
@@ -1623,7 +1659,6 @@ function draw() {
     });
   } else { ctx.clearRect(0,0,innerWidth,innerHeight); }
 
-  // Отрисовка фонового дождя из под облаков
   wCtx.clearRect(0, 0, innerWidth, innerHeight);
   if (!sleepMode) {
     spawnCloudRain();
@@ -1653,7 +1688,6 @@ function draw() {
     for (let i = steamParticles.length - 1; i >= 0; i--) {
       let p = steamParticles[i];
 
-      // Отрисовка: STEAM
       if (p.type === 'steam') {
         p.x += p.vx; p.y += p.vy; p.size += p.growth; p.alpha -= 0.0005 * fxConfig.speed;
         if (p.alpha <= 0) { steamParticles.splice(i, 1); continue; }
@@ -1667,8 +1701,6 @@ function draw() {
         sCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
         sCtx.fill();
       }
-
-      // Отрисовка: RAIN
       else if (p.type === 'rain') {
         p.y += p.vy;
         p.alpha -= 0.005 * fxConfig.speed;
@@ -1681,8 +1713,6 @@ function draw() {
         sCtx.lineTo(p.x, p.y + p.length);
         sCtx.stroke();
       }
-
-      // Отрисовка: SNOW
       else if (p.type === 'snow') {
         p.x += p.vx + Math.sin(p.y * 0.05) * 0.3;
         p.y += p.vy;
@@ -1694,8 +1724,6 @@ function draw() {
         sCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
         sCtx.fill();
       }
-
-      // Отрисовка: COMETS & ASTEROIDS
       else if (p.type === 'comet_ast') {
         p.x += p.vx;
         p.y += p.vy;
@@ -1730,7 +1758,6 @@ function draw() {
 
         if (p.alpha <= 0 || p.x < 0 || p.x > innerWidth || p.y < 0 || p.y > innerHeight) { steamParticles.splice(i, 1); continue; }
 
-        // Рисуем шлейф
         if (p.history.length > 1) {
           sCtx.beginPath();
           sCtx.moveTo(p.history[0].x, p.history[0].y);
@@ -1745,7 +1772,6 @@ function draw() {
           sCtx.globalAlpha = 1.0;
         }
 
-        // Ядро кометы
         sCtx.beginPath();
         sCtx.fillStyle = '#ffffff';
         sCtx.shadowBlur = 6;
@@ -1754,8 +1780,6 @@ function draw() {
         sCtx.fill();
         sCtx.shadowBlur = 0;
       }
-
-      // Отрисовка: NEON DUST
       else if (p.type === 'neondust') {
         p.x += p.vx; p.y += p.vy;
         p.alpha -= 0.012 * fxConfig.speed;
@@ -1769,8 +1793,6 @@ function draw() {
         sCtx.fill();
         sCtx.shadowBlur = 0;
       }
-
-      // Отрисовка: AURA
       else if (p.type === 'aura') {
         p.radius += p.growth;
         p.alpha -= 0.008 * fxConfig.speed;
@@ -1784,7 +1806,6 @@ function draw() {
         sCtx.stroke();
         sCtx.globalAlpha = 1;
       }
-
     }
   }
 
@@ -1811,7 +1832,6 @@ function switchTab(event, tabId) {
     event.currentTarget.classList.add('active');
 }
 
-// iOS Wakeup Overlay
 const wakeUpOverlay = document.createElement('div');
 wakeUpOverlay.style.cssText = `
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -1872,7 +1892,6 @@ window.addEventListener('pageshow', (event) => {
     if (event.persisted) showWakeUpScreen();
 });
 
-// Dropdown Links
 const linksTrigger = document.getElementById('linksTrigger');
 const linksOptions = document.getElementById('linksOptions');
 const speedDropdown = document.getElementById('speedDropdown');
