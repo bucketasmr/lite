@@ -311,11 +311,13 @@
       <label id="lblWeather">Weather</label>
       <select id="weatherSelect" class="settings-select">
         <option value="clear">☀️ Clear</option>
-        <option value="cloudy" selected>☁️ Clouds + Rain</option>
-        <option value="autumn_shower">🍁 Autumn Shower NEW</option>
+        <option value="cloudy">☁️ Clouds + Rain</option>
+        <option value="autumn_shower"selected>🍁 Autumn Shower NEW</option>
         <option value="random">🔀 Random Weather (120s)</option>
       </select>
     </div>
+	
+	
 
     <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 18px 0;">
 
@@ -552,7 +554,7 @@ const uiTL = {
   en: { 
     code: "EN", customBtn: "Settings", title: "BUCKET ASMR", play: "Play", pause: "Pause", repair: "REPAIR", sleep: "Sleep", tabFeatures: "Functions", tabGuide: "Guide", 
     features: [
-      "<span>✦</span> <b>New weather Autumn:</b> 🍁A downpour with leaves and raindrops.", 
+      "<span>✦</span> <b>New weather:</b> 🍁Autumn. A downpour with leaves and raindrops.", 
       "<span>✦</span> <b>Stay Awake:</b> Screen won't turn off automatically.", 
       "<span>✦</span> <b>Mixer:</b> Play multiple sounds at the same time.", 
       "<span>✦</span> <b>Not Working?:</b> Turn off Silent Mode."
@@ -582,7 +584,7 @@ const uiTL = {
   pt: { 
     code: "PT", customBtn: "Personalizar", title: "BALDE ASMR", play: "Tocar", pause: "Pausa", repair: "REPARAR", sleep: "Dormir", tabFeatures: "Funções", tabGuide: "Guia", 
     features: [
-      "<span>✦</span> <b>Novo clima de Outono:</b> 🍁Um aguaceiro com folhas e gotas de chuva.", 
+      "<span>✦</span> <b>Novo clima :</b> 🍁de Outono. Um aguaceiro com folhas e gotas de chuva.", 
       "<span>✦</span> <b>Sempre Ativo:</b> A tela não apaga durante o uso.", 
       "<span>✦</span> <b>Mixer:</b> Toque vários sons ao mesmo tempo.", 
       "<span>✦</span> <b>Não funcionou?:</b> Desative o modo silencioso."
@@ -612,7 +614,7 @@ const uiTL = {
   uk: { 
     code: "UK", customBtn: "Налаштування", title: "ВІДРО АСМР", play: "Грати", pause: "Пауза", repair: "ЛАГОДИТИ", sleep: "Сон", tabFeatures: "Функції", tabGuide: "Інструкція", 
     features: [
-      "<span>✦</span> <b>Нова погода Осінь:</b> 🍁Злива з листям та краплями дощу.", 
+      "<span>✦</span> <b>Нова погода :</b> 🍁Осінь. Злива з листям та краплями дощу.", 
       "<span>✦</span> <b>Без Сну:</b> Екран не згасає автоматично.", 
       "<span>✦</span> <b>Міксер:</b> Грайте кілька звуків одночасно.", 
       "<span>✦</span> <b>Не працює?:</b> Вимкніть беззвучний режим."
@@ -642,7 +644,7 @@ const uiTL = {
   ru: { 
     code: "RU", customBtn: "Настройки", title: "ВЕДРО АСМР", play: "Играть", pause: "Пауза", repair: "ЧИНИТЬ", sleep: "Сон", tabFeatures: "Функции", tabGuide: "Инструкция", 
     features: [
-      "<span>✦</span> <b>Новая погода Осень:</b> 🍁Ливень с листьями и каплями дождя.", 
+      "<span>✦</span> <b>Новая погода :</b> 🍁Осень. Ливень с листьями и каплями дождя.", 
       "<span>✦</span> <b>Бодрость:</b> Экран не гаснет во время сеанса.", 
       "<span>✦</span> <b>Микшер:</b> Запуск нескольких звуков одновременно.", 
       "<span>✦</span> <b>Не работает?:</b> Отключите беззвучный режим."
@@ -659,7 +661,7 @@ const uiTL = {
     lblTimeOfDay: "Время суток", lblWeather: "Погода",
     todNames: { morning: "🌅 Утро", noon: "☀️ Полдень", evening: "🌆 Вечер", night: "🌙 Ночь", full_cycle: "🔄 Полные сутки (120 сек)" },
     weatherNames: { clear: "☀️ Ясно", cloudy: "☁️ Тучи + Дождь", autumn_shower: "🍁 Осенний ливень НОВЫЙ", random: "🔀 Рандомная погода (120 сек)" },
-    fxNames: { steam: "💨 Цветной пар", rain: "💧 Капли дождя", snow: "❄️ Снежинки", comets: "☄️ Кометы и астероиды", neondust: "✨ Магические искры", aura: "🌀 Пульсирующая аура", random: "🔀 Рандом" },
+    fxNames: { steam: "💨 Цветной пар", rain: "💧 Капли дождя", snow: "❄️ Снежинки", comets: "☄️ Кометы и астероиды", neondust: "✨ Магические искри", aura: "🌀 Пульсирующая аура", random: "🔀 Рандом" },
     fxPromoTitle: "Новая функция эффекты.",
     fxPromoDesc: "нажмите да что-бы активировать автоматическую смену эффектов",
     fxPromoEnable: "да, активировать все эффекты",
@@ -667,7 +669,7 @@ const uiTL = {
     fxPromoPs: "PS: Вы сможете изменить это в разделе Настройки.",
     weatherChoiceTitle: "Выберите погоду",
     wClear: "Чистое небо", wClouds: "Тучи и Дождь", wAutumn: " Осенний ливень НОВЫЙ", wRandom: "Рандом",
-    soundSoon: "Этот звук скоро будет доступний!"
+    soundSoon: "Этот звук скоро будет доступен!"
   }
 };
 
@@ -677,13 +679,11 @@ const langOrder = ['en', 'pt', 'uk', 'ru'];
 
 let steamParticles = [];
 let weatherParticles = []; 
-let autumnParticles = []; // Массив для капель и листьев осеннего ливня
-// Массивы для скопившихся внизу экрана капель и листьев
+let autumnParticles = []; 
 let accumulatedWater = [];
 let accumulatedLeaves = [];
 
-// Максимальное количество элементов на экране (защита процессора)
-const MAX_ACCUMULATED_ITEMS = 600;
+const MAX_ACCUMULATED_ITEMS = 2000;
 let pendingUnlockElement = null;
 let adTimerInterval = null;
 let steamHue = 270;
@@ -750,7 +750,7 @@ let fxConfig = {
 
 let envConfig = {
   timeOfDay: 'night', 
-  weather: 'cloudy'      
+  weather: 'autumn_shower'      
 };
 
 let activeWeatherState = 'clear'; 
@@ -1339,7 +1339,7 @@ function resetIdleTimer() {
     return;
   }
   clearTimeout(idleTimer);
-  idleTimer = setTimeout(showIdleModal, 120000);
+  idleTimer = setTimeout(showIdleModal, 35000);
 }
 
 function showIdleModal() {
@@ -1445,88 +1445,62 @@ window.onresize = resize; resize();
 const starsArr = Array.from({length: 70}, () => ({ x: Math.random() * innerWidth, y: Math.random() * innerHeight, r: Math.random() * 1.5, a: Math.random(), s: Math.random() * 0.01 }));
 
 function spawnCloudRain() {
-  // Проверяем режим сна: если активен, ничего не делаем и выходим (Пример: true / false)
   if (sleepMode) return;
-
-  // Определяем текущее состояние погоды: если стоит 'random', берем активную погоду, иначе из настроек
-  // (Примеры результатов: 'cloudy', 'autumn_shower', 'sunny', 'rainy')
   const targetState = (envConfig.weather === 'random') ? activeWeatherState : envConfig.weather;
-
-  // Если погода не облачная и не осенний ливень — прекращаем выполнение функции
   if (targetState !== 'cloudy' && targetState !== 'autumn_shower') return;
 
-  // Флаг: проверяем, является ли текущая погода осенним ливнем (Примеры: true / false)
   const isAutumn = (targetState === 'autumn_shower');
-
-  // Частота спавна частиц: для осени плотность выше (0.9), для обычных облаков ниже (0.45)
   const spawnRate = isAutumn ? 0.9 : 0.45; 
 
-  // Рандомизатор: генерируем частицу только если случайное число от 0 до 1 меньше spawnRate
   if (Math.random() < spawnRate) {
-    // Массив элементов облаков в DOM, откуда будут сыпаться осадки
     const cloudsArr = [
       document.getElementById('cloudEl1'),
       document.getElementById('cloudEl2'),
       document.getElementById('cloudEl3')
     ];
 
-    // Случайным образом выбираем одно из облаков для спавна частицы
     const cloudEl = cloudsArr[Math.floor(Math.random() * cloudsArr.length)];
     
-    // Если элемент облака найден на странице
     if (cloudEl) {
-      // Получаем координаты и размеры облака на экране (объект DOMRect)
       const rect = cloudEl.getBoundingClientRect();
 
-      // Проверяем, находится ли облако в зоне видимости экрана по горизонтали
       if (rect.right > 0 && rect.left < innerWidth) {
-        // Случайная точка по горизонтали (X) в пределах ширины выбранного облака
-        // (Пример: от 150 до 350 пикселей от левого края экрана)
         let startX = rect.left + Math.random() * rect.width;
-
-        // Начальная точка по вертикали (Y) — чуть ниже нижней границы облака (на 10px)
-        // (Пример: 85 пикселей от верха экрана)
         let startY = rect.bottom - 10;
 
-        // Если включен режим осенней погоды
+        // Повышенная базовая скорость для iOS/всех устройств (умножена на коэффициент или увеличена)
         if (isAutumn) {
-          // Спавним либо каплю ливня (75% шанс), либо осенний лист (25% шанс)
           if (Math.random() < 0.75) {
-            // Добавляем обычную каплю осеннего дождя в массив осадков
             weatherParticles.push({
-              x: startX,                                // Начальная позиция X
-              y: startY,                                // Начальная позиция Y
-              vy: Math.random() * 10 + 10,              // Скорость падения капли вниз (Примеры: 12.5, 18.2, 14.1)
-              vx: (Math.random() - 0.5) * 1.0,          // Небольшой горизонтальный снос ветра (Примеры: -0.3, 0.4, -0.1)
-              length: Math.random() * 15 + 10,          // Длина капли (Примеры: 12.4, 22.1, 17.8)
-              alpha: Math.random() * 0.4 + 0.3          // Прозрачность капли (Примеры: 0.45, 0.62, 0.33)
+              x: startX,
+              y: startY,
+              vy: (Math.random() * 10 + 14) * 1.5, // Увеличена скорость капель
+              vx: (Math.random() - 0.5) * 1.0,
+              length: Math.random() * 15 + 10,
+              alpha: Math.random() * 0.4 + 0.3
             });
           } else {
-            // Массив возможных цветов для осеннего листика
             const autumnColors = ['#d35400', '#e67e22', '#c0392b', '#f39c12'];
-            
-            // Добавляем красивый падающий листик в отдельный массив autumnParticles
             autumnParticles.push({
-              x: startX,                                // Начальная позиция X
-              y: startY,                                // Начальная позиция Y
-              vy: Math.random() * 0.6 + 0.4,            // Очень медленная скорость падения (Примеры: 0.45, 0.78, 0.92)
-              vx: (Math.random() - 0.1) * 0.1,          // Мягкий горизонтальный дрейф (Примеры: -0.2, 0.15, -0.05)
-              angle: Math.random() * Math.PI * 2,       // Начальный угол поворота листа в радианах (Примеры: 1.57, 3.14, 5.23)
-              vAngle: (Math.random() - 0.5) * 0.02,     // Скорость вращения листика (Примеры: -0.008, 0.012, 0.003)
-              size: Math.random() * 8 + 6,              // Размер листика в пикселях (Примеры: 8.5, 11.2, 13.9)
-              color: autumnColors[Math.floor(Math.random() * autumnColors.length)], // Случайный цвет из массива выше
-              alpha: Math.random() * 0.4 + 0.6          // Прозрачность листика (Примеры: 0.75, 0.88, 0.61)
+              x: startX,
+              y: startY,
+              vy: (Math.random() * 0.8 + 0.6) * 1.5, // Увеличена скорость листьев
+              vx: (Math.random() - 0.1) * 0.1,
+              angle: Math.random() * Math.PI * 2,
+              vAngle: (Math.random() - 0.5) * 0.02,
+              size: Math.random() * 8 + 6,
+              color: autumnColors[Math.floor(Math.random() * autumnColors.length)],
+              alpha: Math.random() * 0.4 + 0.6
             });
           }
         } else {
-          // Если погода просто облачная (обычный дождь)
           weatherParticles.push({
-            x: startX,                                // Начальная позиция X
-            y: startY,                                // Начальная позиция Y
-            vy: Math.random() * 5 + 8,                // Скорость падения капель (Примеры: 9.2, 11.5, 12.8)
-            vx: (Math.random() - 0.5) * 1.5,          // Горизонтальный снос капель (Примеры: -0.6, 0.7, 0.2)
-            length: Math.random() * 12 + 8,           // Длина капли (Примеры: 10.5, 15.2, 19.8)
-            alpha: Math.random() * 0.4 + 0.3          // Прозрачность капли (Примеры: 0.35, 0.55, 0.68)
+            x: startX,
+            y: startY,
+            vy: (Math.random() * 6 + 10) * 1.5, // Увеличена скорость капель дождя
+            vx: (Math.random() - 0.5) * 1.5,
+            length: Math.random() * 12 + 8,
+            alpha: Math.random() * 0.4 + 0.3
           });
         }
       }
@@ -1673,7 +1647,7 @@ function draw() {
     });
   } else { ctx.clearRect(0,0,innerWidth,innerHeight); }
 
-wCtx.clearRect(0, 0, innerWidth, innerHeight);
+  wCtx.clearRect(0, 0, innerWidth, innerHeight);
   if (!sleepMode) {
     spawnCloudRain();
     
@@ -1683,15 +1657,14 @@ wCtx.clearRect(0, 0, innerWidth, innerHeight);
       p.x += p.vx;
       p.y += p.vy;
 
-      // Когда капля долетает до нижней границы экрана (например, за 20px до низа)
-      if (p.y > innerHeight - 20) {
-        // Превращаем ее в лужицу/каплю на земле, если не превышен лимит
+      // Изменено условие падения: теперь накапливание происходит строго в видимой нижней части экрана (например, над панелью управления / внизу вьюпорта)
+      if (p.y > innerHeight - 90) {
         if (accumulatedWater.length < MAX_ACCUMULATED_ITEMS) {
           accumulatedWater.push({
             x: p.x,
-            y: innerHeight - (Math.random() * 10 + 5), // Случайная высота у самого дна
-            radius: Math.random() * 3 + 2,            // Размер капли
-            alpha: 0.6                                // Начальная прозрачность
+            y: innerHeight - (Math.random() * 70 + 20), // Распределяются в нижней видимой полосе сайта
+            radius: Math.random() * 3 + 2,
+            alpha: 0.7
           });
         }
         weatherParticles.splice(i, 1);
@@ -1713,16 +1686,16 @@ wCtx.clearRect(0, 0, innerWidth, innerHeight);
       leaf.y += leaf.vy;
       leaf.angle += leaf.vAngle;
 
-      // Когда лист падает на землю
-      if (leaf.y > innerHeight - 15) {
+      // Изменено условие падения: листья также оседают в видимой нижней зоне сайта
+      if (leaf.y > innerHeight - 90) {
         if (accumulatedLeaves.length < MAX_ACCUMULATED_ITEMS) {
           accumulatedLeaves.push({
             x: leaf.x,
-            y: innerHeight - (Math.random() * 12 + 5),
+            y: innerHeight - (Math.random() * 75 + 20),
             size: leaf.size,
             angle: leaf.angle,
             color: leaf.color,
-            alpha: 0.85
+            alpha: 0.9
           });
         }
         autumnParticles.splice(i, 1);
@@ -1740,10 +1713,10 @@ wCtx.clearRect(0, 0, innerWidth, innerHeight);
       wCtx.restore();
     }
 
-    // --- 3. Отрисовка и плавное исчезновение скопившейся воды внизу ---
+    // --- 3. Отрисовка и плавное исчезновение скопившейся воды ---
     for (let i = accumulatedWater.length - 1; i >= 0; i--) {
       let w = accumulatedWater[i];
-      w.alpha -= 0.002; // Скорость исчезновения (чем меньше число, тем дольше лежат)
+      w.alpha -= 0.001; 
 
       if (w.alpha <= 0) {
         accumulatedWater.splice(i, 1);
@@ -1756,10 +1729,10 @@ wCtx.clearRect(0, 0, innerWidth, innerHeight);
       wCtx.fill();
     }
 
-    // --- 4. Отрисовка и плавное исчезновение скопившихся листьев внизу ---
+    // --- 4. Отрисовка и плавное исчезновение накопившихся листьев ---
     for (let i = accumulatedLeaves.length - 1; i >= 0; i--) {
       let l = accumulatedLeaves[i];
-      l.alpha -= 0.0001; // Листья исчезают чуть медленнее капель 0.1230 мгновенное 
+      l.alpha -= 0.0005; 
 
       if (l.alpha <= 0) {
         accumulatedLeaves.splice(i, 1);
@@ -2006,3 +1979,4 @@ window.addEventListener('click', () => {
 </script>
 </body>
 </html>
+```[cite: 8]
