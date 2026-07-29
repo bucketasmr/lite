@@ -33,16 +33,6 @@
     background: rgba(0,0,0,0.3); z-index:3; pointer-events: none; 
     transition: background 1.5s ease;
   }
-
-  /* Вспышка молнии при грозе */
-  .lightning-flash {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: #ffffff;
-    opacity: 0;
-    pointer-events: none;
-    z-index: 8;
-    transition: opacity 0.05s ease-out;
-  }
   
   /* Контейнер для облаков */
   .clouds-container {
@@ -283,7 +273,6 @@
 <body class="tod-night">
 
 <canvas id="stars"></canvas>
-<div class="lightning-flash" id="lightningFlash"></div>
 <div class="clouds-container" id="cloudsContainer">
   <div class="cloud cloud1" id="cloudEl1"></div>
   <div class="cloud cloud2" id="cloudEl2"></div>
@@ -323,7 +312,7 @@
       <select id="weatherSelect" class="settings-select">
         <option value="clear">☀️ Clear</option>
         <option value="cloudy" selected>☁️ Clouds + Rain</option>
-        <option value="thunder">🌩️ Thunderstorm</option>
+        <option value="autumn_shower">🍁 Autumn Shower</option>
         <option value="random">🔀 Random Weather (120s)</option>
       </select>
     </div>
@@ -382,8 +371,8 @@
       <button class="weather-option-btn" onclick="selectWeatherMode('cloudy')">
         <span class="icon">🌧️</span> <span id="btnWClouds">Clouds & Rain</span>
       </button>
-      <button class="weather-option-btn" onclick="selectWeatherMode('thunder')">
-        <span class="icon">🌩️</span> <span id="btnWThunder">Thunderstorm</span>
+      <button class="weather-option-btn" onclick="selectWeatherMode('autumn_shower')">
+        <span class="icon">🍁</span> <span id="btnWAutumn">Autumn Shower</span>
       </button>
       <button class="weather-option-btn" onclick="selectWeatherMode('random')">
         <span class="icon">🎲</span> <span id="btnWRandom">Random</span>
@@ -557,7 +546,6 @@ const sounds = [
   { "file": "carrot.mp3", "img": "carrot.png", "name": { "en": "Carrot", "pt": "Cenoura", "ru": "Морковь", "uk": "Морква" }, "color": "#ff8c00", "locked": false },
   { "file": "greybrush.mp3", "img": "greybrush.png", "name": { "en": "Grey Brush", "pt": "Pincel Cinza", "ru": "Серая кисть", "uk": "Сірий пензель" }, "color": "#8c8c8c", "locked": false },
   { "file": "wood.mp3", "img": "wood.png", "name": { "en": "Wood", "pt": "Madeira", "ru": "Дерево", "uk": "Дерево" }, "color": "#ffff00", "locked": false }
-  
 ];
 
 const uiTL = {
@@ -580,7 +568,7 @@ const uiTL = {
     settingsTitle: "Settings", helpBtnLabel: "Help / Guide", lblFxStyle: "Effect Style", lblFxOpacity: "Opacity / Glow", lblFxSpeed: "Effect Speed", lblFxRandomInterval: "Random Change Interval",
     lblTimeOfDay: "Time of Day", lblWeather: "Weather",
     todNames: { morning: "🌅 Morning", noon: "☀️ Noon", evening: "🌆 Evening", night: "🌙 Night", full_cycle: "🔄 Full 24h Cycle (120s)" },
-    weatherNames: { clear: "☀️ Clear", cloudy: "☁️ Clouds + Rain", thunder: "🌩️ Thunderstorm", random: "🔀 Random Weather (120s)" },
+    weatherNames: { clear: "☀️ Clear", cloudy: "☁️ Clouds + Rain", autumn_shower: "🍁 Autumn Shower", random: "🔀 Random Weather (120s)" },
     fxNames: { steam: "💨 Steam (Color)", rain: "💧 Rain Drops", snow: "❄️ Snowflakes", comets: "☄️ Comets & Asteroids", neondust: "✨ Neon Dust", aura: "🌀 Pulsing Aura", random: "🔀 Random Effect" },
     fxPromoTitle: "New Feature: Effects",
     fxPromoDesc: "Click Yes to activate automatic switching of visual effects.",
@@ -588,7 +576,7 @@ const uiTL = {
     fxPromoKeep: "Keep current effect",
     fxPromoPs: "P.S. You can change this later in Settings.",
     weatherChoiceTitle: "Select Weather",
-    wClear: "Clear sky", wClouds: "Clouds & Rain", wThunder: "Thunderstorm", wRandom: "Random",
+    wClear: "Clear sky", wClouds: "Clouds & Rain", wAutumn: "Autumn Shower", wRandom: "Random",
     soundSoon: "This sound will be available soon!"
   },
   pt: { 
@@ -610,7 +598,7 @@ const uiTL = {
     settingsTitle: "Configurações", helpBtnLabel: "Ajuda / Guia", lblFxStyle: "Estilo do Efeito", lblFxOpacity: "Opacidade / Brilho", lblFxSpeed: "Velocidade do Efeito", lblFxRandomInterval: "Intervalo de Troca Aleatória",
     lblTimeOfDay: "Hora do Dia", lblWeather: "Clima",
     todNames: { morning: "🌅 Manhã", noon: "☀️ Meio-dia", evening: "🌆 Tarde / Noite", night: "🌙 Noite", full_cycle: "🔄 Ciclo de 24h (120s)" },
-    weatherNames: { clear: "☀️ Limpo", cloudy: "☁️ Nuvens + Chuva", thunder: "🌩️ Tempestade", random: "🔀 Clima Aleatório (120s)" },
+    weatherNames: { clear: "☀️ Limpo", cloudy: "☁️ Nuvens + Chuva", autumn_shower: "🍁 Chuva de Outono", random: "🔀 Clima Aleatório (120s)" },
     fxNames: { steam: "💨 Vapor (Colorido)", rain: "💧 Gotas de Chuva", snow: "❄️ Flocos de Neve", comets: "☄️ Cometas e Asteroides", neondust: "✨ Poeira Neon", aura: "🌀 Aura Pulsante", random: "🔀 Efeito Aleatório" },
     fxPromoTitle: "Nova Função: Efeitos",
     fxPromoDesc: "Clique em Sim para ativar a troca automática de efeitos visuais.",
@@ -618,7 +606,7 @@ const uiTL = {
     fxPromoKeep: "Manter efeito atual",
     fxPromoPs: "P.S. Você pode alterar isso mais tarde nas Configurações.",
     weatherChoiceTitle: "Selecionar Clima",
-    wClear: "Céu limpo", wClouds: "Nuvens e Chuva", wThunder: "Tempestade", wRandom: "Aleatório",
+    wClear: "Céu limpo", wClouds: "Nuvens e Chuva", wAutumn: "Chuva de Outono", wRandom: "Aleatório",
     soundSoon: "Este som estará disponível em breve!"
   },
   uk: { 
@@ -640,7 +628,7 @@ const uiTL = {
     settingsTitle: "Налаштування", helpBtnLabel: "Допомога / Інструкція", lblFxStyle: "Стиль ефекту", lblFxOpacity: "Прозорість / Сяйво", lblFxSpeed: "Швидкість ефекту", lblFxRandomInterval: "Інтервал зміни рандому",
     lblTimeOfDay: "Час доби", lblWeather: "Погода",
     todNames: { morning: "🌅 Ранок", noon: "☀️ Полдень", evening: "🌆 Вечір", night: "🌙 Ніч", full_cycle: "🔄 Повні добу (120с)" },
-    weatherNames: { clear: "☀️ Ясно", cloudy: "☁️ Хмари + Дощ", thunder: "🌩️ Гроза", random: "🔀 Рандомна погода (120с)" },
+    weatherNames: { clear: "☀️ Ясно", cloudy: "☁️ Хмари + Дощ", autumn_shower: "🍁 Осінній ливень", random: "🔀 Рандомна погода (120с)" },
     fxNames: { steam: "💨 Кольорова пара", rain: "💧 Краплі дощу", snow: "❄️ Сніжинки", comets: "☄️ Комети та астероїди", neondust: "✨ Магічні іскри", aura: "🌀 Пульсуюча аура", random: "🔀 Рандомний ефект" },
     fxPromoTitle: "Нова функція ефекти.",
     fxPromoDesc: "натисніть так щоб активувати автоматичну зміну ефектів",
@@ -648,7 +636,7 @@ const uiTL = {
     fxPromoKeep: "Залишити поточний ефект",
     fxPromoPs: "PS: Ви зможете змінити це в розділі Налаштування.",
     weatherChoiceTitle: "Оберіть погоду",
-    wClear: "Чисте небо", wClouds: "Хмари та Дощ", wThunder: "Гроза", wRandom: "Рандом",
+    wClear: "Чисте небо", wClouds: "Хмари та Дощ", wAutumn: "Осінній ливень", wRandom: "Рандом",
     soundSoon: "Цей звук скоро буде доступний!"
   },
   ru: { 
@@ -670,7 +658,7 @@ const uiTL = {
     settingsTitle: "Настройки", helpBtnLabel: "Помощь / Инструкция", lblFxStyle: "Стиль эффекта", lblFxOpacity: "Прозрачность / Свечение", lblFxSpeed: "Скорость эффекта", lblFxRandomInterval: "Интервал смены рандома",
     lblTimeOfDay: "Время суток", lblWeather: "Погода",
     todNames: { morning: "🌅 Утро", noon: "☀️ Полдень", evening: "🌆 Вечер", night: "🌙 Ночь", full_cycle: "🔄 Полные сутки (120 сек)" },
-    weatherNames: { clear: "☀️ Ясно", cloudy: "☁️ Тучи + Дождь", thunder: "🌩️ Гроза", random: "🔀 Рандомная погода (120 сек)" },
+    weatherNames: { clear: "☀️ Ясно", cloudy: "☁️ Тучи + Дождь", autumn_shower: "🍁 Осенний ливень", random: "🔀 Рандомная погода (120 сек)" },
     fxNames: { steam: "💨 Цветной пар", rain: "💧 Капли дождя", snow: "❄️ Снежинки", comets: "☄️ Кометы и астероиды", neondust: "✨ Магические искры", aura: "🌀 Пульсирующая аура", random: "🔀 Рандом" },
     fxPromoTitle: "Новая функция эффекты.",
     fxPromoDesc: "нажмите да что-бы активировать автоматическую смену эффектов",
@@ -678,7 +666,7 @@ const uiTL = {
     fxPromoKeep: "Оставить текущий эффект",
     fxPromoPs: "PS: Вы сможете изменить это в разделе Настройки.",
     weatherChoiceTitle: "Выберите погоду",
-    wClear: "Чистое небо", wClouds: "Тучи и Дождь", wThunder: "Гроза", wRandom: "Рандом",
+    wClear: "Чистое небо", wClouds: "Тучи и Дождь", wAutumn: "Осенний ливень", wRandom: "Рандом",
     soundSoon: "Этот звук скоро будет доступний!"
   }
 };
@@ -689,7 +677,7 @@ const langOrder = ['en', 'pt', 'uk', 'ru'];
 
 let steamParticles = [];
 let weatherParticles = []; 
-let lightningTimer = null;
+let autumnParticles = []; // Массив для капель и листьев осеннего ливня
 let pendingUnlockElement = null;
 let adTimerInterval = null;
 let steamHue = 270;
@@ -760,7 +748,6 @@ let envConfig = {
 };
 
 let activeWeatherState = 'clear'; 
-let weatherStateStartTime = 0;
 let cycleAnimationReq = null;
 let cycleStartTime = null;
 
@@ -1068,7 +1055,7 @@ function updateUI() {
   document.getElementById('weatherChoiceTitle').innerText = t.weatherChoiceTitle;
   document.getElementById('btnWClear').innerText = t.wClear;
   document.getElementById('btnWClouds').innerText = t.wClouds;
-  document.getElementById('btnWThunder').innerText = t.wThunder;
+  document.getElementById('btnWAutumn').innerText = t.wAutumn;
   document.getElementById('btnWRandom').innerText = t.wRandom;
 
   const selectFx = document.getElementById('fxStyleSelect');
@@ -1144,7 +1131,7 @@ function applyEnvironmentSettings() {
   }
 
   if (envConfig.timeOfDay !== 'full_cycle') {
-    if (envConfig.weather === 'cloudy' || envConfig.weather === 'thunder') {
+    if (envConfig.weather === 'cloudy' || envConfig.weather === 'autumn_shower') {
       clouds.classList.add('visible');
     } else if (envConfig.weather === 'clear') {
       clouds.classList.remove('visible');
@@ -1155,44 +1142,6 @@ function applyEnvironmentSettings() {
     activeWeatherState = envConfig.weather;
   }
 }
-
-function triggerLightning() {
-  if (sleepMode) return;
-  const flash = document.getElementById('lightningFlash');
-  
-  const pulses = Math.floor(Math.random() * 3) + 2;
-  let currentPulse = 0;
-
-  function doPulse() {
-    if (currentPulse >= pulses) return;
-    
-    flash.style.opacity = (Math.random() * 0.5 + 0.5).toString();
-    setTimeout(() => {
-      flash.style.opacity = '0.05'; 
-      setTimeout(() => {
-        flash.style.opacity = '0';
-        currentPulse++;
-        if (currentPulse < pulses) {
-          setTimeout(doPulse, Math.random() * 100 + 40);
-        }
-      }, 60);
-    }, 40);
-  }
-
-  doPulse();
-}
-
-function scheduleNextLightning() {
-  if (lightningTimer) clearTimeout(lightningTimer);
-  const nextDelay = Math.random() * 7000 + 3000; 
-  lightningTimer = setTimeout(() => {
-    if ((activeWeatherState === 'thunder' || envConfig.weather === 'thunder') && !sleepMode) {
-      triggerLightning();
-    }
-    scheduleNextLightning();
-  }, nextDelay);
-}
-scheduleNextLightning();
 
 function runFullCycleAnimation() {
   const duration = 120000; 
@@ -1249,8 +1198,8 @@ function runFullCycleAnimation() {
     overlay.style.background = `rgba(${oR}, ${oG}, ${oB}, ${oA})`;
 
     if (envConfig.weather === 'random') {
-      const weatherCycle = Math.floor((progress * 120) / 20) % 4; 
-      const states = ['clear', 'cloudy', 'thunder', 'cloudy'];
+      const weatherCycle = Math.floor((progress * 120) / 30) % 3; 
+      const states = ['clear', 'cloudy', 'autumn_shower'];
       activeWeatherState = states[weatherCycle];
 
       if (activeWeatherState === 'clear') {
@@ -1369,6 +1318,7 @@ document.getElementById('sleepBtn').onclick = () => {
       document.getElementById('online-count').innerText = "ECO";
       steamParticles = [];
       weatherParticles = [];
+      autumnParticles = [];
     } else {
       firebase.database().goOnline();
       updateConnections();
@@ -1489,32 +1439,90 @@ window.onresize = resize; resize();
 const starsArr = Array.from({length: 70}, () => ({ x: Math.random() * innerWidth, y: Math.random() * innerHeight, r: Math.random() * 1.5, a: Math.random(), s: Math.random() * 0.01 }));
 
 function spawnCloudRain() {
+  // Проверяем режим сна: если активен, ничего не делаем и выходим (Пример: true / false)
   if (sleepMode) return;
+
+  // Определяем текущее состояние погоды: если стоит 'random', берем активную погоду, иначе из настроек
+  // (Примеры результатов: 'cloudy', 'autumn_shower', 'sunny', 'rainy')
   const targetState = (envConfig.weather === 'random') ? activeWeatherState : envConfig.weather;
-  if (targetState !== 'cloudy' && targetState !== 'thunder') return;
 
-  const isThunder = (targetState === 'thunder');
-  const spawnRate = isThunder ? 0.8 : 0.45; 
+  // Если погода не облачная и не осенний ливень — прекращаем выполнение функции
+  if (targetState !== 'cloudy' && targetState !== 'autumn_shower') return;
 
+  // Флаг: проверяем, является ли текущая погода осенним ливнем (Примеры: true / false)
+  const isAutumn = (targetState === 'autumn_shower');
+
+  // Частота спавна частиц: для осени плотность выше (0.9), для обычных облаков ниже (0.45)
+  const spawnRate = isAutumn ? 0.9 : 0.45; 
+
+  // Рандомизатор: генерируем частицу только если случайное число от 0 до 1 меньше spawnRate
   if (Math.random() < spawnRate) {
+    // Массив элементов облаков в DOM, откуда будут сыпаться осадки
     const cloudsArr = [
       document.getElementById('cloudEl1'),
       document.getElementById('cloudEl2'),
       document.getElementById('cloudEl3')
     ];
 
+    // Случайным образом выбираем одно из облаков для спавна частицы
     const cloudEl = cloudsArr[Math.floor(Math.random() * cloudsArr.length)];
+    
+    // Если элемент облака найден на странице
     if (cloudEl) {
+      // Получаем координаты и размеры облака на экране (объект DOMRect)
       const rect = cloudEl.getBoundingClientRect();
+
+      // Проверяем, находится ли облако в зоне видимости экрана по горизонтали
       if (rect.right > 0 && rect.left < innerWidth) {
-        weatherParticles.push({
-          x: rect.left + Math.random() * rect.width,
-          y: rect.bottom - 10,
-          vy: isThunder ? (Math.random() * 8 + 12) : (Math.random() * 5 + 8),
-          vx: (Math.random() - 0.5) * 1.5,
-          length: isThunder ? (Math.random() * 18 + 12) : (Math.random() * 12 + 8),
-          alpha: Math.random() * 0.4 + 0.3
-        });
+        // Случайная точка по горизонтали (X) в пределах ширины выбранного облака
+        // (Пример: от 150 до 350 пикселей от левого края экрана)
+        let startX = rect.left + Math.random() * rect.width;
+
+        // Начальная точка по вертикали (Y) — чуть ниже нижней границы облака (на 10px)
+        // (Пример: 85 пикселей от верха экрана)
+        let startY = rect.bottom - 10;
+
+        // Если включен режим осенней погоды
+        if (isAutumn) {
+          // Спавним либо каплю ливня (75% шанс), либо осенний лист (25% шанс)
+          if (Math.random() < 0.75) {
+            // Добавляем обычную каплю осеннего дождя в массив осадков
+            weatherParticles.push({
+              x: startX,                                // Начальная позиция X
+              y: startY,                                // Начальная позиция Y
+              vy: Math.random() * 10 + 10,              // Скорость падения капли вниз (Примеры: 12.5, 18.2, 14.1)
+              vx: (Math.random() - 0.5) * 1.0,          // Небольшой горизонтальный снос ветра (Примеры: -0.3, 0.4, -0.1)
+              length: Math.random() * 15 + 10,          // Длина капли (Примеры: 12.4, 22.1, 17.8)
+              alpha: Math.random() * 0.4 + 0.3          // Прозрачность капли (Примеры: 0.45, 0.62, 0.33)
+            });
+          } else {
+            // Массив возможных цветов для осеннего листика
+            const autumnColors = ['#d35400', '#e67e22', '#c0392b', '#f39c12'];
+            
+            // Добавляем красивый падающий листик в отдельный массив autumnParticles
+            autumnParticles.push({
+              x: startX,                                // Начальная позиция X
+              y: startY,                                // Начальная позиция Y
+              vy: Math.random() * 0.6 + 0.4,            // Очень медленная скорость падения (Примеры: 0.45, 0.78, 0.92)
+              vx: (Math.random() - 0.1) * 0.1,          // Мягкий горизонтальный дрейф (Примеры: -0.2, 0.15, -0.05)
+              angle: Math.random() * Math.PI * 2,       // Начальный угол поворота листа в радианах (Примеры: 1.57, 3.14, 5.23)
+              vAngle: (Math.random() - 0.5) * 0.02,     // Скорость вращения листика (Примеры: -0.008, 0.012, 0.003)
+              size: Math.random() * 8 + 6,              // Размер листика в пикселях (Примеры: 8.5, 11.2, 13.9)
+              color: autumnColors[Math.floor(Math.random() * autumnColors.length)], // Случайный цвет из массива выше
+              alpha: Math.random() * 0.4 + 0.6          // Прозрачность листика (Примеры: 0.75, 0.88, 0.61)
+            });
+          }
+        } else {
+          // Если погода просто облачная (обычный дождь)
+          weatherParticles.push({
+            x: startX,                                // Начальная позиция X
+            y: startY,                                // Начальная позиция Y
+            vy: Math.random() * 5 + 8,                // Скорость падения капель (Примеры: 9.2, 11.5, 12.8)
+            vx: (Math.random() - 0.5) * 1.5,          // Горизонтальный снос капель (Примеры: -0.6, 0.7, 0.2)
+            length: Math.random() * 12 + 8,           // Длина капли (Примеры: 10.5, 15.2, 19.8)
+            alpha: Math.random() * 0.4 + 0.3          // Прозрачность капли (Примеры: 0.35, 0.55, 0.68)
+          });
+        }
       }
     }
   }
@@ -1662,6 +1670,8 @@ function draw() {
   wCtx.clearRect(0, 0, innerWidth, innerHeight);
   if (!sleepMode) {
     spawnCloudRain();
+    
+    // Отрисовка капель дождя
     for (let i = weatherParticles.length - 1; i >= 0; i--) {
       let p = weatherParticles[i];
       p.x += p.vx;
@@ -1678,6 +1688,30 @@ function draw() {
       wCtx.moveTo(p.x, p.y);
       wCtx.lineTo(p.x + p.vx * 2, p.y + p.length);
       wCtx.stroke();
+    }
+
+    // Отрисовка красивых падающих осенних листьев
+    for (let i = autumnParticles.length - 1; i >= 0; i--) {
+      let leaf = autumnParticles[i];
+      leaf.x += leaf.vx + Math.sin(leaf.y * 0.01) * 0.3;
+      leaf.y += leaf.vy;
+      leaf.angle += leaf.vAngle;
+
+      if (leaf.y > innerHeight + 20) {
+        autumnParticles.splice(i, 1);
+        continue;
+      }
+
+      wCtx.save();
+      wCtx.translate(leaf.x, leaf.y);
+      wCtx.rotate(leaf.angle);
+      wCtx.beginPath();
+      // Рисуем простую изящную форму листика
+      wCtx.ellipse(0, 0, leaf.size, leaf.size * 0.5, 0, 0, Math.PI * 2);
+      wCtx.fillStyle = leaf.color;
+      wCtx.globalAlpha = leaf.alpha;
+      wCtx.fill();
+      wCtx.restore();
     }
   }
 
