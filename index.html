@@ -312,7 +312,7 @@
       <select id="weatherSelect" class="settings-select">
         <option value="clear">☀️ Clear</option>
         <option value="cloudy" selected>☁️ Clouds + Rain</option>
-        <option value="autumn_shower">🍁 Autumn Shower</option>
+        <option value="autumn_shower">🍁 Autumn Shower NEW</option>
         <option value="random">🔀 Random Weather (120s)</option>
       </select>
     </div>
@@ -372,7 +372,7 @@
         <span class="icon">🌧️</span> <span id="btnWClouds">Clouds & Rain</span>
       </button>
       <button class="weather-option-btn" onclick="selectWeatherMode('autumn_shower')">
-        <span class="icon">🍁</span> <span id="btnWAutumn">Autumn Shower</span>
+        <span class="icon">🍁</span> <span id="btnWAutumn">Autumn Shower NEW</span>
       </button>
       <button class="weather-option-btn" onclick="selectWeatherMode('random')">
         <span class="icon">🎲</span> <span id="btnWRandom">Random</span>
@@ -552,7 +552,7 @@ const uiTL = {
   en: { 
     code: "EN", customBtn: "Settings", title: "BUCKET ASMR", play: "Play", pause: "Pause", repair: "REPAIR", sleep: "Sleep", tabFeatures: "Functions", tabGuide: "Guide", 
     features: [
-      "<span>✦</span> <b>New visual effects:</b> Weather and day & night cycle added to the background.", 
+      "<span>✦</span> <b>New weather Autumn:</b> 🍁A downpour with leaves and raindrops.", 
       "<span>✦</span> <b>Stay Awake:</b> Screen won't turn off automatically.", 
       "<span>✦</span> <b>Mixer:</b> Play multiple sounds at the same time.", 
       "<span>✦</span> <b>Not Working?:</b> Turn off Silent Mode."
@@ -568,7 +568,7 @@ const uiTL = {
     settingsTitle: "Settings", helpBtnLabel: "Help / Guide", lblFxStyle: "Effect Style", lblFxOpacity: "Opacity / Glow", lblFxSpeed: "Effect Speed", lblFxRandomInterval: "Random Change Interval",
     lblTimeOfDay: "Time of Day", lblWeather: "Weather",
     todNames: { morning: "🌅 Morning", noon: "☀️ Noon", evening: "🌆 Evening", night: "🌙 Night", full_cycle: "🔄 Full 24h Cycle (120s)" },
-    weatherNames: { clear: "☀️ Clear", cloudy: "☁️ Clouds + Rain", autumn_shower: "🍁 Autumn Shower", random: "🔀 Random Weather (120s)" },
+    weatherNames: { clear: "☀️ Clear", cloudy: "☁️ Clouds + Rain", autumn_shower: "🍁 Autumn Shower NEW", random: "🔀 Random Weather (120s)" },
     fxNames: { steam: "💨 Steam (Color)", rain: "💧 Rain Drops", snow: "❄️ Snowflakes", comets: "☄️ Comets & Asteroids", neondust: "✨ Neon Dust", aura: "🌀 Pulsing Aura", random: "🔀 Random Effect" },
     fxPromoTitle: "New Feature: Effects",
     fxPromoDesc: "Click Yes to activate automatic switching of visual effects.",
@@ -576,13 +576,13 @@ const uiTL = {
     fxPromoKeep: "Keep current effect",
     fxPromoPs: "P.S. You can change this later in Settings.",
     weatherChoiceTitle: "Select Weather",
-    wClear: "Clear sky", wClouds: "Clouds & Rain", wAutumn: "Autumn Shower", wRandom: "Random",
+    wClear: "Clear sky", wClouds: "Clouds & Rain", wAutumn: " Autumn Shower NEW", wRandom: "Random",
     soundSoon: "This sound will be available soon!"
   },
   pt: { 
     code: "PT", customBtn: "Personalizar", title: "BALDE ASMR", play: "Tocar", pause: "Pausa", repair: "REPARAR", sleep: "Dormir", tabFeatures: "Funções", tabGuide: "Guia", 
     features: [
-      "<span>✦</span> <b>Novos efeitos visuais:</b> Clima e ciclo dia/noite adicionados ao fundo.", 
+      "<span>✦</span> <b>Novo clima de Outono:</b> 🍁Um aguaceiro com folhas e gotas de chuva.", 
       "<span>✦</span> <b>Sempre Ativo:</b> A tela não apaga durante o uso.", 
       "<span>✦</span> <b>Mixer:</b> Toque vários sons ao mesmo tempo.", 
       "<span>✦</span> <b>Não funcionou?:</b> Desative o modo silencioso."
@@ -598,7 +598,7 @@ const uiTL = {
     settingsTitle: "Configurações", helpBtnLabel: "Ajuda / Guia", lblFxStyle: "Estilo do Efeito", lblFxOpacity: "Opacidade / Brilho", lblFxSpeed: "Velocidade do Efeito", lblFxRandomInterval: "Intervalo de Troca Aleatória",
     lblTimeOfDay: "Hora do Dia", lblWeather: "Clima",
     todNames: { morning: "🌅 Manhã", noon: "☀️ Meio-dia", evening: "🌆 Tarde / Noite", night: "🌙 Noite", full_cycle: "🔄 Ciclo de 24h (120s)" },
-    weatherNames: { clear: "☀️ Limpo", cloudy: "☁️ Nuvens + Chuva", autumn_shower: "🍁 Chuva de Outono", random: "🔀 Clima Aleatório (120s)" },
+    weatherNames: { clear: "☀️ Limpo", cloudy: "☁️ Nuvens + Chuva", autumn_shower: "🍁 Chuva de Outono Nova", random: "🔀 Clima Aleatório (120s)" },
     fxNames: { steam: "💨 Vapor (Colorido)", rain: "💧 Gotas de Chuva", snow: "❄️ Flocos de Neve", comets: "☄️ Cometas e Asteroides", neondust: "✨ Poeira Neon", aura: "🌀 Aura Pulsante", random: "🔀 Efeito Aleatório" },
     fxPromoTitle: "Nova Função: Efeitos",
     fxPromoDesc: "Clique em Sim para ativar a troca automática de efeitos visuais.",
@@ -606,13 +606,13 @@ const uiTL = {
     fxPromoKeep: "Manter efeito atual",
     fxPromoPs: "P.S. Você pode alterar isso mais tarde nas Configurações.",
     weatherChoiceTitle: "Selecionar Clima",
-    wClear: "Céu limpo", wClouds: "Nuvens e Chuva", wAutumn: "Chuva de Outono", wRandom: "Aleatório",
+    wClear: "Céu limpo", wClouds: "Nuvens e Chuva", wAutumn: " Chuva de Outono Nova", wRandom: "Aleatório",
     soundSoon: "Este som estará disponível em breve!"
   },
   uk: { 
     code: "UK", customBtn: "Налаштування", title: "ВІДРО АСМР", play: "Грати", pause: "Пауза", repair: "ЛАГОДИТИ", sleep: "Сон", tabFeatures: "Функції", tabGuide: "Інструкція", 
     features: [
-      "<span>✦</span> <b>Додано нові візуальні ефекти:</b> Погоду та зміну дня і ночі на фон.", 
+      "<span>✦</span> <b>Нова погода Осінь:</b> 🍁Злива з листям та краплями дощу.", 
       "<span>✦</span> <b>Без Сну:</b> Екран не згасає автоматично.", 
       "<span>✦</span> <b>Міксер:</b> Грайте кілька звуків одночасно.", 
       "<span>✦</span> <b>Не працює?:</b> Вимкніть беззвучний режим."
@@ -628,7 +628,7 @@ const uiTL = {
     settingsTitle: "Налаштування", helpBtnLabel: "Допомога / Інструкція", lblFxStyle: "Стиль ефекту", lblFxOpacity: "Прозорість / Сяйво", lblFxSpeed: "Швидкість ефекту", lblFxRandomInterval: "Інтервал зміни рандому",
     lblTimeOfDay: "Час доби", lblWeather: "Погода",
     todNames: { morning: "🌅 Ранок", noon: "☀️ Полдень", evening: "🌆 Вечір", night: "🌙 Ніч", full_cycle: "🔄 Повні добу (120с)" },
-    weatherNames: { clear: "☀️ Ясно", cloudy: "☁️ Хмари + Дощ", autumn_shower: "🍁 Осінній ливень", random: "🔀 Рандомна погода (120с)" },
+    weatherNames: { clear: "☀️ Ясно", cloudy: "☁️ Хмари + Дощ", autumn_shower: "🍁 Осіння злива НОВА", random: "🔀 Рандомна погода (120с)" },
     fxNames: { steam: "💨 Кольорова пара", rain: "💧 Краплі дощу", snow: "❄️ Сніжинки", comets: "☄️ Комети та астероїди", neondust: "✨ Магічні іскри", aura: "🌀 Пульсуюча аура", random: "🔀 Рандомний ефект" },
     fxPromoTitle: "Нова функція ефекти.",
     fxPromoDesc: "натисніть так щоб активувати автоматичну зміну ефектів",
@@ -636,13 +636,13 @@ const uiTL = {
     fxPromoKeep: "Залишити поточний ефект",
     fxPromoPs: "PS: Ви зможете змінити це в розділі Налаштування.",
     weatherChoiceTitle: "Оберіть погоду",
-    wClear: "Чисте небо", wClouds: "Хмари та Дощ", wAutumn: "Осінній ливень", wRandom: "Рандом",
+    wClear: "Чисте небо", wClouds: "Хмари та Дощ", wAutumn: " Осіння злива НОВА", wRandom: "Рандом",
     soundSoon: "Цей звук скоро буде доступний!"
   },
   ru: { 
     code: "RU", customBtn: "Настройки", title: "ВЕДРО АСМР", play: "Играть", pause: "Пауза", repair: "ЧИНИТЬ", sleep: "Сон", tabFeatures: "Функции", tabGuide: "Инструкция", 
     features: [
-      "<span>✦</span> <b>Добавлены новые визуальные эффекты:</b> Погода и смена дня и ночи на фон.", 
+      "<span>✦</span> <b>Новая погода Осень:</b> 🍁Ливень с листьями и каплями дождя.", 
       "<span>✦</span> <b>Бодрость:</b> Экран не гаснет во время сеанса.", 
       "<span>✦</span> <b>Микшер:</b> Запуск нескольких звуков одновременно.", 
       "<span>✦</span> <b>Не работает?:</b> Отключите беззвучный режим."
@@ -658,7 +658,7 @@ const uiTL = {
     settingsTitle: "Настройки", helpBtnLabel: "Помощь / Инструкция", lblFxStyle: "Стиль эффекта", lblFxOpacity: "Прозрачность / Свечение", lblFxSpeed: "Скорость эффекта", lblFxRandomInterval: "Интервал смены рандома",
     lblTimeOfDay: "Время суток", lblWeather: "Погода",
     todNames: { morning: "🌅 Утро", noon: "☀️ Полдень", evening: "🌆 Вечер", night: "🌙 Ночь", full_cycle: "🔄 Полные сутки (120 сек)" },
-    weatherNames: { clear: "☀️ Ясно", cloudy: "☁️ Тучи + Дождь", autumn_shower: "🍁 Осенний ливень", random: "🔀 Рандомная погода (120 сек)" },
+    weatherNames: { clear: "☀️ Ясно", cloudy: "☁️ Тучи + Дождь", autumn_shower: "🍁 Осенний ливень НОВЫЙ", random: "🔀 Рандомная погода (120 сек)" },
     fxNames: { steam: "💨 Цветной пар", rain: "💧 Капли дождя", snow: "❄️ Снежинки", comets: "☄️ Кометы и астероиды", neondust: "✨ Магические искры", aura: "🌀 Пульсирующая аура", random: "🔀 Рандом" },
     fxPromoTitle: "Новая функция эффекты.",
     fxPromoDesc: "нажмите да что-бы активировать автоматическую смену эффектов",
@@ -666,7 +666,7 @@ const uiTL = {
     fxPromoKeep: "Оставить текущий эффект",
     fxPromoPs: "PS: Вы сможете изменить это в разделе Настройки.",
     weatherChoiceTitle: "Выберите погоду",
-    wClear: "Чистое небо", wClouds: "Тучи и Дождь", wAutumn: "Осенний ливень", wRandom: "Рандом",
+    wClear: "Чистое небо", wClouds: "Тучи и Дождь", wAutumn: " Осенний ливень НОВЫЙ", wRandom: "Рандом",
     soundSoon: "Этот звук скоро будет доступний!"
   }
 };
@@ -678,6 +678,12 @@ const langOrder = ['en', 'pt', 'uk', 'ru'];
 let steamParticles = [];
 let weatherParticles = []; 
 let autumnParticles = []; // Массив для капель и листьев осеннего ливня
+// Массивы для скопившихся внизу экрана капель и листьев
+let accumulatedWater = [];
+let accumulatedLeaves = [];
+
+// Максимальное количество элементов на экране (защита процессора)
+const MAX_ACCUMULATED_ITEMS = 600;
 let pendingUnlockElement = null;
 let adTimerInterval = null;
 let steamHue = 270;
@@ -1667,17 +1673,27 @@ function draw() {
     });
   } else { ctx.clearRect(0,0,innerWidth,innerHeight); }
 
-  wCtx.clearRect(0, 0, innerWidth, innerHeight);
+wCtx.clearRect(0, 0, innerWidth, innerHeight);
   if (!sleepMode) {
     spawnCloudRain();
     
-    // Отрисовка капель дождя
+    // --- 1. Обработка капель дождя ---
     for (let i = weatherParticles.length - 1; i >= 0; i--) {
       let p = weatherParticles[i];
       p.x += p.vx;
       p.y += p.vy;
 
-      if (p.y > innerHeight) {
+      // Когда капля долетает до нижней границы экрана (например, за 20px до низа)
+      if (p.y > innerHeight - 20) {
+        // Превращаем ее в лужицу/каплю на земле, если не превышен лимит
+        if (accumulatedWater.length < MAX_ACCUMULATED_ITEMS) {
+          accumulatedWater.push({
+            x: p.x,
+            y: innerHeight - (Math.random() * 10 + 5), // Случайная высота у самого дна
+            radius: Math.random() * 3 + 2,            // Размер капли
+            alpha: 0.6                                // Начальная прозрачность
+          });
+        }
         weatherParticles.splice(i, 1);
         continue;
       }
@@ -1690,14 +1706,25 @@ function draw() {
       wCtx.stroke();
     }
 
-    // Отрисовка красивых падающих осенних листьев
+    // --- 2. Обработка падающих листьев ---
     for (let i = autumnParticles.length - 1; i >= 0; i--) {
       let leaf = autumnParticles[i];
       leaf.x += leaf.vx + Math.sin(leaf.y * 0.01) * 0.3;
       leaf.y += leaf.vy;
       leaf.angle += leaf.vAngle;
 
-      if (leaf.y > innerHeight + 20) {
+      // Когда лист падает на землю
+      if (leaf.y > innerHeight - 15) {
+        if (accumulatedLeaves.length < MAX_ACCUMULATED_ITEMS) {
+          accumulatedLeaves.push({
+            x: leaf.x,
+            y: innerHeight - (Math.random() * 12 + 5),
+            size: leaf.size,
+            angle: leaf.angle,
+            color: leaf.color,
+            alpha: 0.85
+          });
+        }
         autumnParticles.splice(i, 1);
         continue;
       }
@@ -1706,10 +1733,46 @@ function draw() {
       wCtx.translate(leaf.x, leaf.y);
       wCtx.rotate(leaf.angle);
       wCtx.beginPath();
-      // Рисуем простую изящную форму листика
       wCtx.ellipse(0, 0, leaf.size, leaf.size * 0.5, 0, 0, Math.PI * 2);
       wCtx.fillStyle = leaf.color;
       wCtx.globalAlpha = leaf.alpha;
+      wCtx.fill();
+      wCtx.restore();
+    }
+
+    // --- 3. Отрисовка и плавное исчезновение скопившейся воды внизу ---
+    for (let i = accumulatedWater.length - 1; i >= 0; i--) {
+      let w = accumulatedWater[i];
+      w.alpha -= 0.002; // Скорость исчезновения (чем меньше число, тем дольше лежат)
+
+      if (w.alpha <= 0) {
+        accumulatedWater.splice(i, 1);
+        continue;
+      }
+
+      wCtx.beginPath();
+      wCtx.fillStyle = `rgba(180, 210, 255, ${w.alpha})`;
+      wCtx.arc(w.x, w.y, w.radius, 0, Math.PI * 2);
+      wCtx.fill();
+    }
+
+    // --- 4. Отрисовка и плавное исчезновение скопившихся листьев внизу ---
+    for (let i = accumulatedLeaves.length - 1; i >= 0; i--) {
+      let l = accumulatedLeaves[i];
+      l.alpha -= 0.0001; // Листья исчезают чуть медленнее капель 0.1230 мгновенное 
+
+      if (l.alpha <= 0) {
+        accumulatedLeaves.splice(i, 1);
+        continue;
+      }
+
+      wCtx.save();
+      wCtx.translate(l.x, l.y);
+      wCtx.rotate(l.angle);
+      wCtx.beginPath();
+      wCtx.ellipse(0, 0, l.size, l.size * 0.4, 0, 0, Math.PI * 2);
+      wCtx.fillStyle = l.color;
+      wCtx.globalAlpha = l.alpha;
       wCtx.fill();
       wCtx.restore();
     }
