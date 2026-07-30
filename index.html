@@ -63,6 +63,18 @@
   .cloud3 { width: 180px; height: 50px; top: 22%; left: -200px; animation-duration: 28s; animation-delay: 5s; }
   .cloud3::before { width: 70px; height: 70px; top: -30px; left: 20px; }
   .cloud3::after { width: 60px; height: 60px; top: -25px; left: 75px; }
+  
+  .cloud4 { width: 260px; height: 75px; top: 18%; left: -280px; animation-duration: 42s; animation-delay: 3s; }
+  .cloud4::before { width: 110px; height: 110px; top: -50px; left: 40px; }
+  .cloud4::after { width: 90px; height: 90px; top: -40px; left: 120px; }
+
+  .cloud5 { width: 200px; height: 55px; top: 8%; left: -220px; animation-duration: 30s; animation-delay: 7s; }
+  .cloud5::before { width: 80px; height: 80px; top: -35px; left: 25px; }
+  .cloud5::after { width: 70px; height: 70px; top: -30px; left: 85px; }
+
+  .cloud6 { width: 300px; height: 85px; top: 15%; left: -320px; animation-duration: 48s; animation-delay: 15s; }
+  .cloud6::before { width: 130px; height: 130px; top: -60px; left: 45px; }
+  .cloud6::after { width: 100px; height: 100px; top: -40px; left: 140px; }
 
   @keyframes floatClouds {
     0% { transform: translateX(0); }
@@ -277,6 +289,9 @@
   <div class="cloud cloud1" id="cloudEl1"></div>
   <div class="cloud cloud2" id="cloudEl2"></div>
   <div class="cloud cloud3" id="cloudEl3"></div>
+  <div class="cloud cloud4" id="cloudEl4"></div>
+  <div class="cloud cloud5" id="cloudEl5"></div>
+  <div class="cloud cloud6" id="cloudEl6"></div>
 </div>
 <canvas id="weatherCanvas"></canvas>
 <canvas id="steamCanvas"></canvas>
@@ -1450,13 +1465,16 @@ function spawnCloudRain() {
   if (targetState !== 'cloudy' && targetState !== 'autumn_shower') return;
 
   const isAutumn = (targetState === 'autumn_shower');
-  const spawnRate = isAutumn ? 0.9 : 0.45; 
+  const spawnRate = isAutumn ? 0.9 : 0.8; 
 
   if (Math.random() < spawnRate) {
     const cloudsArr = [
       document.getElementById('cloudEl1'),
       document.getElementById('cloudEl2'),
-      document.getElementById('cloudEl3')
+      document.getElementById('cloudEl3'),
+      document.getElementById('cloudEl4'),
+      document.getElementById('cloudEl5'),
+      document.getElementById('cloudEl6')
     ];
 
     const cloudEl = cloudsArr[Math.floor(Math.random() * cloudsArr.length)];
