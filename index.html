@@ -326,13 +326,11 @@
       <label id="lblWeather">Weather</label>
       <select id="weatherSelect" class="settings-select">
         <option value="clear">☀️ Clear</option>
-        <option value="cloudy"selected>☁️ Clouds + Rain</option>
+        <option value="cloudy" selected>☁️ Clouds + Rain</option>
         <option value="autumn_shower">🍁 Autumn Shower NEW</option>
         <option value="random">🔀 Random Weather (120s)</option>
       </select>
     </div>
-	
-	
 
     <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 18px 0;">
 
@@ -340,11 +338,9 @@
       <label id="lblFxStyle">Effect Style</label>
       <select id="fxStyleSelect" class="settings-select">
         <option value="steam">💨 Steam (Color)</option>
-        <option value="rain">💧 Rain Drops</option>
         <option value="snow">❄️ Snowflakes</option>
         <option value="comets">☄️ Comets & Asteroids</option>
         <option value="neondust">✨ Neon Dust</option>
-        <option value="aura">🌀 Pulsing Aura</option>
         <option value="random">🔀 Random Effect</option>
       </select>
     </div>
@@ -360,8 +356,8 @@
     <div class="settings-group">
       <label id="lblFxOpacity">Opacity / Glow</label>
       <div class="range-container">
-        <input type="range" id="fxOpacityRange" class="settings-range" min="0.1" max="1" step="0.05" value="0.7">
-        <span class="range-value" id="valFxOpacity">70%</span>
+        <input type="range" id="fxOpacityRange" class="settings-range" min="0.1" max="1" step="0.05" value="0.4">
+        <span class="range-value" id="valFxOpacity">40%</span>
       </div>
     </div>
 
@@ -395,7 +391,6 @@
         <span class="icon">🎲</span> <span id="btnWRandom">Random</span>
       </button>
       
-      <!-- Кнопка ОК для закрытия окна -->
       <button class="weather-option-btn" onclick="closeWeatherModal()" style="margin-top: 10px; background-color: #ffb400; color: #000; font-weight: bold; justify-content: center;">
         <span>OK</span>
       </button>
@@ -697,6 +692,7 @@ let weatherParticles = [];
 let autumnParticles = []; 
 let accumulatedWater = [];
 let accumulatedLeaves = [];
+let buttonRipples = []; // Массив для капель, стекающих с кнопок
 
 const MAX_ACCUMULATED_ITEMS = 2000;
 let pendingUnlockElement = null;
@@ -758,7 +754,7 @@ function selectWeatherMode(mode) {
 let fxConfig = {
   style: 'steam',
   activeStyle: 'steam', 
-  opacity: 0.7,
+  opacity: 0.4,
   speed: 0.5,
   randomInterval: 14 
 };
@@ -773,7 +769,7 @@ let cycleAnimationReq = null;
 let cycleStartTime = null;
 
 let randomFxTimer = null;
-const availableEffects = ['steam', 'rain', 'snow', 'comets', 'neondust', 'aura'];
+const availableEffects = ['steam', 'snow', 'comets', 'neondust'];
 
 function pickRandomEffect() {
   const otherFx = availableEffects.filter(e => e !== fxConfig.activeStyle);
@@ -1340,6 +1336,7 @@ document.getElementById('sleepBtn').onclick = () => {
       steamParticles = [];
       weatherParticles = [];
       autumnParticles = [];
+      buttonRipples = [];
     } else {
       firebase.database().goOnline();
       updateConnections();
@@ -1486,13 +1483,12 @@ function spawnCloudRain() {
         let startX = rect.left + Math.random() * rect.width;
         let startY = rect.bottom - 10;
 
-        // Повышенная базовая скорость для iOS/всех устройств (умножена на коэффициент или увеличена)
         if (isAutumn) {
           if (Math.random() < 0.75) {
             weatherParticles.push({
               x: startX,
               y: startY,
-              vy: (Math.random() * 10 + 14) * 1.5, // Увеличена скорость капель
+              vy: (Math.random() * 10 + 14) * 1.5,
               vx: (Math.random() - 0.5) * 1.0,
               length: Math.random() * 15 + 10,
               alpha: Math.random() * 0.4 + 0.3
@@ -1502,7 +1498,7 @@ function spawnCloudRain() {
             autumnParticles.push({
               x: startX,
               y: startY,
-              vy: (Math.random() * 0.8 + 0.6) * 1.5, // Увеличена скорость листьев
+              vy: (Math.random() * 0.8 + 0.6) * 1.5,
               vx: (Math.random() - 0.1) * 0.1,
               angle: Math.random() * Math.PI * 2,
               vAngle: (Math.random() - 0.5) * 0.02,
@@ -1515,7 +1511,7 @@ function spawnCloudRain() {
           weatherParticles.push({
             x: startX,
             y: startY,
-            vy: (Math.random() * 6 + 10) * 1.5, // Увеличена скорость капель дождя
+            vy: (Math.random() * 6 + 10) * 1.5,
             vx: (Math.random() - 0.5) * 1.5,
             length: Math.random() * 12 + 8,
             alpha: Math.random() * 0.4 + 0.3
@@ -1548,18 +1544,6 @@ function spawnSteam() {
             alpha: (Math.random() * 0.3 + 0.2) * fxConfig.opacity,
             growth: (Math.random() * 0.1 + 0.05) * fxConfig.speed,
             hue: steamHue 
-          });
-        }
-      }
-      else if (activeFx === 'rain') {
-        if (Math.random() < 0.3) {
-          steamParticles.push({
-            type: 'rain',
-            x: rect.left + Math.random() * rect.width,
-            y: rect.bottom - 5,
-            vy: (Math.random() * 3 + 2) * fxConfig.speed,
-            length: Math.random() * 10 + 8,
-            alpha: (Math.random() * 0.4 + 0.3) * fxConfig.opacity
           });
         }
       }
@@ -1637,20 +1621,7 @@ function spawnSteam() {
           });
         }
       }
-      else if (activeFx === 'aura') {
-        if (Math.random() < 0.04) {
-          steamParticles.push({
-            type: 'aura',
-            cx: rect.left + rect.width / 2,
-            cy: rect.top + rect.height / 2,
-            radius: rect.width / 2,
-            maxRadius: rect.width * 0.9,
-            alpha: 0.6 * fxConfig.opacity,
-            growth: (Math.random() * 0.4 + 0.2) * fxConfig.speed,
-            color: el.color
-          });
-        }
-      }
+      
     }
   });
 }
@@ -1669,32 +1640,105 @@ function draw() {
   if (!sleepMode) {
     spawnCloudRain();
     
-    // --- 1. Обработка капель дождя ---
-    for (let i = weatherParticles.length - 1; i >= 0; i--) {
-      let p = weatherParticles[i];
-      p.x += p.vx;
-      p.y += p.vy;
+    // --- 1. Обработка капель дождя (с логикой стекания с кнопок из файла-примера) ---
+    const targetWeatherState = (envConfig.weather === 'random') ? activeWeatherState : envConfig.weather;
+    if (targetWeatherState === 'cloudy' || targetWeatherState === 'autumn_shower') {
+      // Собираем координаты всех звуковых кнопок для проверки пересечения с каплями
+      const buttons = document.querySelectorAll('.sound-button');
+      const buttonRects = Array.from(buttons).map(b => b.getBoundingClientRect());
 
-      // Изменено условие падения: теперь накапливание происходит строго в видимой нижней части экрана (например, над панелью управления / внизу вьюпорта)
-      if (p.y > innerHeight - 90) {
-        if (accumulatedWater.length < MAX_ACCUMULATED_ITEMS) {
-          accumulatedWater.push({
-            x: p.x,
-            y: innerHeight - (Math.random() * 70 + 20), // Распределяются в нижней видимой полосе сайта
-            radius: Math.random() * 3 + 2,
-            alpha: 0.7
-          });
+      for (let i = weatherParticles.length - 1; i >= 0; i--) {
+        let p = weatherParticles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+
+        // Проверка: если капля попадает на верхнюю или боковые грани какой-либо кнопки
+        let hitButton = false;
+        for (let rect of buttonRects) {
+          // Если капля находится в диапазоне ширины кнопки и пересекает её верхнюю границу
+          if (p.x >= rect.left && p.x <= rect.right && p.y >= rect.top && p.y <= rect.top + 6) {
+            hitButton = true;
+            // Капля превращается в стекающую по кнопке или падает с её края дальше
+            if (Math.random() < 0.5) {
+              // Стекает по поверхности кнопки (создаем микро-каплю на кнопке)
+              buttonRipples.push({
+                x: p.x,
+                y: rect.top + Math.random() * (rect.height * 0.5),
+                radius: Math.random() * 2 + 1,
+                alpha: 0.8
+              });
+            } else {
+              // Стекает до нижнего края кнопки и падает дальше вниз
+              buttonRipples.push({
+                x: p.x,
+                y: rect.bottom,
+                radius: Math.random() * 2.5 + 1.5,
+                alpha: 0.9,
+                fallAfter: true,
+                vy: Math.random() * 4 + 4
+              });
+            }
+            break;
+          }
         }
-        weatherParticles.splice(i, 1);
-        continue;
+
+        if (hitButton) {
+          weatherParticles.splice(i, 1);
+          continue;
+        }
+
+        // Если капля долетела до низа экрана
+        if (p.y > innerHeight - 90) {
+          if (accumulatedWater.length < MAX_ACCUMULATED_ITEMS) {
+            accumulatedWater.push({
+              x: p.x,
+              y: innerHeight - (Math.random() * 70 + 20),
+              radius: Math.random() * 3 + 2,
+              alpha: 0.7
+            });
+          }
+          weatherParticles.splice(i, 1);
+          continue;
+        }
+
+        wCtx.beginPath();
+        wCtx.strokeStyle = `rgba(180, 210, 255, ${p.alpha})`;
+        wCtx.lineWidth = 1.2;
+        wCtx.moveTo(p.x, p.y);
+        wCtx.lineTo(p.x + p.vx * 2, p.y + p.length);
+        wCtx.stroke();
+      }
+    }
+
+    // --- 1.5. Обработка капель, стекающих с кнопок ---
+    for (let i = buttonRipples.length - 1; i >= 0; i--) {
+      let r = buttonRipples[i];
+      if (r.fallAfter) {
+        r.y += r.vy;
+        if (r.y > innerHeight - 90) {
+          if (accumulatedWater.length < MAX_ACCUMULATED_ITEMS) {
+            accumulatedWater.push({
+              x: r.x,
+              y: innerHeight - (Math.random() * 70 + 20),
+              radius: Math.random() * 3 + 2,
+              alpha: 0.7
+            });
+          }
+          buttonRipples.splice(i, 1);
+          continue;
+        }
+      } else {
+        r.alpha -= 0.02;
+        if (r.alpha <= 0) {
+          buttonRipples.splice(i, 1);
+          continue;
+        }
       }
 
       wCtx.beginPath();
-      wCtx.strokeStyle = `rgba(180, 210, 255, ${p.alpha})`;
-      wCtx.lineWidth = 1.2;
-      wCtx.moveTo(p.x, p.y);
-      wCtx.lineTo(p.x + p.vx * 2, p.y + p.length);
-      wCtx.stroke();
+      wCtx.fillStyle = `rgba(180, 210, 255, ${r.alpha})`;
+      wCtx.arc(r.x, r.y, r.radius, 0, Math.PI * 2);
+      wCtx.fill();
     }
 
     // --- 2. Обработка падающих листьев ---
@@ -1704,7 +1748,6 @@ function draw() {
       leaf.y += leaf.vy;
       leaf.angle += leaf.vAngle;
 
-      // Изменено условие падения: листья также оседают в видимой нижней зоне сайта
       if (leaf.y > innerHeight - 90) {
         if (accumulatedLeaves.length < MAX_ACCUMULATED_ITEMS) {
           accumulatedLeaves.push({
