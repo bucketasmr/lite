@@ -1327,19 +1327,15 @@ document.getElementById('sleepBtn').onclick = () => {
     document.getElementById('cloudsContainer').style.opacity = sleepMode ? "0" : "";
     document.getElementById('sleepBtn').classList.toggle('active', sleepMode);
     document.getElementById('soundGrid').classList.toggle('hidden', sleepMode);
+    
     if (sleepMode) {
-      if(presenceRef) presenceRef.remove();
-      presenceRef = null;
-      if(liveInterval) clearInterval(liveInterval);
-      firebase.database().goOffline();
-      document.getElementById('online-count').innerText = "ECO";
+      // Очищаем только визуальные эффекты для экономии ресурсов батареи телефона,
+      // но соединение с базой данных (Firebase) НЕ трогаем!
       steamParticles = [];
       weatherParticles = [];
       autumnParticles = [];
       buttonRipples = [];
     } else {
-      firebase.database().goOnline();
-      updateConnections();
       applyEnvironmentSettings();
     }
     updateUI();
