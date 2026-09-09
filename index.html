@@ -192,30 +192,55 @@
   #weatherCanvas { z-index: 3; }
   #steamCanvas { z-index: 4; }
   
+  /* --- IOS 26 LIQUID GLASS NOTIFICATIONS & MODALS --- */
   .modal { 
     display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-    background: rgba(0,0,0,0.6); z-index: 10001; justify-content: center; align-items: center; 
-    backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
+    background: rgba(0, 0, 0, 0.45); z-index: 10001; justify-content: center; align-items: center; 
+    backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+    animation: fadeInModal 0.3s ease forwards;
   }
-  .modal-content { background: linear-gradient(145deg, #141423, #0a0a1f); border: 1px solid #ffb400; padding: 25px; border-radius: 30px; text-align: left; color: white; max-width: 85%; width: 400px; max-height: 85vh; overflow-y: auto; box-shadow: 0 0 40px rgba(255, 180, 0, 0.2); position: relative; }
+  @keyframes fadeInModal {
+    from { opacity: 0; transform: scale(0.96); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  .modal-content { 
+    background: linear-gradient(135deg, rgba(35, 35, 55, 0.65) 0%, rgba(20, 20, 35, 0.75) 100%); 
+    border: 1px solid rgba(255, 255, 255, 0.18); 
+    padding: 25px; border-radius: 32px; text-align: left; color: white; max-width: 85%; width: 400px; max-height: 85vh; overflow-y: auto; 
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.3), inset 0 -1px 1px rgba(0, 0, 0, 0.5); 
+    position: relative;
+    backdrop-filter: blur(35px); -webkit-backdrop-filter: blur(35px);
+  }
+
   .modal-tabs { display: flex; gap: 10px; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
-  .tab-btn { background: none; border: none; color: #666; font-weight: bold; cursor: pointer; font-size: 14px; padding: 5px 0; position: relative; }
+  .tab-btn { background: none; border: none; color: #888; font-weight: bold; cursor: pointer; font-size: 14px; padding: 5px 0; position: relative; transition: color 0.2s; }
   .tab-btn.active { color: #ffb400; }
-  .tab-btn.active::after { content: ''; position: absolute; bottom: -11px; left: 0; width: 100%; height: 2px; background: #ffb400; }
+  .tab-btn.active::after { content: ''; position: absolute; bottom: -11px; left: 0; width: 100%; height: 2px; background: #ffb400; box-shadow: 0 0 8px #ffb400; }
   .help-section { display: none; }
   .help-section.active { display: block; }
   .help-list { list-style: none; padding: 0; margin: 0; }
   .help-list li { margin-bottom: 12px; font-size: 13px; line-height: 1.4; color: #ddd; display: flex; align-items: flex-start; gap: 8px; }
   .help-list li b { color: #ffb400; }
   .help-list li span { color: #ffb400; }
-  .modal-btn { background:#ffb400; border:none; padding:14px; border-radius:15px; font-weight:bold; cursor:pointer; color:black; font-size: 15px; width: 100%; margin-top: 15px; text-transform: uppercase; text-align: center; text-decoration: none; display: block; box-sizing: border-box; }
+  
+  .modal-btn { 
+    background: linear-gradient(135deg, rgba(255, 180, 0, 0.9) 0%, rgba(230, 140, 0, 0.9) 100%); 
+    border: 1px solid rgba(255, 255, 255, 0.3); 
+    padding: 14px; border-radius: 18px; font-weight: bold; cursor: pointer; color: #000; font-size: 15px; width: 100%; margin-top: 15px; text-transform: uppercase; text-align: center; text-decoration: none; display: block; box-sizing: border-box; 
+    box-shadow: 0 8px 20px rgba(255, 180, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.6);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .modal-btn:active { transform: scale(0.98); }
 
   /* Элементы управления в Настройках */
   .settings-group { margin-bottom: 18px; }
-  .settings-group label { display: block; font-size: 13px; font-weight: bold; color: #ffb400; margin-bottom: 8px; }
+  .settings-group label { display: block; font-size: 13px; font-weight: bold; color: #ffb400; margin-bottom: 8px; text-shadow: 0 0 8px rgba(255,180,0,0.4); }
   .settings-select, .settings-range {
-    width: 100%; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
-    color: white; padding: 10px; border-radius: 12px; font-size: 13px; outline: none; box-sizing: border-box;
+    width: 100%; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15);
+    color: white; padding: 12px; border-radius: 16px; font-size: 13px; outline: none; box-sizing: border-box;
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.3);
   }
   .settings-select option { background: #141423; color: white; }
   .settings-range { accent-color: #ffb400; cursor: pointer; height: 6px; padding: 0; }
@@ -223,20 +248,21 @@
   .range-value { font-size: 12px; color: #ccc; min-width: 35px; text-align: right; }
 
   .help-open-btn {
-    background: rgba(255, 180, 0, 0.15); border: 1px solid #ffb400; color: #ffb400;
-    padding: 12px; border-radius: 15px; font-weight: bold; cursor: pointer; width: 100%;
+    background: rgba(255, 180, 0, 0.12); border: 1px solid rgba(255, 180, 0, 0.35); color: #ffb400;
+    padding: 12px; border-radius: 16px; font-weight: bold; cursor: pointer; width: 100%;
     margin-bottom: 20px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px;
+    backdrop-filter: blur(10px); box-shadow: inset 0 1px 1px rgba(255,255,255,0.2);
   }
 
   .mute-btn { display: none !important; pointer-events: none !important; }
 
   /* Стиль кнопок выбора погоды */
   .weather-option-btn {
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 180, 0, 0.3);
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 180, 0, 0.25);
     color: white;
     padding: 12px;
-    border-radius: 15px;
+    border-radius: 16px;
     font-weight: bold;
     font-size: 14px;
     cursor: pointer;
@@ -246,9 +272,11 @@
     width: 100%;
     margin-bottom: 10px;
     transition: all 0.2s ease;
+    backdrop-filter: blur(10px);
+    box-shadow: inset 0 1px 1px rgba(255,255,255,0.15);
   }
   .weather-option-btn:hover, .weather-option-btn:active {
-    background: rgba(255, 180, 0, 0.2);
+    background: rgba(255, 180, 0, 0.18);
     border-color: #ffb400;
     transform: translateY(-2px);
   }
@@ -256,25 +284,27 @@
     font-size: 20px;
   }
 
-  /* Красивое кастомное уведомление для Soon */
+  /* Красивое кастомное Liquid Glass уведомление для Soon */
   #soonToast {
     position: fixed;
-    bottom: 30px;
+    bottom: 35px;
     left: 50%;
     transform: translateX(-50%) translateY(100px);
-    background: linear-gradient(145deg, #1e1e2d, #141423);
-    border: 1px solid #ffb400;
+    background: linear-gradient(135deg, rgba(40, 40, 65, 0.75) 0%, rgba(20, 20, 35, 0.85) 100%);
+    border: 1px solid rgba(255, 180, 0, 0.4);
     color: #fff;
-    padding: 12px 24px;
-    border-radius: 20px;
+    padding: 14px 26px;
+    border-radius: 24px;
     font-size: 14px;
     font-weight: bold;
     z-index: 100002;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.6), 0 0 15px rgba(255, 180, 0, 0.3);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.6), 0 0 20px rgba(255, 180, 0, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.35);
     opacity: 0;
     transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease;
     pointer-events: none;
     text-align: center;
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
   }
   #soonToast.show {
     transform: translateX(-50%) translateY(0);
@@ -297,13 +327,13 @@
 <canvas id="steamCanvas"></canvas>
 <div class="overlay" id="envOverlay"></div>
 
-<!-- Кастомное всплывающее уведомление вместо системного alert -->
+<!-- Кастомное всплывающее уведомление с эффектом Liquid Glass -->
 <div id="soonToast">This sound will be available soon!</div>
 
 <!-- Настройки -->
 <div id="settingsModal" class="modal">
   <div class="modal-content">
-    <h2 style="color: #ffb400; margin: 0 0 18px 0; font-size: 20px;" id="settingsTitle">Settings</h2>
+    <h2 style="color: #ffb400; margin: 0 0 18px 0; font-size: 20px; text-shadow: 0 0 10px rgba(255,180,0,0.4);" id="settingsTitle">Settings</h2>
     
     <button class="help-open-btn" id="openHelpFromSettings">
       <span>❓</span> <span id="helpBtnLabel">Help / Guide</span>
@@ -323,11 +353,11 @@
 
     <!-- Выпадающее меню: Погода -->
     <div class="settings-group">
-      <label id="lblWeather">Weather</label>
+      <label id="lblWeather">Weather (upd 09.09.26)</label>
       <select id="weatherSelect" class="settings-select">
         <option value="clear">☀️ Clear</option>
         <option value="cloudy" selected>☁️ Clouds + Rain</option>
-        <option value="autumn_shower">🍁 Autumn Shower NEW</option>
+        <option value="autumn_shower">🍁 Autumn Shower NEW (upd 09.09.26)</option>
         <option value="random">🔀 Random Weather (120s)</option>
       </select>
     </div>
@@ -376,7 +406,7 @@
 <!-- Модальное окно выбора погоды (через 10 секунд) -->
 <div id="weatherChoiceModal" class="modal">
   <div class="modal-content" style="text-align: center;">
-    <h2 style="color: #ffb400; margin: 0 0 15px 0; font-size: 20px;" id="weatherChoiceTitle">Select Weather</h2>
+    <h2 style="color: #ffb400; margin: 0 0 15px 0; font-size: 20px; text-shadow: 0 0 10px rgba(255,180,0,0.4);" id="weatherChoiceTitle">Select Weather</h2>
     <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 15px;">
       <button class="weather-option-btn" onclick="selectWeatherMode('clear')">
         <span class="icon">☀️</span> <span id="btnWClear">Clear sky</span>
@@ -385,13 +415,13 @@
         <span class="icon">🌧️</span> <span id="btnWClouds">Clouds & Rain</span>
       </button>
       <button class="weather-option-btn" onclick="selectWeatherMode('autumn_shower')">
-        <span class="icon">🍁</span> <span id="btnWAutumn">Autumn Shower NEW</span>
+        <span class="icon">🍁</span> <span id="btnWAutumn">Autumn Shower NEW (upd 09.09.26)</span>
       </button>
       <button class="weather-option-btn" onclick="selectWeatherMode('random')">
         <span class="icon">🎲</span> <span id="btnWRandom">Random</span>
       </button>
       
-      <button class="weather-option-btn" onclick="closeWeatherModal()" style="margin-top: 10px; background-color: #ffb400; color: #000; font-weight: bold; justify-content: center;">
+      <button class="weather-option-btn" onclick="closeWeatherModal()" style="margin-top: 10px; background: linear-gradient(135deg, rgba(255, 180, 0, 0.9), rgba(230, 140, 0, 0.9)); color: #000; font-weight: bold; justify-content: center; border-color: rgba(255,255,255,0.4);">
         <span>OK</span>
       </button>
     </div>
@@ -401,37 +431,37 @@
 <!-- Новое уведомление: Случайные эффекты -->
 <div id="fxPromoModal" class="modal">
   <div class="modal-content" style="text-align: center;">
-    <h2 style="color: #ffb400; margin: 0 0 10px 0; font-size: 20px;" id="fxPromoTitle">New Feature: Effects</h2>
+    <h2 style="color: #ffb400; margin: 0 0 10px 0; font-size: 20px; text-shadow: 0 0 10px rgba(255,180,0,0.4);" id="fxPromoTitle">New Feature: Effects</h2>
     <p style="font-size: 14px; color: #ddd; margin-bottom: 20px; line-height: 1.4;" id="fxPromoDesc">Click Yes to activate automatic switching of visual effects.</p>
-    <button class="modal-btn" id="fxPromoEnableBtn" style="background: #8a2be2; color: white; margin-top: 5px;">Yes, activate all effects</button>
-    <button class="modal-btn" id="fxPromoKeepBtn" style="background: rgba(255,255,255,0.1); color: white; margin-top: 10px; padding: 12px;">Keep current effect</button>
+    <button class="modal-btn" id="fxPromoEnableBtn" style="background: linear-gradient(135deg, rgba(138, 43, 226, 0.9), rgba(90, 20, 180, 0.9)); color: white; margin-top: 5px; box-shadow: 0 8px 20px rgba(138, 43, 226, 0.4);">Yes, activate all effects</button>
+    <button class="modal-btn" id="fxPromoKeepBtn" style="background: rgba(255,255,255,0.1); color: white; margin-top: 10px; padding: 12px; border: 1px solid rgba(255,255,255,0.2);">Keep current effect</button>
     <p style="font-size: 11px; color: #888; margin-top: 15px; margin-bottom: 0;" id="fxPromoPs">P.S. You can change this later in Settings.</p>
   </div>
 </div>
 
 <div id="idleModal" class="modal">
   <div class="modal-content" style="text-align: center;">
-    <h2 style="color: #ffb400; margin: 0 0 10px 0; font-size: 22px;" id="idleTitle">Start playing?</h2>
+    <h2 style="color: #ffb400; margin: 0 0 10px 0; font-size: 22px; text-shadow: 0 0 10px rgba(255,180,0,0.4);" id="idleTitle">Start playing?</h2>
     <p style="font-size: 14px; color: #ccc; margin-bottom: 20px;" id="idleDesc">Would you like to start the ASMR session?</p>
     <button class="modal-btn" id="idlePlayBtn" style="margin-top: 5px;">▶ PLAY</button>
-    <button class="modal-btn" id="idleCloseBtn" style="background: rgba(255,255,255,0.1); color: white; margin-top: 10px; padding: 12px;">Close</button>
-    <button class="modal-btn" id="idleDisableBtn" style="background: transparent; color: #666; border: 1px dashed rgba(255,255,255,0.2); margin-top: 10px; padding: 8px; font-size: 12px;">Don't show again</button>
+    <button class="modal-btn" id="idleCloseBtn" style="background: rgba(255,255,255,0.1); color: white; margin-top: 10px; padding: 12px; border: 1px solid rgba(255,255,255,0.2);">Close</button>
+    <button class="modal-btn" id="idleDisableBtn" style="background: transparent; color: #888; border: 1px dashed rgba(255,255,255,0.2); margin-top: 10px; padding: 8px; font-size: 12px;">Don't show again</button>
   </div>
 </div>
 
 <div id="unlockModal" class="modal">
   <div class="modal-content">
-    <h3 style="color: #ffb400; margin: 0 0 10px 0; font-size: 20px;" id="unlockTitle">Unlock Sound</h3>
+    <h3 style="color: #ffb400; margin: 0 0 10px 0; font-size: 20px; text-shadow: 0 0 10px rgba(255,180,0,0.4);" id="unlockTitle">Unlock Sound</h3>
     <p style="font-size: 13px; color: #ccc; margin: 0;" id="unlockDesc">Unlock this trigger!</p>
-    <button class="modal-btn" id="unlockTriggerBtn" style="background: #8a2be2; color: white; margin-top: 10px;">🔓 Unlock Sound</button>
-    <button class="modal-btn" id="cancelUnlock" style="background: rgba(255,255,255,0.1); color: white; margin-top: 10px; padding: 12px;">Close</button>
+    <button class="modal-btn" id="unlockTriggerBtn" style="background: linear-gradient(135deg, rgba(138, 43, 226, 0.9), rgba(90, 20, 180, 0.9)); color: white; margin-top: 10px; box-shadow: 0 8px 20px rgba(138, 43, 226, 0.4);">🔓 Unlock Sound</button>
+    <button class="modal-btn" id="cancelUnlock" style="background: rgba(255,255,255,0.1); color: white; margin-top: 10px; padding: 12px; border: 1px solid rgba(255,255,255,0.2);">Close</button>
   </div>
 </div>
 
 <div id="welcomeModal" class="modal">
   <div class="modal-content">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-        <h2 style="color: #ffb400; margin: 0; font-size: 20px;">BUCKET ASMR</h2>
+        <h2 style="color: #ffb400; margin: 0; font-size: 20px; text-shadow: 0 0 10px rgba(255,180,0,0.4);">BUCKET ASMR v.1.1 (09.09.26)</h2>
         <button class="lang-btn-ui lang-switcher-btn" style="scale: 0.8;">EN</button>
     </div>
     <div class="modal-tabs">
@@ -562,9 +592,9 @@ const sounds = [
 
 const uiTL = {
   en: { 
-    code: "EN", customBtn: "Settings", title: "BUCKET ASMR", play: "Play", pause: "Pause", repair: "REPAIR", sleep: "Sleep", tabFeatures: "Functions", tabGuide: "Guide", 
+    code: "EN", customBtn: "Settings", title: "BUCKET ASMR v.1.1", play: "Play", pause: "Pause", repair: "REPAIR", sleep: "Sleep", tabFeatures: "Functions", tabGuide: "Guide", 
     features: [
-      "<span>✦</span> <b>New weather:</b> 🍁Autumn. A downpour with leaves and raindrops.", 
+      "<span>✦</span> <b>New weather:</b> 🍁Autumn. A downpour with leaves and raindrops.(upd 09.09.26)", 
       "<span>✦</span> <b>Stay Awake:</b> Screen won't turn off automatically.", 
       "<span>✦</span> <b>Mixer:</b> Play multiple sounds at the same time.", 
       "<span>✦</span> <b>Not Working?:</b> Turn off Silent Mode."
@@ -578,9 +608,9 @@ const uiTL = {
     unlockTitle: "Unlock Trigger", unlockDesc: "Unlock this trigger!", 
     unlockBtn: "🔓 Unlock Sound", closeBtn: "Close", idleTitle: "Start playing?", idleDesc: "Would you like to start the ASMR session?", idleDisable: "Don't show again",
     settingsTitle: "Settings", helpBtnLabel: "Help / Guide", lblFxStyle: "Effect Style", lblFxOpacity: "Opacity / Glow", lblFxSpeed: "Effect Speed", lblFxRandomInterval: "Random Change Interval",
-    lblTimeOfDay: "Time of Day", lblWeather: "Weather",
+    lblTimeOfDay: "Time of Day", lblWeather: "Weather (upd 09.09.26)",
     todNames: { morning: "🌅 Morning", noon: "☀️ Noon", evening: "🌆 Evening", night: "🌙 Night", full_cycle: "🔄 Full 24h Cycle (120s)" },
-    weatherNames: { clear: "☀️ Clear", cloudy: "☁️ Clouds + Rain", autumn_shower: "🍁 Autumn Shower NEW", random: "🔀 Random Weather (120s)" },
+    weatherNames: { clear: "☀️ Clear", cloudy: "☁️ Clouds + Rain", autumn_shower: "🍁 Autumn Shower NEW  (upd 09.09.26)", random: "🔀 Random Weather (120s)" },
     fxNames: { steam: "💨 Steam (Color)", rain: "💧 Rain Drops", snow: "❄️ Snowflakes", comets: "☄️ Comets & Asteroids", neondust: "✨ Neon Dust", aura: "🌀 Pulsing Aura", random: "🔀 Random Effect" },
     fxPromoTitle: "New Feature: Effects",
     fxPromoDesc: "Click Yes to activate automatic switching of visual effects.",
@@ -588,13 +618,13 @@ const uiTL = {
     fxPromoKeep: "Keep current effect",
     fxPromoPs: "P.S. You can change this later in Settings.",
     weatherChoiceTitle: "Select Weather",
-    wClear: "Clear sky", wClouds: "Clouds & Rain", wAutumn: " Autumn Shower NEW", wRandom: "Random",
+    wClear: "Clear sky", wClouds: "Clouds & Rain", wAutumn: " Autumn Shower NEW (upd 09.09.26)", wRandom: "Random",
     soundSoon: "This sound will be available soon!"
   },
   pt: { 
-    code: "PT", customBtn: "Personalizar", title: "BALDE ASMR", play: "Tocar", pause: "Pausa", repair: "REPARAR", sleep: "Dormir", tabFeatures: "Funções", tabGuide: "Guia", 
+    code: "PT", customBtn: "Personalizar", title: "BALDE ASMR v.1.1", play: "Tocar", pause: "Pausa", repair: "REPARAR", sleep: "Dormir", tabFeatures: "Funções", tabGuide: "Guia", 
     features: [
-      "<span>✦</span> <b>Novo clima :</b> 🍁de Outono. Um aguaceiro com folhas e gotas de chuva.", 
+      "<span>✦</span> <b>Novo clima :</b> 🍁de Outono. Um aguaceiro com folhas e gotas de chuva.(upd 09.09.26)", 
       "<span>✦</span> <b>Sempre Ativo:</b> A tela não apaga durante o uso.", 
       "<span>✦</span> <b>Mixer:</b> Toque vários sons ao mesmo tempo.", 
       "<span>✦</span> <b>Não funcionou?:</b> Desative o modo silencioso."
@@ -608,9 +638,9 @@ const uiTL = {
     unlockTitle: "Desbloquear Som", unlockDesc: "Desbloqueie este som!", 
     unlockBtn: "🔓 Desbloquear Som", closeBtn: "Fechar", idleTitle: "Começar a tocar?", idleDesc: "Você está inativo. Gostaria de iniciar a sessão de ASMR?", idleDisable: "Não mostrar novamente",
     settingsTitle: "Configurações", helpBtnLabel: "Ajuda / Guia", lblFxStyle: "Estilo do Efeito", lblFxOpacity: "Opacidade / Brilho", lblFxSpeed: "Velocidade do Efeito", lblFxRandomInterval: "Intervalo de Troca Aleatória",
-    lblTimeOfDay: "Hora do Dia", lblWeather: "Clima",
+    lblTimeOfDay: "Hora do Dia", lblWeather: "Clima (upd 09.09.26)",
     todNames: { morning: "🌅 Manhã", noon: "☀️ Meio-dia", evening: "🌆 Tarde / Noite", night: "🌙 Noite", full_cycle: "🔄 Ciclo de 24h (120s)" },
-    weatherNames: { clear: "☀️ Limpo", cloudy: "☁️ Nuvens + Chuva", autumn_shower: "🍁 Chuva de Outono Nova", random: "🔀 Clima Aleatório (120s)" },
+    weatherNames: { clear: "☀️ Limpo", cloudy: "☁️ Nuvens + Chuva", autumn_shower: "🍁 Chuva de Outono Nova  (upd 09.09.26)", random: "🔀 Clima Aleatório (120s)" },
     fxNames: { steam: "💨 Vapor (Colorido)", rain: "💧 Gotas de Chuva", snow: "❄️ Flocos de Neve", comets: "☄️ Cometas e Asteroides", neondust: "✨ Poeira Neon", aura: "🌀 Aura Pulsante", random: "🔀 Efeito Aleatório" },
     fxPromoTitle: "Nova Função: Efeitos",
     fxPromoDesc: "Clique em Sim para ativar a troca automática de efeitos visuais.",
@@ -622,9 +652,9 @@ const uiTL = {
     soundSoon: "Este som estará disponível em breve!"
   },
   uk: { 
-    code: "UK", customBtn: "Налаштування", title: "ВІДРО АСМР", play: "Грати", pause: "Пауза", repair: "ЛАГОДИТИ", sleep: "Сон", tabFeatures: "Функції", tabGuide: "Інструкція", 
+    code: "UK", customBtn: "Налаштування", title: "ВІДРО АСМР v.1.1", play: "Грати", pause: "Пауза", repair: "ЛАГОДИТИ", sleep: "Сон", tabFeatures: "Функції", tabGuide: "Інструкція", 
     features: [
-      "<span>✦</span> <b>Нова погода :</b> 🍁Осінь. Злива з листям та краплями дощу.", 
+      "<span>✦</span> <b>Нова погода :</b> 🍁Осінь. Злива з листям та краплями дощу.(upd 09.09.26)", 
       "<span>✦</span> <b>Без Сну:</b> Екран не згасає автоматично.", 
       "<span>✦</span> <b>Міксер:</b> Грайте кілька звуків одночасно.", 
       "<span>✦</span> <b>Не працює?:</b> Вимкніть беззвучний режим."
@@ -638,9 +668,9 @@ const uiTL = {
     unlockTitle: "Відкрити звук", unlockDesc: "Розблокуйте цей тригер!", 
     unlockBtn: "🔓 Розблокувати звук", closeBtn: "Закрити", idleTitle: "Запустити програвання?", idleDesc: "Ви нічого не натискали. Бажаєте увімкнути випадковий режим АСМР?", idleDisable: "Приховати нагадування",
     settingsTitle: "Налаштування", helpBtnLabel: "Допомога / Інструкція", lblFxStyle: "Стиль ефекту", lblFxOpacity: "Прозорість / Сяйво", lblFxSpeed: "Швидкість ефекту", lblFxRandomInterval: "Інтервал зміни рандому",
-    lblTimeOfDay: "Час доби", lblWeather: "Погода",
+    lblTimeOfDay: "Час доби", lblWeather: "Погода (upd 09.09.26)",
     todNames: { morning: "🌅 Ранок", noon: "☀️ Полдень", evening: "🌆 Вечір", night: "🌙 Ніч", full_cycle: "🔄 Повні добу (120с)" },
-    weatherNames: { clear: "☀️ Ясно", cloudy: "☁️ Хмари + Дощ", autumn_shower: "🍁 Осіння злива НОВА", random: "🔀 Рандомна погода (120с)" },
+    weatherNames: { clear: "☀️ Ясно", cloudy: "☁️ Хмари + Дощ", autumn_shower: "🍁 Осіння злива НОВА (upd 09.09.26)", random: "🔀 Рандомна погода (120с)" },
     fxNames: { steam: "💨 Кольорова пара", rain: "💧 Краплі дощу", snow: "❄️ Сніжинки", comets: "☄️ Комети та астероїди", neondust: "✨ Магічні іскри", aura: "🌀 Пульсуюча аура", random: "🔀 Рандомний ефект" },
     fxPromoTitle: "Нова функція ефекти.",
     fxPromoDesc: "натисніть так щоб активувати автоматичну зміну ефектів",
@@ -652,9 +682,9 @@ const uiTL = {
     soundSoon: "Цей звук скоро буде доступний!"
   },
   ru: { 
-    code: "RU", customBtn: "Настройки", title: "ВЕДРО АСМР", play: "Играть", pause: "Пауза", repair: "ЧИНИТЬ", sleep: "Сон", tabFeatures: "Функции", tabGuide: "Инструкция", 
+    code: "RU", customBtn: "Настройки", title: "ВЕДРО АСМР v.1.1", play: "Играть", pause: "Пауза", repair: "ЧИНИТЬ", sleep: "Сон", tabFeatures: "Функции", tabGuide: "Инструкция", 
     features: [
-      "<span>✦</span> <b>Новая погода :</b> 🍁Осень. Ливень с листьями и каплями дождя.", 
+      "<span>✦</span> <b>Новая погода :</b> 🍁Осень. Ливень с листьями и каплями дождя.(upd 09.09.26)", 
       "<span>✦</span> <b>Бодрость:</b> Экран не гаснет во время сеанса.", 
       "<span>✦</span> <b>Микшер:</b> Запуск нескольких звуков одновременно.", 
       "<span>✦</span> <b>Не работает?:</b> Отключите беззвучный режим."
@@ -668,9 +698,9 @@ const uiTL = {
     unlockTitle: "Открыть звук", unlockDesc: "Разблокируйте этот триггер!", 
     unlockBtn: "🔓 Разблокировать звук", closeBtn: "Закрыть", idleTitle: "Запустить проигрывание?", idleDesc: "Вы ничего не нажимали. Хотите включить случайный режим АСМР?", idleDisable: "Скрыть напоминание",
     settingsTitle: "Настройки", helpBtnLabel: "Помощь / Инструкция", lblFxStyle: "Стиль эффекта", lblFxOpacity: "Прозрачность / Свечение", lblFxSpeed: "Скорость эффекта", lblFxRandomInterval: "Интервал смены рандома",
-    lblTimeOfDay: "Время суток", lblWeather: "Погода",
+    lblTimeOfDay: "Время суток", lblWeather: "Погода (upd 09.09.26)",
     todNames: { morning: "🌅 Утро", noon: "☀️ Полдень", evening: "🌆 Вечер", night: "🌙 Ночь", full_cycle: "🔄 Полные сутки (120 сек)" },
-    weatherNames: { clear: "☀️ Ясно", cloudy: "☁️ Тучи + Дождь", autumn_shower: "🍁 Осенний ливень НОВЫЙ", random: "🔀 Рандомная погода (120 сек)" },
+    weatherNames: { clear: "☀️ Ясно", cloudy: "☁️ Тучи + Дождь", autumn_shower: "🍁 Осенний ливень НОВЫЙ (upd 09.09.26)", random: "🔀 Рандомная погода (120 сек)" },
     fxNames: { steam: "💨 Цветной пар", rain: "💧 Капли дождя", snow: "❄️ Снежинки", comets: "☄️ Кометы и астероиды", neondust: "✨ Магические искри", aura: "🌀 Пульсирующая аура", random: "🔀 Рандом" },
     fxPromoTitle: "Новая функция эффекты.",
     fxPromoDesc: "нажмите да что-бы активировать автоматическую смену эффектов",
@@ -692,9 +722,9 @@ let weatherParticles = [];
 let autumnParticles = []; 
 let accumulatedWater = [];
 let accumulatedLeaves = [];
-let buttonRipples = []; // Массив для капель, стекающих с кнопок
+let buttonRipples = []; 
 
-const MAX_ACCUMULATED_ITEMS = 2000;
+const MAX_ACCUMULATED_ITEMS = 860;
 let pendingUnlockElement = null;
 let adTimerInterval = null;
 let steamHue = 270;
@@ -730,7 +760,7 @@ function triggerFirstAudioPlay() {
         logButtonClick('ui_fx_promo_modal_shown');
         document.getElementById('fxPromoModal').style.display = 'flex';
       }
-    }, 20000);
+    }, 180000);
   }
 
   if (!weatherTimerStarted) {
@@ -738,7 +768,7 @@ function triggerFirstAudioPlay() {
     weatherTimerId = setTimeout(() => {
       logButtonClick('ui_weather_choice_modal_shown');
       document.getElementById('weatherChoiceModal').style.display = 'flex';
-    }, 10000);
+    }, 40000);
   }
 }
 
@@ -1329,8 +1359,6 @@ document.getElementById('sleepBtn').onclick = () => {
     document.getElementById('soundGrid').classList.toggle('hidden', sleepMode);
     
     if (sleepMode) {
-      // Очищаем только визуальные эффекты для экономии ресурсов батареи телефона,
-      // но соединение с базой данных (Firebase) НЕ трогаем!
       steamParticles = [];
       weatherParticles = [];
       autumnParticles = [];
@@ -1452,6 +1480,64 @@ window.onresize = resize; resize();
 
 const starsArr = Array.from({length: 70}, () => ({ x: Math.random() * innerWidth, y: Math.random() * innerHeight, r: Math.random() * 1.5, a: Math.random(), s: Math.random() * 0.01 }));
 
+// --- Функция отрисовки точной формы реалистичных осенних листьев ---
+function drawLeafShape(ctx, type, size, color, alpha) {
+  ctx.save();
+  ctx.fillStyle = color;
+  ctx.strokeStyle = '#3d1c02';
+  ctx.lineWidth = 0.8;
+  ctx.globalAlpha = alpha;
+
+  ctx.beginPath();
+  if (type === 0) {
+    // 1. Кленовый лист (Sugar Maple) - резные острые лучи
+    ctx.moveTo(0, -size);
+    ctx.lineTo(size * 0.4, -size * 0.3);
+    ctx.lineTo(size, -size * 0.4);
+    ctx.lineTo(size * 0.5, size * 0.1);
+    ctx.lineTo(size * 0.8, size * 0.8);
+    ctx.lineTo(0, size * 0.4);
+    ctx.lineTo(-size * 0.8, size * 0.8);
+    ctx.lineTo(-size * 0.5, size * 0.1);
+    ctx.lineTo(-size, -size * 0.4);
+    ctx.lineTo(-size * 0.4, -size * 0.3);
+    ctx.closePath();
+  } else if (type === 1) {
+    // 2. Дубовый лист (Red Oak) - лопастные округлые зубцы
+    ctx.moveTo(0, -size * 1.2);
+    ctx.bezierCurveTo(size * 0.8, -size * 0.9, size * 0.6, -size * 0.2, size * 0.9, 0);
+    ctx.bezierCurveTo(size * 0.6, size * 0.4, size * 0.8, size * 0.9, size * 0.3, size * 1.1);
+    ctx.lineTo(0, size * 1.3);
+    ctx.lineTo(-size * 0.3, size * 1.1);
+    ctx.bezierCurveTo(-size * 0.8, size * 0.9, -size * 0.6, size * 0.4, -size * 0.9, 0);
+    ctx.bezierCurveTo(-size * 0.6, -size * 0.2, -size * 0.8, -size * 0.9, 0, -size * 1.2);
+    ctx.closePath();
+  } else if (type === 2) {
+    // 3. Сердцевидный лист (Eastern Redbud) - заостренное сердце
+    ctx.moveTo(0, -size * 1.1);
+    ctx.bezierCurveTo(size * 1.2, -size * 0.8, size * 1.1, size * 0.7, 0, size * 1.2);
+    ctx.bezierCurveTo(-size * 1.1, size * 0.7, -size * 1.2, -size * 0.8, 0, -size * 1.1);
+    ctx.closePath();
+  } else {
+    // 4. Вытянутый ланцетовидный лист (American Beech) - классический овальный с заостренным концом
+    ctx.moveTo(0, -size * 1.3);
+    ctx.bezierCurveTo(size * 0.7, -size * 0.6, size * 0.5, size * 0.8, 0, size * 1.3);
+    ctx.bezierCurveTo(-size * 0.5, size * 0.8, -size * 0.7, -size * 0.6, 0, -size * 1.3);
+    ctx.closePath();
+  }
+  ctx.fill();
+  ctx.stroke();
+
+  // Рисуем центральную прожилку листа
+  ctx.beginPath();
+  ctx.strokeStyle = 'rgba(61, 28, 2, 0.5)';
+  ctx.moveTo(0, -size * 0.9);
+  ctx.lineTo(0, size * 0.9);
+  ctx.stroke();
+
+  ctx.restore();
+}
+
 function spawnCloudRain() {
   if (sleepMode) return;
   const targetState = (envConfig.weather === 'random') ? activeWeatherState : envConfig.weather;
@@ -1480,7 +1566,7 @@ function spawnCloudRain() {
         let startY = rect.bottom - 10;
 
         if (isAutumn) {
-          if (Math.random() < 0.75) {
+          if (Math.random() < 0.7) {
             weatherParticles.push({
               x: startX,
               y: startY,
@@ -1490,17 +1576,21 @@ function spawnCloudRain() {
               alpha: Math.random() * 0.4 + 0.3
             });
           } else {
-            const autumnColors = ['#d35400', '#e67e22', '#c0392b', '#f39c12'];
+            const autumnPalettes = [
+              '#e67e22', '#d35400', '#c0392b', '#f39c12', 
+              '#8e44ad', '#d32f2f', '#f57c00', '#827717'
+            ];
             autumnParticles.push({
               x: startX,
               y: startY,
-              vy: (Math.random() * 0.8 + 0.6) * 1.5,
-              vx: (Math.random() - 0.1) * 0.1,
+              vy: (Math.random() * 0.8 + 0.6) * 1.3,
+              vx: (Math.random() - 0.5) * 0.6,
               angle: Math.random() * Math.PI * 2,
-              vAngle: (Math.random() - 0.5) * 0.02,
-              size: Math.random() * 8 + 6,
-              color: autumnColors[Math.floor(Math.random() * autumnColors.length)],
-              alpha: Math.random() * 0.4 + 0.6
+              vAngle: (Math.random() - 0.5) * 0.03,
+              size: Math.random() * 9 + 8,
+              type: Math.floor(Math.random() * 4),
+              color: autumnPalettes[Math.floor(Math.random() * autumnPalettes.length)],
+              alpha: Math.random() * 0.2 + 0.8
             });
           }
         } else {
@@ -1636,10 +1726,8 @@ function draw() {
   if (!sleepMode) {
     spawnCloudRain();
     
-    // --- 1. Обработка капель дождя (с логикой стекания с кнопок из файла-примера) ---
     const targetWeatherState = (envConfig.weather === 'random') ? activeWeatherState : envConfig.weather;
     if (targetWeatherState === 'cloudy' || targetWeatherState === 'autumn_shower') {
-      // Собираем координаты всех звуковых кнопок для проверки пересечения с каплями
       const buttons = document.querySelectorAll('.sound-button');
       const buttonRects = Array.from(buttons).map(b => b.getBoundingClientRect());
 
@@ -1648,15 +1736,11 @@ function draw() {
         p.x += p.vx;
         p.y += p.vy;
 
-        // Проверка: если капля попадает на верхнюю или боковые грани какой-либо кнопки
         let hitButton = false;
         for (let rect of buttonRects) {
-          // Если капля находится в диапазоне ширины кнопки и пересекает её верхнюю границу
           if (p.x >= rect.left && p.x <= rect.right && p.y >= rect.top && p.y <= rect.top + 6) {
             hitButton = true;
-            // Капля превращается в стекающую по кнопке или падает с её края дальше
             if (Math.random() < 0.5) {
-              // Стекает по поверхности кнопки (создаем микро-каплю на кнопке)
               buttonRipples.push({
                 x: p.x,
                 y: rect.top + Math.random() * (rect.height * 0.5),
@@ -1664,7 +1748,6 @@ function draw() {
                 alpha: 0.8
               });
             } else {
-              // Стекает до нижнего края кнопки и падает дальше вниз
               buttonRipples.push({
                 x: p.x,
                 y: rect.bottom,
@@ -1683,7 +1766,6 @@ function draw() {
           continue;
         }
 
-        // Если капля долетела до низа экрана
         if (p.y > innerHeight - 90) {
           if (accumulatedWater.length < MAX_ACCUMULATED_ITEMS) {
             accumulatedWater.push({
@@ -1706,7 +1788,6 @@ function draw() {
       }
     }
 
-    // --- 1.5. Обработка капель, стекающих с кнопок ---
     for (let i = buttonRipples.length - 1; i >= 0; i--) {
       let r = buttonRipples[i];
       if (r.fallAfter) {
@@ -1737,10 +1818,9 @@ function draw() {
       wCtx.fill();
     }
 
-    // --- 2. Обработка падающих листьев ---
     for (let i = autumnParticles.length - 1; i >= 0; i--) {
       let leaf = autumnParticles[i];
-      leaf.x += leaf.vx + Math.sin(leaf.y * 0.01) * 0.3;
+      leaf.x += leaf.vx + Math.sin(leaf.y * 0.02) * 0.5;
       leaf.y += leaf.vy;
       leaf.angle += leaf.vAngle;
 
@@ -1751,8 +1831,9 @@ function draw() {
             y: innerHeight - (Math.random() * 75 + 20),
             size: leaf.size,
             angle: leaf.angle,
+            type: leaf.type,
             color: leaf.color,
-            alpha: 0.9
+            alpha: 0.95
           });
         }
         autumnParticles.splice(i, 1);
@@ -1762,18 +1843,13 @@ function draw() {
       wCtx.save();
       wCtx.translate(leaf.x, leaf.y);
       wCtx.rotate(leaf.angle);
-      wCtx.beginPath();
-      wCtx.ellipse(0, 0, leaf.size, leaf.size * 0.5, 0, 0, Math.PI * 2);
-      wCtx.fillStyle = leaf.color;
-      wCtx.globalAlpha = leaf.alpha;
-      wCtx.fill();
+      drawLeafShape(wCtx, leaf.type, leaf.size, leaf.color, leaf.alpha);
       wCtx.restore();
     }
 
-    // --- 3. Отрисовка и плавное исчезновение скопившейся воды ---
     for (let i = accumulatedWater.length - 1; i >= 0; i--) {
       let w = accumulatedWater[i];
-      w.alpha -= 0.000095; 
+      w.alpha -= 0.0004; 
 
       if (w.alpha <= 0) {
         accumulatedWater.splice(i, 1);
@@ -1786,10 +1862,9 @@ function draw() {
       wCtx.fill();
     }
 
-    // --- 4. Отрисовка и плавное исчезновение накопившихся листьев ---
     for (let i = accumulatedLeaves.length - 1; i >= 0; i--) {
       let l = accumulatedLeaves[i];
-      l.alpha -= 0.000095; 
+      l.alpha -= 0.0004; 
 
       if (l.alpha <= 0) {
         accumulatedLeaves.splice(i, 1);
@@ -1799,11 +1874,7 @@ function draw() {
       wCtx.save();
       wCtx.translate(l.x, l.y);
       wCtx.rotate(l.angle);
-      wCtx.beginPath();
-      wCtx.ellipse(0, 0, l.size, l.size * 0.4, 0, 0, Math.PI * 2);
-      wCtx.fillStyle = l.color;
-      wCtx.globalAlpha = l.alpha;
-      wCtx.fill();
+      drawLeafShape(wCtx, l.type, l.size, l.color, l.alpha);
       wCtx.restore();
     }
   }
