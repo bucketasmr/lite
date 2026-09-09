@@ -626,13 +626,13 @@ requestWakeLock();
 
 const sounds = [
   { "file": "purplebrush.mp3", "img": "purplebrush.png", "name": { "en": "Purple Brush", "pt": "Pincel Roxo", "ru": "Фиолетовая кисть", "uk": "Фіолетовий пензель" }, "color": "#9664ff", "locked": false },
-  { "file": "", "img": "Soon.png", "name": { "en": "Soon", "pt": "Breve", "ru": "Скоро", "uk": "Незабаром" }, "color": "#ffb6c1", "locked": false },
   { "file": "wax.mp3", "img": "wax.png", "name": { "en": "Wax", "pt": "Cera", "ru": "Воск", "uk": "Віск" }, "color": "#ffa500", "locked": false },
   { "file": "choko.mp3", "img": "choko.png", "name": { "en": "Choco", "pt": "Chocolate", "ru": "Шоколад", "uk": "Шоколад" }, "color": "#8b4513", "locked": false },
   { "file": "strawberry.mp3", "img": "strawberry.png", "name": { "en": "Strawberry", "pt": "Morango", "ru": "Клубника", "uk": "Полуниця" }, "color": "#ff69b4", "locked": false },
   { "file": "oldphone.mp3", "img": "oldphone.png", "name": { "en": "Old Phone", "pt": "Telefone Antigo", "ru": "Телефон", "uk": "Телефон" }, "color": "#323232", "locked": false },
   { "file": "carrot.mp3", "img": "carrot.png", "name": { "en": "Carrot", "pt": "Cenoura", "ru": "Морковь", "uk": "Морква" }, "color": "#ff8c00", "locked": false },
   { "file": "greybrush.mp3", "img": "greybrush.png", "name": { "en": "Grey Brush", "pt": "Pincel Cinza", "ru": "Серая кисть", "uk": "Сірий пензель" }, "color": "#8c8c8c", "locked": false },
+    { "file": "", "img": "Soon.png", "name": { "en": "Soon", "pt": "Breve", "ru": "Скоро", "uk": "Незабаром" }, "color": "#ffb6c1", "locked": false },
   { "file": "wood.mp3", "img": "wood.png", "name": { "en": "Wood", "pt": "Madeira", "ru": "Дерево", "uk": "Дерево" }, "color": "#ffff00", "locked": false }
 ];
 
@@ -1531,49 +1531,63 @@ function drawLeafShape(ctx, type, size, color, alpha) {
   ctx.save();
   ctx.fillStyle = color;
   ctx.strokeStyle = '#3d1c02';
-  ctx.lineWidth = 0.8;
+  ctx.lineWidth = 1;
   ctx.globalAlpha = alpha;
 
   ctx.beginPath();
   if (type === 0) {
+    // Кленовый лист
     ctx.moveTo(0, -size);
-    ctx.lineTo(size * 0.4, -size * 0.3);
-    ctx.lineTo(size, -size * 0.4);
-    ctx.lineTo(size * 0.5, size * 0.1);
-    ctx.lineTo(size * 0.8, size * 0.8);
-    ctx.lineTo(0, size * 0.4);
-    ctx.lineTo(-size * 0.8, size * 0.8);
-    ctx.lineTo(-size * 0.5, size * 0.1);
-    ctx.lineTo(-size, -size * 0.4);
-    ctx.lineTo(-size * 0.4, -size * 0.3);
+    ctx.lineTo(size * 0.3, -size * 0.4);
+    ctx.lineTo(size * 0.9, -size * 0.5);
+    ctx.lineTo(size * 0.4, -size * 0.1);
+    ctx.lineTo(size * 0.8, size * 0.4);
+    ctx.lineTo(size * 0.2, size * 0.2);
+    ctx.lineTo(size * 0.4, size * 1.0);
+    ctx.lineTo(0, size * 0.6);
+    ctx.lineTo(-size * 0.4, size * 1.0);
+    ctx.lineTo(-size * 0.2, size * 0.2);
+    ctx.lineTo(-size * 0.8, size * 0.4);
+    ctx.lineTo(-size * 0.4, -size * 0.1);
+    ctx.lineTo(-size * 0.9, -size * 0.5);
+    ctx.lineTo(-size * 0.3, -size * 0.4);
     ctx.closePath();
   } else if (type === 1) {
-    ctx.moveTo(0, -size * 1.2);
-    ctx.bezierCurveTo(size * 0.8, -size * 0.9, size * 0.6, -size * 0.2, size * 0.9, 0);
-    ctx.bezierCurveTo(size * 0.6, size * 0.4, size * 0.8, size * 0.9, size * 0.3, size * 1.1);
-    ctx.lineTo(0, size * 1.3);
-    ctx.lineTo(-size * 0.3, size * 1.1);
-    ctx.bezierCurveTo(-size * 0.8, size * 0.9, -size * 0.6, size * 0.4, -size * 0.9, 0);
-    ctx.bezierCurveTo(-size * 0.6, -size * 0.2, -size * 0.8, -size * 0.9, 0, -size * 1.2);
+    // Березовый лист (удлиненный с заостренным кончиком)
+    ctx.moveTo(0, -size * 1.3);
+    ctx.bezierCurveTo(size * 0.7, -size * 1.0, size * 0.8, -size * 0.2, size * 0.6, size * 0.4);
+    ctx.bezierCurveTo(size * 0.4, size * 0.9, size * 0.2, size * 1.1, 0, size * 1.4);
+    ctx.bezierCurveTo(-0.2, size * 1.1, -size * 0.4, size * 0.9, -size * 0.6, size * 0.4);
+    ctx.bezierCurveTo(-size * 0.8, -size * 0.2, -size * 0.7, -size * 1.0, 0, -size * 1.3);
     ctx.closePath();
   } else if (type === 2) {
+    // Округлая листва (липа / осина)
     ctx.moveTo(0, -size * 1.1);
-    ctx.bezierCurveTo(size * 1.2, -size * 0.8, size * 1.1, size * 0.7, 0, size * 1.2);
-    ctx.bezierCurveTo(-size * 1.1, size * 0.7, -size * 1.2, -size * 0.8, 0, -size * 1.1);
+    ctx.bezierCurveTo(size * 1.1, -size * 1.1, size * 1.3, size * 0.2, size * 0.8, size * 0.8);
+    ctx.bezierCurveTo(size * 0.3, size * 1.2, -size * 0.3, size * 1.2, -size * 0.8, size * 0.8);
+    ctx.bezierCurveTo(-size * 1.3, size * 0.2, -size * 1.1, -size * 1.1, 0, -size * 1.1);
     ctx.closePath();
   } else {
-    ctx.moveTo(0, -size * 1.3);
-    ctx.bezierCurveTo(size * 0.7, -size * 0.6, size * 0.5, size * 0.8, 0, size * 1.3);
-    ctx.bezierCurveTo(-size * 0.5, size * 0.8, -size * 0.7, -size * 0.6, 0, -size * 1.3);
+    // Дуб (резной фигурный)
+    ctx.moveTo(0, -size * 1.2);
+    ctx.bezierCurveTo(size * 0.5, -size * 1.2, size * 1.1, -size * 0.7, size * 0.7, -size * 0.3);
+    ctx.bezierCurveTo(size * 1.2, -size * 0.1, size * 1.1, size * 0.5, size * 0.6, size * 0.7);
+    ctx.bezierCurveTo(size * 0.9, size * 1.0, size * 0.3, size * 1.3, 0, size * 1.1);
+    ctx.bezierCurveTo(-size * 0.3, size * 1.3, -size * 0.9, size * 1.0, -size * 0.6, size * 0.7);
+    ctx.bezierCurveTo(-size * 1.1, size * 0.5, -size * 1.2, -size * 0.1, -size * 0.7, -size * 0.3);
+    ctx.bezierCurveTo(-size * 1.1, -size * 0.7, -size * 0.5, -size * 1.2, 0, -size * 1.2);
     ctx.closePath();
   }
+
   ctx.fill();
   ctx.stroke();
 
+  // Рисуем прожилки для большей детализации
   ctx.beginPath();
-  ctx.strokeStyle = 'rgba(61, 28, 2, 0.5)';
-  ctx.moveTo(0, -size * 0.9);
-  ctx.lineTo(0, size * 0.9);
+  ctx.strokeStyle = '#5c2805';
+  ctx.lineWidth = 0.6;
+  ctx.moveTo(0, size * 0.9);
+  ctx.lineTo(0, -size * 0.8);
   ctx.stroke();
 
   ctx.restore();
@@ -1607,7 +1621,7 @@ function spawnCloudRain() {
         let startY = rect.bottom - 10;
 
         if (isAutumn) {
-          if (Math.random() < 0.7) {
+          if (Math.random() < 0.93) {
             weatherParticles.push({
               x: startX,
               y: startY,
@@ -2063,6 +2077,8 @@ function switchTab(event, tabId) {
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     document.getElementById(tabId).classList.add('active');
 }
+
+
 </script>
 </body>
 </html>
