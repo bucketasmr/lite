@@ -128,22 +128,49 @@
   }
   .sound-grid.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
 
-  .sound-button { 
-    aspect-ratio: 1/1; border: 1px solid rgba(255,255,255,0.1); border-radius: 20px;
-    background: rgba(0,0,0,0.2); color: rgba(255,255,255,0.7); 
-    font-weight: bold; cursor: pointer; display: flex; flex-direction: column; 
-    justify-content: center; align-items: center; backdrop-filter: blur(8px);
-    transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); font-size: 11px; text-align: center; 
-    position: relative; overflow: hidden; padding: 5px;
-    background-size: cover; background-position: center; background-repeat: no-repeat;
+.sound-button { 
+    aspect-ratio: 1/1; 
+    border-radius: 24px;
+    /* Тонкая полупрозрачная граница для создания объема стекла */
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    /* Градиент жидкого стекла с высокой прозрачностью */
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.03) 100%);
+    color: rgba(255, 255, 255, 0.95); 
+    font-weight: bold; 
+    cursor: pointer; 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center; 
+    align-items: center; 
+    /* Сильное размытие фона под кнопкой */
+    backdrop-filter: blur(25px); 
+    -webkit-backdrop-filter: blur(25px);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+    font-size: 11px; 
+    text-align: center; 
+    position: relative; 
+    overflow: hidden; 
+    padding: 5px;
+    /* Глубокая мягкая тень + внутренние световые блики стекла */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), 
+                inset 0 1px 1px rgba(255, 255, 255, 0.5), 
+                inset 0 -1px 1px rgba(0, 0, 0, 0.3);
+    background-size: cover; 
+    background-position: center; 
+    background-repeat: no-repeat;
   }
   
   .sound-button::before {
-    content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.4); opacity: 1; transition: opacity 0.4s; z-index: 1;
+    content: ''; 
+    position: absolute; 
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.15); 
+    opacity: 1; 
+    transition: opacity 0.4s; 
+    z-index: 1;
   }
-  .sound-button.ready::before { background: rgba(0,0,0,0.25); }
-  .sound-button.active::before { background: rgba(0,0,0,0.1); }
+  .sound-button.ready::before { background: rgba(255, 255, 255, 0.05); }
+  .sound-button.active::before { background: rgba(138, 43, 226, 0.2); }
 
   .sound-button span { position: relative; z-index: 2; pointer-events: none; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); }
   .sound-button.ready { color: white; background-color: rgba(255,255,255,0.12); }
@@ -356,8 +383,8 @@
       <label id="lblWeather">Weather (upd 09.09.26)</label>
       <select id="weatherSelect" class="settings-select">
         <option value="clear">☀️ Clear</option>
-        <option value="cloudy" selected>☁️ Clouds + Rain</option>
-        <option value="autumn_shower">🍁 Autumn Shower NEW (upd 09.09.26)</option>
+        <option value="cloudy">☁️ Clouds + Rain</option>
+        <option value="autumn_shower" selected>🍁 Autumn Shower NEW (upd 09.09.26)</option>
         <option value="random">🔀 Random Weather (120s)</option>
       </select>
     </div>
@@ -608,7 +635,7 @@ const uiTL = {
     unlockTitle: "Unlock Trigger", unlockDesc: "Unlock this trigger!", 
     unlockBtn: "🔓 Unlock Sound", closeBtn: "Close", idleTitle: "Start playing?", idleDesc: "Would you like to start the ASMR session?", idleDisable: "Don't show again",
     settingsTitle: "Settings", helpBtnLabel: "Help / Guide", lblFxStyle: "Effect Style", lblFxOpacity: "Opacity / Glow", lblFxSpeed: "Effect Speed", lblFxRandomInterval: "Random Change Interval",
-    lblTimeOfDay: "Time of Day", lblWeather: "Weather (upd 09.09.26)",
+    lblTimeOfDay: "Time of Day", lblWeather: "Weather",
     todNames: { morning: "🌅 Morning", noon: "☀️ Noon", evening: "🌆 Evening", night: "🌙 Night", full_cycle: "🔄 Full 24h Cycle (120s)" },
     weatherNames: { clear: "☀️ Clear", cloudy: "☁️ Clouds + Rain", autumn_shower: "🍁 Autumn Shower NEW  (upd 09.09.26)", random: "🔀 Random Weather (120s)" },
     fxNames: { steam: "💨 Steam (Color)", rain: "💧 Rain Drops", snow: "❄️ Snowflakes", comets: "☄️ Comets & Asteroids", neondust: "✨ Neon Dust", aura: "🌀 Pulsing Aura", random: "🔀 Random Effect" },
@@ -638,7 +665,7 @@ const uiTL = {
     unlockTitle: "Desbloquear Som", unlockDesc: "Desbloqueie este som!", 
     unlockBtn: "🔓 Desbloquear Som", closeBtn: "Fechar", idleTitle: "Começar a tocar?", idleDesc: "Você está inativo. Gostaria de iniciar a sessão de ASMR?", idleDisable: "Não mostrar novamente",
     settingsTitle: "Configurações", helpBtnLabel: "Ajuda / Guia", lblFxStyle: "Estilo do Efeito", lblFxOpacity: "Opacidade / Brilho", lblFxSpeed: "Velocidade do Efeito", lblFxRandomInterval: "Intervalo de Troca Aleatória",
-    lblTimeOfDay: "Hora do Dia", lblWeather: "Clima (upd 09.09.26)",
+    lblTimeOfDay: "Hora do Dia", lblWeather: "Clima",
     todNames: { morning: "🌅 Manhã", noon: "☀️ Meio-dia", evening: "🌆 Tarde / Noite", night: "🌙 Noite", full_cycle: "🔄 Ciclo de 24h (120s)" },
     weatherNames: { clear: "☀️ Limpo", cloudy: "☁️ Nuvens + Chuva", autumn_shower: "🍁 Chuva de Outono Nova  (upd 09.09.26)", random: "🔀 Clima Aleatório (120s)" },
     fxNames: { steam: "💨 Vapor (Colorido)", rain: "💧 Gotas de Chuva", snow: "❄️ Flocos de Neve", comets: "☄️ Cometas e Asteroides", neondust: "✨ Poeira Neon", aura: "🌀 Aura Pulsante", random: "🔀 Efeito Aleatório" },
@@ -668,7 +695,7 @@ const uiTL = {
     unlockTitle: "Відкрити звук", unlockDesc: "Розблокуйте цей тригер!", 
     unlockBtn: "🔓 Розблокувати звук", closeBtn: "Закрити", idleTitle: "Запустити програвання?", idleDesc: "Ви нічого не натискали. Бажаєте увімкнути випадковий режим АСМР?", idleDisable: "Приховати нагадування",
     settingsTitle: "Налаштування", helpBtnLabel: "Допомога / Інструкція", lblFxStyle: "Стиль ефекту", lblFxOpacity: "Прозорість / Сяйво", lblFxSpeed: "Швидкість ефекту", lblFxRandomInterval: "Інтервал зміни рандому",
-    lblTimeOfDay: "Час доби", lblWeather: "Погода (upd 09.09.26)",
+    lblTimeOfDay: "Час доби", lblWeather: "Погода",
     todNames: { morning: "🌅 Ранок", noon: "☀️ Полдень", evening: "🌆 Вечір", night: "🌙 Ніч", full_cycle: "🔄 Повні добу (120с)" },
     weatherNames: { clear: "☀️ Ясно", cloudy: "☁️ Хмари + Дощ", autumn_shower: "🍁 Осіння злива НОВА (upd 09.09.26)", random: "🔀 Рандомна погода (120с)" },
     fxNames: { steam: "💨 Кольорова пара", rain: "💧 Краплі дощу", snow: "❄️ Сніжинки", comets: "☄️ Комети та астероїди", neondust: "✨ Магічні іскри", aura: "🌀 Пульсуюча аура", random: "🔀 Рандомний ефект" },
@@ -698,7 +725,7 @@ const uiTL = {
     unlockTitle: "Открыть звук", unlockDesc: "Разблокируйте этот триггер!", 
     unlockBtn: "🔓 Разблокировать звук", closeBtn: "Закрыть", idleTitle: "Запустить проигрывание?", idleDesc: "Вы ничего не нажимали. Хотите включить случайный режим АСМР?", idleDisable: "Скрыть напоминание",
     settingsTitle: "Настройки", helpBtnLabel: "Помощь / Инструкция", lblFxStyle: "Стиль эффекта", lblFxOpacity: "Прозрачность / Свечение", lblFxSpeed: "Скорость эффекта", lblFxRandomInterval: "Интервал смены рандома",
-    lblTimeOfDay: "Время суток", lblWeather: "Погода (upd 09.09.26)",
+    lblTimeOfDay: "Время суток", lblWeather: "Погода",
     todNames: { morning: "🌅 Утро", noon: "☀️ Полдень", evening: "🌆 Вечер", night: "🌙 Ночь", full_cycle: "🔄 Полные сутки (120 сек)" },
     weatherNames: { clear: "☀️ Ясно", cloudy: "☁️ Тучи + Дождь", autumn_shower: "🍁 Осенний ливень НОВЫЙ (upd 09.09.26)", random: "🔀 Рандомная погода (120 сек)" },
     fxNames: { steam: "💨 Цветной пар", rain: "💧 Капли дождя", snow: "❄️ Снежинки", comets: "☄️ Кометы и астероиды", neondust: "✨ Магические искри", aura: "🌀 Пульсирующая аура", random: "🔀 Рандом" },
@@ -760,7 +787,7 @@ function triggerFirstAudioPlay() {
         logButtonClick('ui_fx_promo_modal_shown');
         document.getElementById('fxPromoModal').style.display = 'flex';
       }
-    }, 180000);
+    }, 120000);
   }
 
   if (!weatherTimerStarted) {
@@ -768,7 +795,7 @@ function triggerFirstAudioPlay() {
     weatherTimerId = setTimeout(() => {
       logButtonClick('ui_weather_choice_modal_shown');
       document.getElementById('weatherChoiceModal').style.display = 'flex';
-    }, 40000);
+    }, 26000);
   }
 }
 
@@ -791,7 +818,7 @@ let fxConfig = {
 
 let envConfig = {
   timeOfDay: 'night', 
-  weather: 'cloudy'      
+  weather: 'autumn_shower'      
 };
 
 let activeWeatherState = 'clear'; 
