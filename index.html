@@ -415,7 +415,7 @@
       <select id="fxStyleSelect" class="settings-select">
         <option value="steam">💨 Steam (Color)</option>
         <option value="snow">❄️ Snowflakes</option>
-        <option value="comets">☄️ Comets & Asteroids</option>
+        <option value="comets" selected>☄️ Comets & Asteroids</option>
         <option value="neondust">✨ Neon Dust</option>
         <option value="random">🔀 Random Effect</option>
       </select>
@@ -828,8 +828,8 @@ function selectWeatherMode(mode) {
 }
 
 let fxConfig = {
-  style: 'steam',
-  activeStyle: 'steam', 
+  style: 'comets',
+  activeStyle: 'comets', 
   opacity: 0.4,
   speed: 0.5,
   randomInterval: 14 
