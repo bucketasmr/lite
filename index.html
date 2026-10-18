@@ -399,11 +399,11 @@
 
     <!-- Выпадающее меню: Погода -->
     <div class="settings-group">
-      <label id="lblWeather">Weather (upd 09.09.26)</label>
+      <label id="lblWeather">Weather</label>
       <select id="weatherSelect" class="settings-select">
         <option value="clear">☀️ Clear</option>
         <option value="cloudy">☁️ Clouds + Rain</option>
-        <option value="autumn_shower" selected>🍁 Autumn Shower NEW (upd 09.09.26)</option>
+        <option value="autumn_shower" selected>🍁 Autumn Shower </option>
         <option value="random">🔀 Random Weather (120s)</option>
       </select>
     </div>
@@ -461,7 +461,7 @@
         <span class="icon">🌧️</span> <span id="btnWClouds">Clouds & Rain</span>
       </button>
       <button class="weather-option-btn" onclick="selectWeatherMode('autumn_shower')">
-        <span class="icon">🍁</span> <span id="btnWAutumn">Autumn Shower NEW (upd 09.09.26)</span>
+        <span class="icon">🍁</span> <span id="btnWAutumn">Autumn Shower</span>
       </button>
       <button class="weather-option-btn" onclick="selectWeatherMode('random')">
         <span class="icon">🎲</span> <span id="btnWRandom">Random</span>
@@ -507,7 +507,7 @@
 <div id="welcomeModal" class="modal">
   <div class="modal-content">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-        <h2 style="color: #ffb400; margin: 0; font-size: 20px; text-shadow: 0 0 10px rgba(255,180,0,0.4);">BUCKET ASMR v.1.1 (09.09.26)</h2>
+        <h2 style="color: #ffb400; margin: 0; font-size: 20px; text-shadow: 0 0 10px rgba(255,180,0,0.4);">BUCKET ASMR v.1.2 (18.10.26)</h2>
         <button class="lang-btn-ui lang-switcher-btn" style="scale: 0.8;">EN</button>
     </div>
     <div class="modal-tabs">
@@ -638,9 +638,9 @@ const sounds = [
 
 const uiTL = {
   en: { 
-    code: "EN", customBtn: "Settings", title: "BUCKET ASMR v.1.1", play: "Play", pause: "Pause", repair: "REPAIR", sleep: "Sleep", tabFeatures: "Functions", tabGuide: "Guide", 
+    code: "EN", customBtn: "Settings", title: "BUCKET ASMR v.1.2", play: "Play", pause: "Pause", repair: "REPAIR", sleep: "Sleep", tabFeatures: "Functions", tabGuide: "Guide", 
     features: [
-      "<span>✦</span> <b>New weather:</b> 🍁Autumn. A downpour with leaves and raindrops.(upd 09.09.26)", 
+      "<span>✦</span> <b>Fixed:</b> The link button has been fixed; the button now works reliably (upd. 18.10.26)", 
       "<span>✦</span> <b>Stay Awake:</b> Screen won't turn off automatically.", 
       "<span>✦</span> <b>Mixer:</b> Play multiple sounds at the same time.", 
       "<span>✦</span> <b>Not Working?:</b> Turn off Silent Mode."
@@ -656,7 +656,7 @@ const uiTL = {
     settingsTitle: "Settings", helpBtnLabel: "Help / Guide", lblFxStyle: "Effect Style", lblFxOpacity: "Opacity / Glow", lblFxSpeed: "Effect Speed", lblFxRandomInterval: "Random Change Interval",
     lblTimeOfDay: "Time of Day", lblWeather: "Weather",
     todNames: { morning: "🌅 Morning", noon: "☀️ Noon", evening: "🌆 Evening", night: "🌙 Night", full_cycle: "🔄 Full 24h Cycle (120s)" },
-    weatherNames: { clear: "☀️ Clear", cloudy: "☁️ Clouds + Rain", autumn_shower: "🍁 Autumn Shower NEW  (upd 09.09.26)", random: "🔀 Random Weather (120s)" },
+    weatherNames: { clear: "☀️ Clear", cloudy: "☁️ Clouds + Rain", autumn_shower: "🍁 Autumn Shower NEW  (upd 18.10.26)", random: "🔀 Random Weather (120s)" },
     fxNames: { steam: "💨 Steam (Color)", rain: "💧 Rain Drops", snow: "❄️ Snowflakes", comets: "☄️ Comets & Asteroids", neondust: "✨ Neon Dust", aura: "🌀 Pulsing Aura", random: "🔀 Random Effect" },
     fxPromoTitle: "New Feature: Effects",
     fxPromoDesc: "Click Yes to activate automatic switching of visual effects.",
@@ -664,13 +664,13 @@ const uiTL = {
     fxPromoKeep: "Keep current effect",
     fxPromoPs: "P.S. You can change this later in Settings.",
     weatherChoiceTitle: "Select Weather",
-    wClear: "Clear sky", wClouds: "Clouds & Rain", wAutumn: " Autumn Shower NEW (upd 09.09.26)", wRandom: "Random",
+    wClear: "Clear sky", wClouds: "Clouds & Rain", wAutumn: " Autumn Shower ", wRandom: "Random",
     soundSoon: "This sound will be available soon!"
   },
   pt: { 
-    code: "PT", customBtn: "Personalizar", title: "BALDE ASMR v.1.1", play: "Tocar", pause: "Pausa", repair: "REPARAR", sleep: "Dormir", tabFeatures: "Funções", tabGuide: "Guia", 
+    code: "PT", customBtn: "Personalizar", title: "BALDE ASMR v.1.2", play: "Tocar", pause: "Pausa", repair: "REPARAR", sleep: "Dormir", tabFeatures: "Funções", tabGuide: "Guia", 
     features: [
-      "<span>✦</span> <b>Novo clima :</b> 🍁de Outono. Um aguaceiro com folhas e gotas de chuva.(upd 09.09.26)", 
+      "<span>✦</span> <b>Corrigido:</b> O botão do link foi corrigido; agora ele funciona de maneira confiável (actual. 18.10.26)", 
       "<span>✦</span> <b>Sempre Ativo:</b> A tela não apaga durante o uso.", 
       "<span>✦</span> <b>Mixer:</b> Toque vários sons ao mesmo tempo.", 
       "<span>✦</span> <b>Não funcionou?:</b> Desative o modo silencioso."
@@ -686,7 +686,7 @@ const uiTL = {
     settingsTitle: "Configurações", helpBtnLabel: "Ajuda / Guia", lblFxStyle: "Estilo do Efeito", lblFxOpacity: "Opacidade / Brilho", lblFxSpeed: "Velocidade do Efeito", lblFxRandomInterval: "Intervalo de Troca Aleatória",
     lblTimeOfDay: "Hora do Dia", lblWeather: "Clima",
     todNames: { morning: "🌅 Manhã", noon: "☀️ Meio-dia", evening: "🌆 Tarde / Noite", night: "🌙 Noite", full_cycle: "🔄 Ciclo de 24h (120s)" },
-    weatherNames: { clear: "☀️ Limpo", cloudy: "☁️ Nuvens + Chuva", autumn_shower: "🍁 Chuva de Outono Nova  (upd 09.09.26)", random: "🔀 Clima Aleatório (120s)" },
+    weatherNames: { clear: "☀️ Limpo", cloudy: "☁️ Nuvens + Chuva", autumn_shower: "🍁 Chuva de Outono Nova  (upd 18.10.26)", random: "🔀 Clima Aleatório (120s)" },
     fxNames: { steam: "💨 Vapor (Colorido)", rain: "💧 Gotas de Chuva", snow: "❄️ Flocos de Neve", comets: "☄️ Cometas e Asteroides", neondust: "✨ Poeira Neon", aura: "🌀 Aura Pulsante", random: "🔀 Efeito Aleatório" },
     fxPromoTitle: "Nova Função: Efeitos",
     fxPromoDesc: "Clique em Sim para ativar a troca automática de efeitos visuais.",
@@ -698,9 +698,9 @@ const uiTL = {
     soundSoon: "Este som estará disponível em breve!"
   },
   uk: { 
-    code: "UK", customBtn: "Налаштування", title: "ВІДРО АСМР v.1.1", play: "Грати", pause: "Пауза", repair: "ЛАГОДИТИ", sleep: "Сон", tabFeatures: "Функції", tabGuide: "Інструкція", 
+    code: "UK", customBtn: "Налаштування", title: "ВІДРО АСМР v.1.2", play: "Грати", pause: "Пауза", repair: "ЛАГОДИТИ", sleep: "Сон", tabFeatures: "Функції", tabGuide: "Інструкція", 
     features: [
-      "<span>✦</span> <b>Нова погода :</b> 🍁Осінь. Злива з листям та краплями дощу.(upd 09.09.26)", 
+      "<span>✦</span> <b>Виправлено:</b> кнопка «Посилання» була виправлена; тепер вона працює без збоїв (онов. 18.10.26)", 
       "<span>✦</span> <b>Без Сну:</b> Екран не згасає автоматично.", 
       "<span>✦</span> <b>Міксер:</b> Грайте кілька звуків одночасно.", 
       "<span>✦</span> <b>Не працює?:</b> Вимкніть беззвучний режим."
@@ -716,7 +716,7 @@ const uiTL = {
     settingsTitle: "Налаштування", helpBtnLabel: "Допомога / Інструкція", lblFxStyle: "Стиль ефекту", lblFxOpacity: "Прозорість / Сяйво", lblFxSpeed: "Швидкість ефекту", lblFxRandomInterval: "Інтервал зміни рандому",
     lblTimeOfDay: "Час доби", lblWeather: "Погода",
     todNames: { morning: "🌅 Ранок", noon: "☀️ Полдень", evening: "🌆 Вечір", night: "🌙 Ніч", full_cycle: "🔄 Повні добу (120с)" },
-    weatherNames: { clear: "☀️ Ясно", cloudy: "☁️ Хмари + Дощ", autumn_shower: "🍁 Осіння злива НОВА (upd 09.09.26)", random: "🔀 Рандомна погода (120с)" },
+    weatherNames: { clear: "☀️ Ясно", cloudy: "☁️ Хмари + Дощ", autumn_shower: "🍁 Осіння злива НОВА (upd 18.10.26)", random: "🔀 Рандомна погода (120с)" },
     fxNames: { steam: "💨 Кольорова пара", rain: "💧 Краплі дощу", snow: "❄️ Сніжинки", comets: "☄️ Комети та астероїди", neondust: "✨ Магічні іскри", aura: "🌀 Пульсуюча аура", random: "🔀 Рандомний ефект" },
     fxPromoTitle: "Нова функція ефекти.",
     fxPromoDesc: "натисніть так щоб активувати автоматичну зміну ефектів",
@@ -728,9 +728,9 @@ const uiTL = {
     soundSoon: "Цей звук скоро буде доступний!"
   },
   ru: { 
-    code: "RU", customBtn: "Настройки", title: "ВЕДРО АСМР v.1.1", play: "Играть", pause: "Пауза", repair: "ЧИНИТЬ", sleep: "Сон", tabFeatures: "Функции", tabGuide: "Инструкция", 
+    code: "RU", customBtn: "Настройки", title: "ВЕДРО АСМР v.1.2", play: "Играть", pause: "Пауза", repair: "ЧИНИТЬ", sleep: "Сон", tabFeatures: "Функции", tabGuide: "Инструкция", 
     features: [
-      "<span>✦</span> <b>Новая погода :</b> 🍁Осень. Ливень с листьями и каплями дождя.(upd 09.09.26)", 
+      "<span>✦</span> <b>Исправления:</b>Устранена проблема с кнопкой «Ссылки» ; теперь она работает стабильно. (обн. 18.10.26)", 
       "<span>✦</span> <b>Бодрость:</b> Экран не гаснет во время сеанса.", 
       "<span>✦</span> <b>Микшер:</b> Запуск нескольких звуков одновременно.", 
       "<span>✦</span> <b>Не работает?:</b> Отключите беззвучный режим."
@@ -746,7 +746,7 @@ const uiTL = {
     settingsTitle: "Настройки", helpBtnLabel: "Помощь / Инструкция", lblFxStyle: "Стиль эффекта", lblFxOpacity: "Прозрачность / Свечение", lblFxSpeed: "Скорость эффекта", lblFxRandomInterval: "Интервал смены рандома",
     lblTimeOfDay: "Время суток", lblWeather: "Погода",
     todNames: { morning: "🌅 Утро", noon: "☀️ Полдень", evening: "🌆 Вечер", night: "🌙 Ночь", full_cycle: "🔄 Полные сутки (120 сек)" },
-    weatherNames: { clear: "☀️ Ясно", cloudy: "☁️ Тучи + Дождь", autumn_shower: "🍁 Осенний ливень НОВЫЙ (upd 09.09.26)", random: "🔀 Рандомная погода (120 сек)" },
+    weatherNames: { clear: "☀️ Ясно", cloudy: "☁️ Тучи + Дождь", autumn_shower: "🍁 Осенний ливень НОВЫЙ (upd 18.10.26)", random: "🔀 Рандомная погода (120 сек)" },
     fxNames: { steam: "💨 Цветной пар", rain: "💧 Капли дождя", snow: "❄️ Снежинки", comets: "☄️ Кометы и астероиды", neondust: "✨ Магические искри", aura: "🌀 Пульсирующая аура", random: "🔀 Рандом" },
     fxPromoTitle: "Новая функция эффекты.",
     fxPromoDesc: "нажмите да что-бы активировать автоматическую смену эффектов",
@@ -788,7 +788,7 @@ function showSoonToast() {
   toast.classList.add('show');
   setTimeout(() => {
     toast.classList.remove('show');
-  }, 3000);
+  }, 6000);
 }
 
 function closeWeatherModal() {
@@ -806,7 +806,7 @@ function triggerFirstAudioPlay() {
         logButtonClick('ui_fx_promo_modal_shown');
         document.getElementById('fxPromoModal').style.display = 'flex';
       }
-    }, 120000);
+    }, 600000);
   }
 
   if (!weatherTimerStarted) {
@@ -814,7 +814,7 @@ function triggerFirstAudioPlay() {
     weatherTimerId = setTimeout(() => {
       logButtonClick('ui_weather_choice_modal_shown');
       document.getElementById('weatherChoiceModal').style.display = 'flex';
-    }, 26000);
+    }, 300000);
   }
 }
 
@@ -1421,7 +1421,7 @@ function resetIdleTimer() {
     return;
   }
   clearTimeout(idleTimer);
-  idleTimer = setTimeout(showIdleModal, 35000);
+  idleTimer = setTimeout(showIdleModal, 240000);
 }
 
 function showIdleModal() {
@@ -2078,6 +2078,20 @@ function switchTab(event, tabId) {
     document.getElementById(tabId).classList.add('active');
 }
 
+const linksTrigger = document.getElementById('linksTrigger');
+const linksOptions = document.getElementById('linksOptions');
+const speedDropdown = document.getElementById('speedDropdown');
+
+linksTrigger.addEventListener('click', (e) => {
+  e.stopPropagation();
+  logButtonClick('ui_social_links_menu');
+  if (speedDropdown) speedDropdown.classList.remove('open');
+  linksOptions.classList.toggle('open');
+});
+
+window.addEventListener('click', () => {
+  linksOptions.classList.remove('open');
+});
 
 </script>
 </body>
