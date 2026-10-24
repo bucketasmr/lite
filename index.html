@@ -5,36 +5,45 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="darkreader-lock">
 <meta name="color-scheme" content="dark">
-<title>BUCKET ASMR ROOM</title>
+<title>BUCKET ASMR ROOM - Halloween Edition</title>
 
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
 <link rel="manifest" href="site.webmanifest">
+<link href="https://fonts.googleapis.com/css2?family=Creepster&family=Signika:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
-  /* Основной интерфейс */
+  /* Основной интерфейс - Halloween Theme */
+  :root {
+    --halloween-orange: #ff6600;
+    --halloween-purple: #9d00ff;
+    --halloween-green: #39ff14;
+    --halloween-dark-purple: #1a002c;
+    --fx-opacity: 0.5;
+  }
+
   body, html {
     margin: 0; padding: 0; height: 100%;
-    background: #050505; 
+    background: #05020a; 
     transition: background 1.5s ease;
-    font-family: 'Segoe UI', sans-serif; color: white; overflow: hidden;
+    font-family: 'Signika', 'Segoe UI', sans-serif; color: white; overflow: hidden;
     touch-action: manipulation; -webkit-user-select: none; user-select: none;
   }
   
-  /* Градиенты времени суток */
-  body.tod-morning { background: linear-gradient(180deg, #ff9a9e 0%, #fecfef 50%, #a1c4fd 100%); }
-  body.tod-noon { background: linear-gradient(180deg, #4facfe 0%, #00f2fe 100%); }
-  body.tod-evening { background: linear-gradient(180deg, #2c3e50 0%, #fd746c 70%, #ff8235 100%); }
-  body.tod-night { background: radial-gradient(ellipse at bottom, #050505 0%, #0a0a1f 100%); }
+  /* Хэллоуинские градиенты времени суток */
+  body.tod-morning { background: linear-gradient(180deg, #4a154b 0%, #ff5252 50%, #ff793f 100%); }
+  body.tod-noon { background: linear-gradient(180deg, #2d132c 0%, #801336 60%, #ee4540 100%); }
+  body.tod-evening { background: linear-gradient(180deg, #0f051d 0%, #290025 50%, #ff5200 100%); }
+  body.tod-night { background: radial-gradient(ellipse at bottom, #05020a 0%, #150022 70%, #000000 100%); }
 
   .overlay { 
     position: absolute; top:0; left:0; right:0; bottom:0; 
-    background: rgba(0,0,0,0.3); z-index:3; pointer-events: none; 
+    background: rgba(10, 0, 20, 0.4); z-index:3; pointer-events: none; 
     transition: background 1.5s ease;
   }
   
-  /* Контейнер для облаков */
+  /* Контейнер для жутких туманных облаков */
   .clouds-container {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     pointer-events: none; z-index: 2; overflow: hidden;
@@ -44,82 +53,177 @@
 
   .cloud {
     position: absolute;
-    background: rgba(200, 210, 225, 0.55);
+    background: rgba(120, 50, 160, 0.35);
     border-radius: 100px;
-    filter: blur(10px);
+    filter: blur(14px);
     animation: floatClouds linear infinite;
+    box-shadow: 0 0 30px rgba(157, 0, 255, 0.2);
   }
   .cloud::before, .cloud::after {
-    content: ''; position: absolute; background: rgba(200, 210, 225, 0.55); border-radius: 50%;
+    content: ''; position: absolute; background: rgba(120, 50, 160, 0.35); border-radius: 50%;
   }
-  .cloud1 { width: 220px; height: 65px; top: 5%; left: -240px; animation-duration: 35s; }
-  .cloud1::before { width: 100px; height: 100px; top: -45px; left: 30px; }
-  .cloud1::after { width: 80px; height: 80px; top: -35px; left: 100px; }
+  .cloud1 { width: 240px; height: 75px; top: 5%; left: -260px; animation-duration: 35s; }
+  .cloud1::before { width: 110px; height: 110px; top: -50px; left: 35px; }
+  .cloud1::after { width: 90px; height: 90px; top: -40px; left: 110px; }
 
-  .cloud2 { width: 320px; height: 95px; top: 12%; left: -350px; animation-duration: 50s; animation-delay: 10s; }
-  .cloud2::before { width: 140px; height: 140px; top: -65px; left: 50px; }
-  .cloud2::after { width: 110px; height: 110px; top: -45px; left: 150px; }
+  .cloud2 { width: 340px; height: 105px; top: 12%; left: -370px; animation-duration: 50s; animation-delay: 10s; }
+  .cloud2::before { width: 150px; height: 150px; top: -70px; left: 55px; }
+  .cloud2::after { width: 120px; height: 120px; top: -50px; left: 165px; }
 
-  .cloud3 { width: 180px; height: 50px; top: 22%; left: -200px; animation-duration: 28s; animation-delay: 5s; }
-  .cloud3::before { width: 70px; height: 70px; top: -30px; left: 20px; }
-  .cloud3::after { width: 60px; height: 60px; top: -25px; left: 75px; }
+  .cloud3 { width: 200px; height: 60px; top: 22%; left: -220px; animation-duration: 28s; animation-delay: 5s; }
+  .cloud3::before { width: 80px; height: 80px; top: -35px; left: 25px; }
+  .cloud3::after { width: 70px; height: 70px; top: -30px; left: 85px; }
   
-  .cloud4 { width: 260px; height: 75px; top: 18%; left: -280px; animation-duration: 42s; animation-delay: 3s; }
-  .cloud4::before { width: 110px; height: 110px; top: -50px; left: 40px; }
-  .cloud4::after { width: 90px; height: 90px; top: -40px; left: 120px; }
+  .cloud4 { width: 280px; height: 85px; top: 18%; left: -300px; animation-duration: 42s; animation-delay: 3s; }
+  .cloud4::before { width: 120px; height: 120px; top: -55px; left: 45px; }
+  .cloud4::after { width: 100px; height: 100px; top: -45px; left: 130px; }
 
-  .cloud5 { width: 200px; height: 55px; top: 8%; left: -220px; animation-duration: 30s; animation-delay: 7s; }
-  .cloud5::before { width: 80px; height: 80px; top: -35px; left: 25px; }
-  .cloud5::after { width: 70px; height: 70px; top: -30px; left: 85px; }
+  .cloud5 { width: 220px; height: 65px; top: 8%; left: -240px; animation-duration: 30s; animation-delay: 7s; }
+  .cloud5::before { width: 90px; height: 90px; top: -40px; left: 30px; }
+  .cloud5::after { width: 80px; height: 80px; top: -35px; left: 95px; }
 
-  .cloud6 { width: 300px; height: 85px; top: 15%; left: -320px; animation-duration: 48s; animation-delay: 15s; }
-  .cloud6::before { width: 130px; height: 130px; top: -60px; left: 45px; }
-  .cloud6::after { width: 100px; height: 100px; top: -40px; left: 140px; }
+  .cloud6 { width: 320px; height: 95px; top: 15%; left: -340px; animation-duration: 48s; animation-delay: 15s; }
+  .cloud6::before { width: 140px; height: 140px; top: -65px; left: 50px; }
+  .cloud6::after { width: 110px; height: 110px; top: -45px; left: 150px; }
 
   @keyframes floatClouds {
     0% { transform: translateX(0); }
     100% { transform: translateX(calc(100vw + 450px)); }
   }
 
+  /* Жуткая Луна */
+  .spooky-moon {
+    position: fixed;
+    top: 30px;
+    right: 40px;
+    width: 80px;
+    height: 80px;
+    background: radial-gradient(circle, #fff7d6 0%, #ffaa00 70%, #d47a00 100%);
+    border-radius: 50%;
+    box-shadow: 0 0 35px #ffaa00, 0 0 70px rgba(255, 102, 0, 0.4);
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.85;
+  }
+  .spooky-moon::after {
+    content: '';
+    position: absolute;
+    top: 15px; left: 12px;
+    width: 18px; height: 18px;
+    background: rgba(180, 100, 0, 0.25);
+    border-radius: 50%;
+    box-shadow: 25px 10px 0 3px rgba(180, 100, 0, 0.2), 10px 30px 0 -2px rgba(180, 100, 0, 0.25);
+  }
+
+  /* Паутина по углам */
+  .cobweb {
+    position: fixed;
+    width: 120px;
+    height: 120px;
+    z-index: 2;
+    pointer-events: none;
+    opacity: 0.35;
+  }
+  .cobweb-top-left { top: 0; left: 0; }
+  .cobweb-top-right { top: 0; right: 0; transform: scaleX(-1); }
+
   .container { position: relative; z-index: 10; display:flex; flex-direction: column; align-items:center; padding: 20px 20px 90px 20px; height: 100vh; box-sizing: border-box; }
   
   .title-bar { display:flex; align-items:center; gap:15px; margin-bottom:15px; z-index: 1000; transition: opacity 0.5s; }
-  h1 { margin:0; font-size:24px; color:#ffb400; text-shadow:0 0 10px rgba(0,0,0,0.5); }
+  h1 { 
+    margin:0; 
+    font-family: 'Creepster', cursive; 
+    font-size: 32px; 
+    letter-spacing: 2px;
+    color: #ff6600; 
+    text-shadow: 0 0 10px rgba(255, 102, 0, 0.8), 0 0 20px rgba(157, 0, 255, 0.6); 
+  }
   
   .live-counter {
-    background: rgba(255, 50, 50, 0.15);
-    border: 1px solid rgba(255, 50, 50, 0.4);
-    padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: bold; color: #ff8080;
+    background: rgba(157, 0, 255, 0.25);
+    border: 1px solid rgba(255, 102, 0, 0.5);
+    padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: bold; color: #ff9933;
     display: none !important; 
     display: flex; align-items: center; gap: 5px; text-transform: uppercase;
   }
-  .live-dot { width: 6px; height: 6px; background: #ff3030; border-radius: 50%; animation: blink 1.5s infinite; }
+  .live-dot { width: 6px; height: 6px; background: #ff6600; border-radius: 50%; box-shadow: 0 0 8px #ff6600; animation: blink 1.5s infinite; }
   @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
   #settingsBtn {
-    background: rgba(255, 255, 255, 0.15);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    padding: 0 12px;
+    background: rgba(40, 10, 60, 0.5);
+    border: 1px solid rgba(255, 102, 0, 0.4);
+    padding: 0 14px;
     height: 35px;
     border-radius: 20px;
-    color: white;
+    color: #ffaa33;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 6px;
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(8px);
     font-weight: bold;
     font-size: 13px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5), inset 0 0 8px rgba(255, 102, 0, 0.2);
+    transition: all 0.3s ease;
   }
-  .lang-btn-ui { background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.4); padding: 8px 16px; border-radius: 10px; color: white; cursor: pointer; font-weight: bold; min-width: 45px; }
+  #settingsBtn:hover {
+    border-color: #ff6600;
+    box-shadow: 0 0 15px rgba(255, 102, 0, 0.6);
+    color: #fff;
+  }
+  .lang-btn-ui { 
+    background: rgba(40, 10, 60, 0.5); 
+    border: 1px solid rgba(157, 0, 255, 0.5); 
+    padding: 8px 16px; 
+    border-radius: 10px; 
+    color: #d896ff; 
+    cursor: pointer; 
+    font-weight: bold; 
+    min-width: 45px; 
+    transition: all 0.3s;
+  }
+  .lang-btn-ui:hover {
+    border-color: #ff6600;
+    color: #ff9900;
+  }
 
   .controls { margin-bottom:15px; display:flex; gap:10px; flex-wrap: wrap; justify-content: center; align-items: center; z-index: 10; transition: opacity 0.5s; }
-  .controls > button { padding:8px 14px; border:none; border-radius:12px; background: rgba(255,255,255,0.2); color:white; cursor:pointer; font-weight:bold; backdrop-filter: blur(5px); font-size: 13px; transition: 0.3s; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+  .controls > button { 
+    padding:8px 14px; 
+    border:1px solid rgba(255, 102, 0, 0.3); 
+    border-radius:12px; 
+    background: rgba(25, 5, 40, 0.6); 
+    color:#e0d0ff; 
+    cursor:pointer; 
+    font-weight:bold; 
+    backdrop-filter: blur(5px); 
+    font-size: 13px; 
+    transition: all 0.3s; 
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4); 
+  }
+  .controls > button:hover {
+    border-color: #ff6600;
+    color: #fff;
+    box-shadow: 0 0 10px rgba(255, 102, 0, 0.4);
+  }
   
-  #randomBtn { background: rgba(138, 43, 226, 0.5); border: 1px solid rgba(138, 43, 226, 0.4); min-width: 80px; }
-  #sleepBtn.active { background: #ffb400; border: 1px solid #ffb400; color: black; box-shadow: 0 0 15px rgba(255, 180, 0, 0.4); }
+  #randomBtn { 
+    background: linear-gradient(135deg, rgba(157, 0, 255, 0.6) 0%, rgba(255, 102, 0, 0.6) 100%); 
+    border: 1px solid rgba(255, 102, 0, 0.6); 
+    min-width: 85px; 
+    color: #fff;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+  }
+  #randomBtn:hover {
+    box-shadow: 0 0 15px rgba(255, 102, 0, 0.8);
+  }
+  #sleepBtn.active { 
+    background: #ff6600; 
+    border: 1px solid #ffaa00; 
+    color: black; 
+    box-shadow: 0 0 20px rgba(255, 102, 0, 0.8); 
+  }
 
   .sound-grid { 
     display: grid; grid-template-columns: repeat(auto-fill, minmax(85px, 1fr)); 
@@ -131,8 +235,8 @@
   .sound-button { 
     aspect-ratio: 1/1; 
     border-radius: 24px;
-    border: 1px solid rgba(255, 255, 255, 0.22);
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.03) 100%);
+    border: 1px solid rgba(255, 102, 0, 0.3);
+    background: linear-gradient(135deg, rgba(40, 10, 60, 0.4) 0%, rgba(15, 5, 25, 0.6) 100%);
     color: rgba(255, 255, 255, 0.95); 
     font-weight: bold; 
     cursor: pointer; 
@@ -148,16 +252,22 @@
     position: relative; 
     overflow: hidden; 
     padding: 5px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), 
-                inset 0 1px 1px rgba(255, 255, 255, 0.5), 
-                inset 0 -1px 1px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 
+                inset 0 1px 1px rgba(255, 150, 50, 0.3), 
+                inset 0 -1px 1px rgba(0, 0, 0, 0.6);
+  }
+
+  .sound-button:hover {
+    border-color: #ff6600;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 35px rgba(0,0,0,0.6), 0 0 15px rgba(255, 102, 0, 0.3);
   }
 
   /* Стиль для закругленной картинки внутри кнопки масштабом 88% */
   .button-img {
     position: absolute;
-    width: 88%; /* Строка с шириной в % */
-    height: 88%; /* Строка с высотой в % */
+    width: 88%;
+    height: 88%;
     object-fit: cover;
     border-radius: 16px;
     top: 50%;
@@ -167,70 +277,71 @@
     pointer-events: none;
   }
   
-/* Тонкая настройка активного состояния для сохранения стекла */
+  /* Тонкая настройка активного состояния для сохранения стекла */
   .sound-button::before {
     content: ''; 
     position: absolute; 
     top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0, 0, 0, 0.25); /* Затемняем базу для лучшего эффекта стекла */
+    background: rgba(10, 0, 20, 0.35); 
     opacity: 1; 
     transition: opacity 0.4s; 
     z-index: 2;
   }
-  .sound-button.ready::before { background: rgba(0, 0, 0, 0.1); }
- /* Делаем активное состояние глубоким, сохраняя темный стеклянный эффект */
+  .sound-button.ready::before { background: rgba(10, 0, 20, 0.15); }
   .sound-button.active::before { 
-    background: rgba(30, 10, 50, 0.4); /* Используем глубокий темный оттенок вместо высветления */
+    background: rgba(40, 0, 60, 0.4); 
   }
 
-  .sound-button span { position: relative; z-index: 3; pointer-events: none; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); }
-/* Убираем излишнее высветление готовой кнопки */
+  .sound-button span { position: relative; z-index: 3; pointer-events: none; text-shadow: 1px 1px 4px rgba(0,0,0,0.9), 0 0 6px rgba(0,0,0,0.8); }
+  
   .sound-button.ready { 
     color: white; 
-    background-color: rgba(255, 255, 255, 0.05); /* Делаем чуть темнее и глубже */
+    background-color: rgba(30, 10, 50, 0.2); 
   }
-.sound-button.active { 
-    color: white; 
-    transform: scale(1.03); 
-    border: 1px solid #8a2be2 !important; 
-    /* Усиливаем внутреннее и внешнее неоновое свечение, оставляя стекло темным */
-    background: linear-gradient(135deg, rgba(138, 43, 226, 0.18) 0%, rgba(20, 20, 35, 0.4) 100%) !important;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 
-                0 0 20px rgba(138, 43, 226, var(--fx-opacity, 0.5)), 
-                inset 0 1px 1px rgba(255, 255, 255, 0.3), 
-                inset 0 -1px 1px rgba(0, 0, 0, 0.5); 
+  .sound-button.active { 
+    color: #fff; 
+    transform: scale(1.04); 
+    border: 1px solid #ff6600 !important; 
+    background: linear-gradient(135deg, rgba(255, 102, 0, 0.25) 0%, rgba(157, 0, 255, 0.3) 100%) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 
+                0 0 25px rgba(255, 102, 0, var(--fx-opacity, 0.6)), 
+                inset 0 1px 1px rgba(255, 200, 100, 0.5), 
+                inset 0 -1px 1px rgba(0, 0, 0, 0.7); 
   }
-  .sound-button.is-fav { border: 1px solid #ffb400; }
-  .sound-button.active.is-fav { border: 1px solid #8a2be2 !important; }
+  .sound-button.is-fav { border: 1px solid #ffaa00; }
+  .sound-button.active.is-fav { border: 1px solid #ff6600 !important; }
   
   .sound-button.locked {
-    border: 1px dashed rgba(255,255,255,0.25) !important;
+    border: 1px dashed rgba(255,102,0,0.4) !important;
     cursor: pointer;
   }
   .sound-button.locked::before {
-    background: rgba(0, 0, 0, 0.65) !important;
+    background: rgba(10, 0, 20, 0.75) !important;
     z-index: 2;
   }
   .lock-icon {
-    position: absolute; top: 8px; left: 8px; font-size: 12px; z-index: 3; color: #ffb400;
-    background: rgba(0,0,0,0.6); padding: 3px 5px; border-radius: 6px; line-height: 1;
+    position: absolute; top: 8px; left: 8px; font-size: 12px; z-index: 3; color: #ffaa00;
+    background: rgba(20,0,30,0.8); padding: 3px 6px; border-radius: 6px; line-height: 1;
+    border: 1px solid rgba(255,102,0,0.3);
   }
 
   .custom-select-container { position: relative; }
-  .select-trigger { padding: 8px 14px; border-radius: 12px; background: rgba(255, 255, 255, 0.2); color: white; cursor: pointer; font-weight: bold; font-size: 13px; min-width: 90px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
-  
+  .select-trigger { padding: 8px 14px; border-radius: 12px; background: rgba(30, 10, 50, 0.5); border: 1px solid rgba(255,102,0,0.3); color: white; cursor: pointer; font-weight: bold; font-size: 13px; min-width: 90px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.3); transition: all 0.3s; }
+  .select-trigger:hover { border-color: #ff6600; }
+
   .custom-dropdown, .fav-dropdown { 
     display: none; position: absolute; top: 40px; left: 50%; transform: translateX(-50%); 
-    background: #1e1e2d; border-radius: 15px; flex-direction: column; z-index: 3000; 
-    overflow: hidden; min-width: 120px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); 
+    background: #150522; border: 1px solid rgba(255, 102, 0, 0.4); border-radius: 15px; flex-direction: column; z-index: 3000; 
+    overflow: hidden; min-width: 120px; box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 15px rgba(157, 0, 255, 0.3); 
   }
   .custom-dropdown.open, .fav-dropdown.open { display: flex; }
-  .custom-dropdown button { padding: 12px; border: none; background: transparent; color: white; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.1); font-weight: bold; }
+  .custom-dropdown button { padding: 12px; border: none; background: transparent; color: white; cursor: pointer; border-bottom: 1px solid rgba(255,102,0,0.15); font-weight: bold; transition: background 0.2s; }
+  .custom-dropdown button:hover { background: rgba(255, 102, 0, 0.2); }
 
   .fav-dropdown { width: 180px; max-height: 250px; overflow-y: auto; padding: 5px; }
   .fav-item { display: flex; align-items: center; gap: 10px; padding: 10px; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.05); }
   .fav-item:last-child { border-bottom: none; }
-  .fav-item input { cursor: pointer; accent-color: #ffb400; }
+  .fav-item input { cursor: pointer; accent-color: #ff6600; }
   .fav-item label { cursor: pointer; font-size: 13px; flex-grow: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
   canvas { position: fixed; top:0; left:0; width:100%; height:100%; pointer-events: none; }
@@ -238,74 +349,83 @@
   #weatherCanvas { z-index: 3; }
   #steamCanvas { z-index: 4; }
   
-  /* --- IOS 26 LIQUID GLASS NOTIFICATIONS & MODALS --- */
+  /* --- HALLOWEEN GLASS MODALS --- */
   .modal { 
     display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-    background: rgba(0, 0, 0, 0.45); z-index: 10001; justify-content: center; align-items: center; 
-    backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+    background: rgba(5, 0, 15, 0.65); z-index: 10001; justify-content: center; align-items: center; 
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
     animation: fadeInModal 0.3s ease forwards;
   }
   @keyframes fadeInModal {
-    from { opacity: 0; transform: scale(0.96); }
+    from { opacity: 0; transform: scale(0.95); }
     to { opacity: 1; transform: scale(1); }
   }
 
   .modal-content { 
-    background: linear-gradient(135deg, rgba(35, 35, 55, 0.65) 0%, rgba(20, 20, 35, 0.75) 100%); 
-    border: 1px solid rgba(255, 255, 255, 0.18); 
+    background: linear-gradient(135deg, rgba(35, 10, 50, 0.85) 0%, rgba(15, 5, 25, 0.9) 100%); 
+    border: 1px solid rgba(255, 102, 0, 0.4); 
     padding: 25px; border-radius: 32px; text-align: left; color: white; max-width: 85%; width: 400px; max-height: 85vh; overflow-y: auto; 
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.3), inset 0 -1px 1px rgba(0, 0, 0, 0.5); 
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(157, 0, 255, 0.3), inset 0 1px 1px rgba(255, 150, 50, 0.4); 
     position: relative;
     backdrop-filter: blur(35px); -webkit-backdrop-filter: blur(35px);
   }
 
-  .modal-tabs { display: flex; gap: 10px; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
-  .tab-btn { background: none; border: none; color: #888; font-weight: bold; cursor: pointer; font-size: 14px; padding: 5px 0; position: relative; transition: color 0.2s; }
-  .tab-btn.active { color: #ffb400; }
-  .tab-btn.active::after { content: ''; position: absolute; bottom: -11px; left: 0; width: 100%; height: 2px; background: #ffb400; box-shadow: 0 0 8px #ffb400; }
+  .modal-tabs { display: flex; gap: 10px; margin-bottom: 15px; border-bottom: 1px solid rgba(255,102,0,0.2); padding-bottom: 10px; }
+  .tab-btn { background: none; border: none; color: #a888c0; font-weight: bold; cursor: pointer; font-size: 14px; padding: 5px 0; position: relative; transition: color 0.2s; }
+  .tab-btn.active { color: #ff6600; }
+  .tab-btn.active::after { content: ''; position: absolute; bottom: -11px; left: 0; width: 100%; height: 2px; background: #ff6600; box-shadow: 0 0 10px #ff6600; }
   .help-section { display: none; }
   .help-section.active { display: block; }
   .help-list { list-style: none; padding: 0; margin: 0; }
   .help-list li { margin-bottom: 12px; font-size: 13px; line-height: 1.4; color: #ddd; display: flex; align-items: flex-start; gap: 8px; }
-  .help-list li b { color: #ffb400; }
-  .help-list li span { color: #ffb400; }
+  .help-list li b { color: #ff9900; }
+  .help-list li span { color: #ff6600; }
   
   .modal-btn { 
-    background: linear-gradient(135deg, rgba(255, 180, 0, 0.9) 0%, rgba(230, 140, 0, 0.9) 100%); 
-    border: 1px solid rgba(255, 255, 255, 0.3); 
-    padding: 14px; border-radius: 18px; font-weight: bold; cursor: pointer; color: #000; font-size: 15px; width: 100%; margin-top: 15px; text-transform: uppercase; text-align: center; text-decoration: none; display: block; box-sizing: border-box; 
-    box-shadow: 0 8px 20px rgba(255, 180, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.6);
+    background: linear-gradient(135deg, #ff6600 0%, #d44000 100%); 
+    border: 1px solid rgba(255, 200, 100, 0.4); 
+    padding: 14px; border-radius: 18px; font-weight: bold; cursor: pointer; color: #fff; font-size: 15px; width: 100%; margin-top: 15px; text-transform: uppercase; text-align: center; text-decoration: none; display: block; box-sizing: border-box; 
+    box-shadow: 0 8px 20px rgba(255, 102, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.5);
     transition: transform 0.2s, box-shadow 0.2s;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+  }
+  .modal-btn:hover {
+    box-shadow: 0 8px 25px rgba(255, 102, 0, 0.7);
   }
   .modal-btn:active { transform: scale(0.98); }
 
   /* Элементы управления в Настройках */
   .settings-group { margin-bottom: 18px; }
-  .settings-group label { display: block; font-size: 13px; font-weight: bold; color: #ffb400; margin-bottom: 8px; text-shadow: 0 0 8px rgba(255,180,0,0.4); }
+  .settings-group label { display: block; font-size: 13px; font-weight: bold; color: #ff9900; margin-bottom: 8px; text-shadow: 0 0 8px rgba(255,102,0,0.5); }
   .settings-select, .settings-range {
-    width: 100%; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15);
+    width: 100%; background: rgba(20, 5, 30, 0.6); border: 1px solid rgba(255, 102, 0, 0.3);
     color: white; padding: 12px; border-radius: 16px; font-size: 13px; outline: none; box-sizing: border-box;
     backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-    box-shadow: inset 0 1px 2px rgba(0,0,0,0.3);
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
   }
-  .settings-select option { background: #141423; color: white; }
-  .settings-range { accent-color: #ffb400; cursor: pointer; height: 6px; padding: 0; }
+  .settings-select option { background: #150522; color: white; }
+  .settings-range { accent-color: #ff6600; cursor: pointer; height: 6px; padding: 0; }
   .range-container { display: flex; align-items: center; gap: 10px; }
   .range-value { font-size: 12px; color: #ccc; min-width: 35px; text-align: right; }
 
   .help-open-btn {
-    background: rgba(255, 180, 0, 0.12); border: 1px solid rgba(255, 180, 0, 0.35); color: #ffb400;
+    background: rgba(255, 102, 0, 0.15); border: 1px solid rgba(255, 102, 0, 0.4); color: #ffaa33;
     padding: 12px; border-radius: 16px; font-weight: bold; cursor: pointer; width: 100%;
     margin-bottom: 20px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px;
     backdrop-filter: blur(10px); box-shadow: inset 0 1px 1px rgba(255,255,255,0.2);
+    transition: all 0.3s;
+  }
+  .help-open-btn:hover {
+    background: rgba(255, 102, 0, 0.25);
+    color: #fff;
   }
 
   .mute-btn { display: none !important; pointer-events: none !important; }
 
   /* Стиль кнопок выбора погоды */
   .weather-option-btn {
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 180, 0, 0.25);
+    background: rgba(30, 10, 45, 0.6);
+    border: 1px solid rgba(255, 102, 0, 0.3);
     color: white;
     padding: 12px;
     border-radius: 16px;
@@ -322,8 +442,8 @@
     box-shadow: inset 0 1px 1px rgba(255,255,255,0.15);
   }
   .weather-option-btn:hover, .weather-option-btn:active {
-    background: rgba(255, 180, 0, 0.18);
-    border-color: #ffb400;
+    background: rgba(255, 102, 0, 0.25);
+    border-color: #ff6600;
     transform: translateY(-2px);
   }
   .weather-option-btn span.icon {
@@ -336,15 +456,15 @@
     bottom: 35px;
     left: 50%;
     transform: translateX(-50%) translateY(100px);
-    background: linear-gradient(135deg, rgba(40, 40, 65, 0.75) 0%, rgba(20, 20, 35, 0.85) 100%);
-    border: 1px solid rgba(255, 180, 0, 0.4);
+    background: linear-gradient(135deg, rgba(40, 10, 60, 0.85) 0%, rgba(15, 5, 25, 0.95) 100%);
+    border: 1px solid rgba(255, 102, 0, 0.5);
     color: #fff;
     padding: 14px 26px;
     border-radius: 24px;
     font-size: 14px;
     font-weight: bold;
     z-index: 100002;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.6), 0 0 20px rgba(255, 180, 0, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.35);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.8), 0 0 25px rgba(255, 102, 0, 0.4), inset 0 1px 1px rgba(255, 180, 100, 0.4);
     opacity: 0;
     transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease;
     pointer-events: none;
@@ -360,6 +480,17 @@
 </head>
 <body class="tod-night">
 
+<!-- Хэллоуинские декоративные элементы -->
+<div class="spooky-moon"></div>
+<svg class="cobweb cobweb-top-left" viewBox="0 0 100 100" fill="none" stroke="#ff6600">
+  <path d="M0,0 L100,0 M0,0 L0,100 M0,0 L100,100 M0,0 L50,100 M0,0 L100,50" stroke-width="1"/>
+  <path d="M20,0 Q20,20 0,20 M40,0 Q40,40 0,40 M60,0 Q60,60 0,60 M80,0 Q80,80 0,80" stroke-width="0.8"/>
+</svg>
+<svg class="cobweb cobweb-top-right" viewBox="0 0 100 100" fill="none" stroke="#ff6600">
+  <path d="M0,0 L100,0 M0,0 L0,100 M0,0 L100,100 M0,0 L50,100 M0,0 L100,50" stroke-width="1"/>
+  <path d="M20,0 Q20,20 0,20 M40,0 Q40,40 0,40 M60,0 Q60,60 0,60 M80,0 Q80,80 0,80" stroke-width="0.8"/>
+</svg>
+
 <canvas id="stars"></canvas>
 <div class="clouds-container" id="cloudsContainer">
   <div class="cloud cloud1" id="cloudEl1"></div>
@@ -374,12 +505,12 @@
 <div class="overlay" id="envOverlay"></div>
 
 <!-- Кастомное всплывающее уведомление с эффектом Liquid Glass -->
-<div id="soonToast">This sound will be available soon!</div>
+<div id="soonToast">This sound will be available soon! 🎃</div>
 
 <!-- Настройки -->
 <div id="settingsModal" class="modal">
   <div class="modal-content">
-    <h2 style="color: #ffb400; margin: 0 0 18px 0; font-size: 20px; text-shadow: 0 0 10px rgba(255,180,0,0.4);" id="settingsTitle">Settings</h2>
+    <h2 style="color: #ff6600; margin: 0 0 18px 0; font-size: 20px; font-family: 'Creepster', cursive; letter-spacing: 1px; text-shadow: 0 0 10px rgba(255,102,0,0.6);" id="settingsTitle">Settings 🎃</h2>
     
     <button class="help-open-btn" id="openHelpFromSettings">
       <span>❓</span> <span id="helpBtnLabel">Help / Guide</span>
@@ -389,10 +520,10 @@
     <div class="settings-group">
       <label id="lblTimeOfDay">Time of Day</label>
       <select id="timeOfDaySelect" class="settings-select">
-        <option value="morning">🌅 Morning</option>
-        <option value="noon">☀️ Noon</option>
-        <option value="evening">🌆 Evening</option>
-        <option value="night" selected>🌙 Night</option>
+        <option value="morning">🌅 Spooky Dawn</option>
+        <option value="noon">☀️ Crimson Noon</option>
+        <option value="evening">🌆 Witching Hour</option>
+        <option value="night" selected>🌙 Haunted Night</option>
         <option value="full_cycle">🔄 Full 24h Cycle (120s)</option>
       </select>
     </div>
@@ -401,22 +532,24 @@
     <div class="settings-group">
       <label id="lblWeather">Weather</label>
       <select id="weatherSelect" class="settings-select">
-        <option value="clear">☀️ Clear</option>
-        <option value="cloudy">☁️ Clouds + Rain</option>
-        <option value="autumn_shower" selected>🍁 Autumn Shower </option>
+        <option value="clear">🌕 Foggy Night</option>
+        <option value="cloudy">☁️ Toxic Rain</option>
+        <option value="autumn_shower" selected>🎃 Pumpkin Rain & Leaves</option>
         <option value="random">🔀 Random Weather (120s)</option>
       </select>
     </div>
 
-    <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 18px 0;">
+    <hr style="border: 0; border-top: 1px solid rgba(255,102,0,0.2); margin: 18px 0;">
 
     <div class="settings-group">
       <label id="lblFxStyle">Effect Style</label>
       <select id="fxStyleSelect" class="settings-select">
-        <option value="steam">💨 Steam (Color)</option>
-        <option value="snow">❄️ Snowflakes</option>
-        <option value="comets" selected>☄️ Comets & Asteroids</option>
-        <option value="neondust">✨ Neon Dust</option>
+        <option value="ghosts" selected>👻 Flying Ghosts</option>
+        <option value="bats">🦇 Spooky Bats</option>
+        <option value="steam">💨 Ghostly Mist</option>
+        <option value="snow">🕸️ Flying Spiders</option>
+        <option value="comets">☄️ Pumpkin Sparks</option>
+        <option value="neondust">✨ Magic Orbs</option>
         <option value="random">🔀 Random Effect</option>
       </select>
     </div>
@@ -432,16 +565,16 @@
     <div class="settings-group">
       <label id="lblFxOpacity">Opacity / Glow</label>
       <div class="range-container">
-        <input type="range" id="fxOpacityRange" class="settings-range" min="0.1" max="1" step="0.05" value="0.4">
-        <span class="range-value" id="valFxOpacity">40%</span>
+        <input type="range" id="fxOpacityRange" class="settings-range" min="0.1" max="1" step="0.05" value="0.5">
+        <span class="range-value" id="valFxOpacity">50%</span>
       </div>
     </div>
 
     <div class="settings-group">
       <label id="lblFxSpeed">Effect Speed</label>
       <div class="range-container">
-        <input type="range" id="fxSpeedRange" class="settings-range" min="0.2" max="2.5" step="0.1" value="0.3">
-        <span class="range-value" id="valFxSpeed">0.5x</span>
+        <input type="range" id="fxSpeedRange" class="settings-range" min="0.2" max="2.5" step="0.1" value="0.4">
+        <span class="range-value" id="valFxSpeed">0.4x</span>
       </div>
     </div>
 
@@ -449,57 +582,57 @@
   </div>
 </div>
 
-<!-- Модальное окно выбора погоды (через 10 секунд) -->
+<!-- Модальное окно выбора погоды -->
 <div id="weatherChoiceModal" class="modal">
   <div class="modal-content" style="text-align: center;">
-    <h2 style="color: #ffb400; margin: 0 0 15px 0; font-size: 20px; text-shadow: 0 0 10px rgba(255,180,0,0.4);" id="weatherChoiceTitle">Select Weather</h2>
+    <h2 style="color: #ff6600; margin: 0 0 15px 0; font-size: 22px; font-family: 'Creepster', cursive; letter-spacing: 1px; text-shadow: 0 0 10px rgba(255,102,0,0.6);" id="weatherChoiceTitle">Select Weather</h2>
     <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 15px;">
       <button class="weather-option-btn" onclick="selectWeatherMode('clear')">
-        <span class="icon">☀️</span> <span id="btnWClear">Clear sky</span>
+        <span class="icon">🌕</span> <span id="btnWClear">Foggy Night</span>
       </button>
       <button class="weather-option-btn" onclick="selectWeatherMode('cloudy')">
-        <span class="icon">🌧️</span> <span id="btnWClouds">Clouds & Rain</span>
+        <span class="icon">🌧️</span> <span id="btnWClouds">Toxic Rain</span>
       </button>
       <button class="weather-option-btn" onclick="selectWeatherMode('autumn_shower')">
-        <span class="icon">🍁</span> <span id="btnWAutumn">Autumn Shower</span>
+        <span class="icon">🎃</span> <span id="btnWAutumn">Pumpkin Rain</span>
       </button>
       <button class="weather-option-btn" onclick="selectWeatherMode('random')">
         <span class="icon">🎲</span> <span id="btnWRandom">Random</span>
       </button>
       
-      <button class="weather-option-btn" onclick="closeWeatherModal()" style="margin-top: 10px; background: linear-gradient(135deg, rgba(255, 180, 0, 0.9), rgba(230, 140, 0, 0.9)); color: #000; font-weight: bold; justify-content: center; border-color: rgba(255,255,255,0.4);">
+      <button class="weather-option-btn" onclick="closeWeatherModal()" style="margin-top: 10px; background: linear-gradient(135deg, #ff6600, #d44000); color: #fff; font-weight: bold; justify-content: center; border-color: rgba(255,255,255,0.4);">
         <span>OK</span>
       </button>
     </div>
   </div>
 </div>
 
-<!-- Новое уведомление: Случайные эффекты -->
+<!-- Уведомление: Случайные эффекты -->
 <div id="fxPromoModal" class="modal">
   <div class="modal-content" style="text-align: center;">
-    <h2 style="color: #ffb400; margin: 0 0 10px 0; font-size: 20px; text-shadow: 0 0 10px rgba(255,180,0,0.4);" id="fxPromoTitle">New Feature: Effects</h2>
-    <p style="font-size: 14px; color: #ddd; margin-bottom: 20px; line-height: 1.4;" id="fxPromoDesc">Click Yes to activate automatic switching of visual effects.</p>
-    <button class="modal-btn" id="fxPromoEnableBtn" style="background: linear-gradient(135deg, rgba(138, 43, 226, 0.9), rgba(90, 20, 180, 0.9)); color: white; margin-top: 5px; box-shadow: 0 8px 20px rgba(138, 43, 226, 0.4);">Yes, activate all effects</button>
+    <h2 style="color: #ff6600; margin: 0 0 10px 0; font-size: 22px; font-family: 'Creepster', cursive; letter-spacing: 1px; text-shadow: 0 0 10px rgba(255,102,0,0.6);" id="fxPromoTitle">Halloween Spells: Effects</h2>
+    <p style="font-size: 14px; color: #ddd; margin-bottom: 20px; line-height: 1.4;" id="fxPromoDesc">Click Yes to activate automatic switching of visual spooky effects.</p>
+    <button class="modal-btn" id="fxPromoEnableBtn" style="background: linear-gradient(135deg, #9d00ff, #5c0099); color: white; margin-top: 5px; box-shadow: 0 8px 20px rgba(157, 0, 255, 0.5);">Yes, activate all effects 🎃</button>
     <button class="modal-btn" id="fxPromoKeepBtn" style="background: rgba(255,255,255,0.1); color: white; margin-top: 10px; padding: 12px; border: 1px solid rgba(255,255,255,0.2);">Keep current effect</button>
-    <p style="font-size: 11px; color: #888; margin-top: 15px; margin-bottom: 0;" id="fxPromoPs">P.S. You can change this later in Settings.</p>
+    <p style="font-size: 11px; color: #aaa; margin-top: 15px; margin-bottom: 0;" id="fxPromoPs">P.S. You can change this later in Settings.</p>
   </div>
 </div>
 
 <div id="idleModal" class="modal">
   <div class="modal-content" style="text-align: center;">
-    <h2 style="color: #ffb400; margin: 0 0 10px 0; font-size: 22px; text-shadow: 0 0 10px rgba(255,180,0,0.4);" id="idleTitle">Start playing?</h2>
+    <h2 style="color: #ff6600; margin: 0 0 10px 0; font-size: 24px; font-family: 'Creepster', cursive; letter-spacing: 1px; text-shadow: 0 0 10px rgba(255,102,0,0.6);" id="idleTitle">Awaken the Spirits?</h2>
     <p style="font-size: 14px; color: #ccc; margin-bottom: 20px;" id="idleDesc">Would you like to start the ASMR session?</p>
-    <button class="modal-btn" id="idlePlayBtn" style="margin-top: 5px;">▶ PLAY</button>
+    <button class="modal-btn" id="idlePlayBtn" style="margin-top: 5px;">▶ PLAY 🎃</button>
     <button class="modal-btn" id="idleCloseBtn" style="background: rgba(255,255,255,0.1); color: white; margin-top: 10px; padding: 12px; border: 1px solid rgba(255,255,255,0.2);">Close</button>
-    <button class="modal-btn" id="idleDisableBtn" style="background: transparent; color: #888; border: 1px dashed rgba(255,255,255,0.2); margin-top: 10px; padding: 8px; font-size: 12px;">Don't show again</button>
+    <button class="modal-btn" id="idleDisableBtn" style="background: transparent; color: #a888c0; border: 1px dashed rgba(157,0,255,0.4); margin-top: 10px; padding: 8px; font-size: 12px;">Don't show again</button>
   </div>
 </div>
 
 <div id="unlockModal" class="modal">
   <div class="modal-content">
-    <h3 style="color: #ffb400; margin: 0 0 10px 0; font-size: 20px; text-shadow: 0 0 10px rgba(255,180,0,0.4);" id="unlockTitle">Unlock Sound</h3>
-    <p style="font-size: 13px; color: #ccc; margin: 0;" id="unlockDesc">Unlock this trigger!</p>
-    <button class="modal-btn" id="unlockTriggerBtn" style="background: linear-gradient(135deg, rgba(138, 43, 226, 0.9), rgba(90, 20, 180, 0.9)); color: white; margin-top: 10px; box-shadow: 0 8px 20px rgba(138, 43, 226, 0.4);">🔓 Unlock Sound</button>
+    <h3 style="color: #ff6600; margin: 0 0 10px 0; font-size: 22px; font-family: 'Creepster', cursive; letter-spacing: 1px; text-shadow: 0 0 10px rgba(255,102,0,0.6);" id="unlockTitle">Unlock Sound</h3>
+    <p style="font-size: 13px; color: #ccc; margin: 0;" id="unlockDesc">Unlock this spooky trigger!</p>
+    <button class="modal-btn" id="unlockTriggerBtn" style="background: linear-gradient(135deg, #9d00ff, #ff6600); color: white; margin-top: 10px; box-shadow: 0 8px 20px rgba(157, 0, 255, 0.5);">🔓 Unlock Sound 🎃</button>
     <button class="modal-btn" id="cancelUnlock" style="background: rgba(255,255,255,0.1); color: white; margin-top: 10px; padding: 12px; border: 1px solid rgba(255,255,255,0.2);">Close</button>
   </div>
 </div>
@@ -507,7 +640,7 @@
 <div id="welcomeModal" class="modal">
   <div class="modal-content">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-        <h2 style="color: #ffb400; margin: 0; font-size: 20px; text-shadow: 0 0 10px rgba(255,180,0,0.4);">BUCKET ASMR v.1.2 (18.10.26)</h2>
+        <h2 style="color: #ff6600; margin: 0; font-size: 20px; font-family: 'Creepster', cursive; letter-spacing: 1px; text-shadow: 0 0 10px rgba(255,102,0,0.6);">BUCKET ASMR Halloween 🎃</h2>
         <button class="lang-btn-ui lang-switcher-btn" style="scale: 0.8;">EN</button>
     </div>
     <div class="modal-tabs">
@@ -520,40 +653,40 @@
     <div id="tab-guide" class="help-section">
         <ul class="help-list" id="guideList"></ul>
     </div>
-    <button class="modal-btn" id="closeWelcome">OK / START</button>
+    <button class="modal-btn" id="closeWelcome">OK / START 🎃</button>
   </div>
 </div>
 
 <div class="container">
   <div class="title-bar" id="uiTitleBar">
-    <h1 id="title">BUCKET ASMR</h1>
+    <h1 id="title">🎃 BUCKET ASMR</h1>
     <div class="live-counter">
       <div class="live-dot"></div>
       <span id="online-count">—</span> LIVE
     </div>
-    <div id="settingsBtn" onclick="openSettings()">Settings</div>
+    <div id="settingsBtn" onclick="openSettings()">Settings ⚙️</div>
     <button id="langBtn" class="lang-btn-ui lang-switcher-btn">EN</button>
   </div>
 
   <div class="controls" id="uiControls">
-    <button id="randomBtn">Play</button>
+    <button id="randomBtn">Play 🎃</button>
     <div class="custom-select-container" id="linksSelectContainer">
-      <div class="select-trigger" id="linksTrigger" style="background: rgba(226, 43, 43, 0.4); border: 1px solid rgba(226, 43, 43, 0.3); min-width: 80px; color: #fff; font-weight: bold;">Links</div>
+      <div class="select-trigger" id="linksTrigger" style="background: rgba(157, 0, 255, 0.4); border: 1px solid rgba(255, 102, 0, 0.5); min-width: 80px; color: #fff; font-weight: bold;">Links 🕷️</div>
       
       <div class="custom-dropdown" id="linksOptions">
-        <button onclick="trackLinkClick('youtube', 'https://www.youtube.com/@BucketASMR')">YouTube</button>
-        <button onclick="trackLinkClick('tiktok', 'https://www.tiktok.com/@bucket_asmr')">TikTok</button>
-        <button onclick="trackLinkClick('instagram', 'https://www.instagram.com/bucket_asmr')">Instagram</button>
+        <button onclick="trackLinkClick('youtube', 'https://www.youtube.com/@BucketASMR')">YouTube 🎃</button>
+        <button onclick="trackLinkClick('tiktok', 'https://www.tiktok.com/@bucket_asmr')">TikTok 👻</button>
+        <button onclick="trackLinkClick('instagram', 'https://www.instagram.com/bucket_asmr')">Instagram 🕸️</button>
       </div>
     </div>
 	
     <div class="custom-select-container">
-        <button id="favBtn" class="select-trigger" style="background: rgba(255, 180, 0, 0.2); border: 1px solid #ffb400; min-width: 60px;">⭐ Fav</button>
+        <button id="favBtn" class="select-trigger" style="background: rgba(255, 102, 0, 0.25); border: 1px solid #ff6600; min-width: 60px;">⭐ Fav</button>
         <div class="fav-dropdown" id="favDropdown"></div>
     </div>
 
     <button id="sleepBtn">Sleep: OFF</button>
-    <button id="repairBtn">REPAIR</button>
+    <button id="repairBtn">REPAIR 🧙‍♂️</button>
     
     <div class="custom-select-container">
         <div class="select-trigger" id="speedTrigger">Medium</div>
@@ -625,137 +758,137 @@ updateConnections();
 requestWakeLock();
 
 const sounds = [
-  { "file": "purplebrush.mp3", "img": "purplebrush.png", "name": { "en": "Purple Brush", "pt": "Pincel Roxo", "ru": "Фиолетовая кисть", "uk": "Фіолетовий пензель" }, "color": "#9664ff", "locked": false },
-  { "file": "wax.mp3", "img": "wax.png", "name": { "en": "Wax", "pt": "Cera", "ru": "Воск", "uk": "Віск" }, "color": "#ffa500", "locked": false },
-  { "file": "choko.mp3", "img": "choko.png", "name": { "en": "Choco", "pt": "Chocolate", "ru": "Шоколад", "uk": "Шоколад" }, "color": "#8b4513", "locked": false },
-  { "file": "strawberry.mp3", "img": "strawberry.png", "name": { "en": "Strawberry", "pt": "Morango", "ru": "Клубника", "uk": "Полуниця" }, "color": "#ff69b4", "locked": false },
-  { "file": "oldphone.mp3", "img": "oldphone.png", "name": { "en": "Old Phone", "pt": "Telefone Antigo", "ru": "Телефон", "uk": "Телефон" }, "color": "#323232", "locked": false },
-  { "file": "carrot.mp3", "img": "carrot.png", "name": { "en": "Carrot", "pt": "Cenoura", "ru": "Морковь", "uk": "Морква" }, "color": "#ff8c00", "locked": false },
-  { "file": "greybrush.mp3", "img": "greybrush.png", "name": { "en": "Grey Brush", "pt": "Pincel Cinza", "ru": "Серая кисть", "uk": "Сірий пензель" }, "color": "#8c8c8c", "locked": false },
-    { "file": "", "img": "Soon.png", "name": { "en": "Soon", "pt": "Breve", "ru": "Скоро", "uk": "Незабаром" }, "color": "#ffb6c1", "locked": false },
-  { "file": "wood.mp3", "img": "wood.png", "name": { "en": "Wood", "pt": "Madeira", "ru": "Дерево", "uk": "Дерево" }, "color": "#ffff00", "locked": false }
+  { "file": "purplebrush.mp3", "img": "purplebrush.png", "name": { "en": "Purple Brush 🧹", "pt": "Pincel Roxo 🧹", "ru": "Фиолетовая кисть 🧹", "uk": "Фіолетовий пензель 🧹" }, "color": "#9d00ff", "locked": false },
+  { "file": "wax.mp3", "img": "wax.png", "name": { "en": "Witch Wax 🕯️", "pt": "Cera das Bruxas 🕯️", "ru": "Воск ведьмы 🕯️", "uk": "Віск відьми 🕯️" }, "color": "#ff6600", "locked": false },
+  { "file": "choko.mp3", "img": "choko.png", "name": { "en": "Spooky Choco 🍫", "pt": "Chocolate Assustador 🍫", "ru": "Жуткий шоколад 🍫", "uk": "Моторошний шоколад 🍫" }, "color": "#8b4513", "locked": false },
+  { "file": "strawberry.mp3", "img": "strawberry.png", "name": { "en": "Vampire Potion 🧪", "pt": "Poção Vampira 🧪", "ru": "Зелье вампира 🧪", "uk": "Зілля вампіра 🧪" }, "color": "#ff0055", "locked": false },
+  { "file": "oldphone.mp3", "img": "oldphone.png", "name": { "en": "Haunted Phone ☎️", "pt": "Telefone Assombrado ☎️", "ru": "Призрачный телефон ☎️", "uk": "Примарний телефон ☎️" }, "color": "#4a0e4e", "locked": false },
+  { "file": "carrot.mp3", "img": "carrot.png", "name": { "en": "Jack Carrot 🎃", "pt": "Cenoura Jack 🎃", "ru": "Тыквенный хруст 🎃", "uk": "Гарбузовий хрустіт 🎃" }, "color": "#ff8c00", "locked": false },
+  { "file": "greybrush.mp3", "img": "greybrush.png", "name": { "en": "Ghost Brush 👻", "pt": "Pincel Fantasma 👻", "ru": "Призрачная кисть 👻", "uk": "Примарний пензель 👻" }, "color": "#8c8c8c", "locked": false },
+  { "file": "", "img": "Soon.png", "name": { "en": "Pumpkin Spell 🎃", "pt": "Feitiço de Abóbora 🎃", "ru": "Тыквенные чары 🎃", "uk": "Гарбузове закляття 🎃" }, "color": "#ffb6c1", "locked": false },
+  { "file": "wood.mp3", "img": "wood.png", "name": { "en": "Coffin Wood 🪦", "pt": "Madeira de Caixão 🪦", "ru": "Дерево гроба 🪦", "uk": "Дерево труни 🪦" }, "color": "#39ff14", "locked": false }
 ];
 
 const uiTL = {
   en: { 
-    code: "EN", customBtn: "Settings", title: "BUCKET ASMR v.1.2", play: "Play", pause: "Pause", repair: "REPAIR", sleep: "Sleep", tabFeatures: "Functions", tabGuide: "Guide", 
+    code: "EN", customBtn: "Settings ⚙️", title: "🎃 BUCKET ASMR v.1.2", play: "Play 🎃", pause: "Pause 🦇", repair: "REPAIR 🧙‍♂️", sleep: "Sleep 🌙", tabFeatures: "Spells & Magic", tabGuide: "Guide", 
     features: [
-      "<span>✦</span> <b>Fixed:</b> The link button has been fixed; the button now works reliably (upd. 18.10.26)", 
+      "<span>🎃</span> <b>Halloween Special:</b> Flying ghosts, bats, pumpkins, and eerie effects!", 
+      "<span>✦</span> <b>Fixed:</b> Link buttons work smoothly (upd. 18.10.26).", 
       "<span>✦</span> <b>Stay Awake:</b> Screen won't turn off automatically.", 
-      "<span>✦</span> <b>Mixer:</b> Play multiple sounds at the same time.", 
-      "<span>✦</span> <b>Not Working?:</b> Turn off Silent Mode."
+      "<span>✦</span> <b>Mixer:</b> Play multiple eerie triggers together."
     ], 
     guide: [
       "<b>1. Manual:</b> Tap any sound icon to start/stop audio mix.", 
-      "<b>2. Auto:</b> Press <b>PLAY</b> for random automatic switching.", 
-      "<b>3. Favorites:</b> Use <b>⭐ Fav</b> to select specific triggers for auto-play."
+      "<b>2. Auto:</b> Press <b>PLAY</b> for random creepy switching.", 
+      "<b>3. Favorites:</b> Use <b>⭐ Fav</b> to select specific triggers."
     ], 
-    speeds: { slow: "Slow", medium: "Medium", fast: "Fast" }, 
-    unlockTitle: "Unlock Trigger", unlockDesc: "Unlock this trigger!", 
-    unlockBtn: "🔓 Unlock Sound", closeBtn: "Close", idleTitle: "Start playing?", idleDesc: "Would you like to start the ASMR session?", idleDisable: "Don't show again",
-    settingsTitle: "Settings", helpBtnLabel: "Help / Guide", lblFxStyle: "Effect Style", lblFxOpacity: "Opacity / Glow", lblFxSpeed: "Effect Speed", lblFxRandomInterval: "Random Change Interval",
-    lblTimeOfDay: "Time of Day", lblWeather: "Weather",
-    todNames: { morning: "🌅 Morning", noon: "☀️ Noon", evening: "🌆 Evening", night: "🌙 Night", full_cycle: "🔄 Full 24h Cycle (120s)" },
-    weatherNames: { clear: "☀️ Clear", cloudy: "☁️ Clouds + Rain", autumn_shower: "🍁 Autumn Shower NEW  (upd 18.10.26)", random: "🔀 Random Weather (120s)" },
-    fxNames: { steam: "💨 Steam (Color)", rain: "💧 Rain Drops", snow: "❄️ Snowflakes", comets: "☄️ Comets & Asteroids", neondust: "✨ Neon Dust", aura: "🌀 Pulsing Aura", random: "🔀 Random Effect" },
-    fxPromoTitle: "New Feature: Effects",
-    fxPromoDesc: "Click Yes to activate automatic switching of visual effects.",
-    fxPromoEnable: "Yes, activate all effects",
+    speeds: { slow: "Slow 🐢", medium: "Medium 👻", fast: "Fast 🦇" }, 
+    unlockTitle: "Unlock Trigger 🔓", unlockDesc: "Unlock this creepy sound!", 
+    unlockBtn: "🔓 Unlock Sound 🎃", closeBtn: "Close", idleTitle: "Awaken the Spirits? 🎃", idleDesc: "Would you like to start the spooky ASMR session?", idleDisable: "Don't show again",
+    settingsTitle: "Settings 🎃", helpBtnLabel: "Help / Guide ❓", lblFxStyle: "Spooky Effect Style", lblFxOpacity: "Glow & Opacity", lblFxSpeed: "Spooky Speed", lblFxRandomInterval: "Random Change Interval",
+    lblTimeOfDay: "Atmosphere", lblWeather: "Weather & Rain",
+    todNames: { morning: "🌅 Spooky Dawn", noon: "☀️ Crimson Noon", evening: "🌆 Witching Hour", night: "🌙 Haunted Night", full_cycle: "🔄 Full 24h Cycle (120s)" },
+    weatherNames: { clear: "🌕 Foggy Night", cloudy: "☁️ Toxic Rain", autumn_shower: "🎃 Pumpkin Rain & Leaves", random: "🔀 Random Weather (120s)" },
+    fxNames: { ghosts: "👻 Flying Ghosts", bats: "🦇 Spooky Bats", steam: "💨 Ghostly Mist", snow: "🕸️ Flying Spiders", comets: "☄️ Pumpkin Sparks", neondust: "✨ Magic Orbs", random: "🔀 Random Spells" },
+    fxPromoTitle: "Halloween Spells: Effects",
+    fxPromoDesc: "Click Yes to activate automatic switching of visual spooky effects.",
+    fxPromoEnable: "Yes, activate all effects 🎃",
     fxPromoKeep: "Keep current effect",
     fxPromoPs: "P.S. You can change this later in Settings.",
-    weatherChoiceTitle: "Select Weather",
-    wClear: "Clear sky", wClouds: "Clouds & Rain", wAutumn: " Autumn Shower ", wRandom: "Random",
-    soundSoon: "This sound will be available soon!"
+    weatherChoiceTitle: "Select Atmosphere 🎃",
+    wClear: "Foggy Night 🌕", wClouds: "Toxic Rain ☁️", wAutumn: "Pumpkin Rain 🎃", wRandom: "Random 🎲",
+    soundSoon: "This spooky sound will be available soon! 🎃"
   },
   pt: { 
-    code: "PT", customBtn: "Personalizar", title: "BALDE ASMR v.1.2", play: "Tocar", pause: "Pausa", repair: "REPARAR", sleep: "Dormir", tabFeatures: "Funções", tabGuide: "Guia", 
+    code: "PT", customBtn: "Configurações ⚙️", title: "🎃 BALDE ASMR v.1.2", play: "Tocar 🎃", pause: "Pausa 🦇", repair: "REPARAR 🧙‍♂️", sleep: "Dormir 🌙", tabFeatures: "Magias", tabGuide: "Guia", 
     features: [
-      "<span>✦</span> <b>Corrigido:</b> O botão do link foi corrigido; agora ele funciona de maneira confiável (actual. 18.10.26)", 
+      "<span>🎃</span> <b>Especial Halloween:</b> Fantasmas, morcegos e efeitos assustadores!", 
+      "<span>✦</span> <b>Corrigido:</b> Botões de link funcionam perfeitamente.", 
       "<span>✦</span> <b>Sempre Ativo:</b> A tela não apaga durante o uso.", 
-      "<span>✦</span> <b>Mixer:</b> Toque vários sons ao mesmo tempo.", 
-      "<span>✦</span> <b>Não funcionou?:</b> Desative o modo silencioso."
+      "<span>✦</span> <b>Mixer:</b> Toque vários sons ao mesmo tempo."
     ], 
     guide: [
       "<b>1. Manual:</b> Clique nos ícones para iniciar/parar sons.", 
       "<b>2. Auto:</b> Pressione <b>Tocar</b> para troca aleatória.", 
-      "<b>3. Favoritos:</b> Use <b>⭐ Fav</b> para escolher sons específicos no modo auto."
+      "<b>3. Favoritos:</b> Use <b>⭐ Fav</b> para escolher sons específicos."
     ], 
-    speeds: { slow: "Lento", medium: "Médio", fast: "Rápido" }, 
-    unlockTitle: "Desbloquear Som", unlockDesc: "Desbloqueie este som!", 
-    unlockBtn: "🔓 Desbloquear Som", closeBtn: "Fechar", idleTitle: "Começar a tocar?", idleDesc: "Você está inativo. Gostaria de iniciar a sessão de ASMR?", idleDisable: "Não mostrar novamente",
-    settingsTitle: "Configurações", helpBtnLabel: "Ajuda / Guia", lblFxStyle: "Estilo do Efeito", lblFxOpacity: "Opacidade / Brilho", lblFxSpeed: "Velocidade do Efeito", lblFxRandomInterval: "Intervalo de Troca Aleatória",
-    lblTimeOfDay: "Hora do Dia", lblWeather: "Clima",
-    todNames: { morning: "🌅 Manhã", noon: "☀️ Meio-dia", evening: "🌆 Tarde / Noite", night: "🌙 Noite", full_cycle: "🔄 Ciclo de 24h (120s)" },
-    weatherNames: { clear: "☀️ Limpo", cloudy: "☁️ Nuvens + Chuva", autumn_shower: "🍁 Chuva de Outono Nova  (upd 18.10.26)", random: "🔀 Clima Aleatório (120s)" },
-    fxNames: { steam: "💨 Vapor (Colorido)", rain: "💧 Gotas de Chuva", snow: "❄️ Flocos de Neve", comets: "☄️ Cometas e Asteroides", neondust: "✨ Poeira Neon", aura: "🌀 Aura Pulsante", random: "🔀 Efeito Aleatório" },
-    fxPromoTitle: "Nova Função: Efeitos",
+    speeds: { slow: "Lento 🐢", medium: "Médio 👻", fast: "Rápido 🦇" }, 
+    unlockTitle: "Desbloquear Som 🔓", unlockDesc: "Desbloqueie este som assustador!", 
+    unlockBtn: "🔓 Desbloquear Som 🎃", closeBtn: "Fechar", idleTitle: "Despertar os Espíritos? 🎃", idleDesc: "Gostaria de iniciar a sessão de ASMR assustadora?", idleDisable: "Não mostrar novamente",
+    settingsTitle: "Configurações 🎃", helpBtnLabel: "Ajuda / Guia ❓", lblFxStyle: "Estilo de Efeito Assustador", lblFxOpacity: "Brilho e Opacidade", lblFxSpeed: "Velocidade do Efeito", lblFxRandomInterval: "Intervalo de Troca",
+    lblTimeOfDay: "Atmósfera", lblWeather: "Clima Assustador",
+    todNames: { morning: "🌅 Amanhecer Sombrio", noon: "☀️ Meio-dia Carmesim", evening: "🌆 Hora das Bruixas", night: "🌙 Noite Assombrada", full_cycle: "🔄 Ciclo de 24h (120s)" },
+    weatherNames: { clear: "🌕 Noite de Névoa", cloudy: "☁️ Chuva Tóxica", autumn_shower: "🎃 Chuva de Abóboras", random: "🔀 Clima Aleatório (120s)" },
+    fxNames: { ghosts: "👻 Fantasmas Voadores", bats: "🦇 Morcegos Assustadores", steam: "💨 Névoa Fantasmagórica", snow: "🕸️ Aranhas Voadoras", comets: "☄️ Faíscas de Abóbora", neondust: "✨ Orbes Mágicos", random: "🔀 Efeitos Aleatórios" },
+    fxPromoTitle: "Magias de Halloween",
     fxPromoDesc: "Clique em Sim para ativar a troca automática de efeitos visuais.",
-    fxPromoEnable: "Sim, ativar todos os efeitos",
+    fxPromoEnable: "Sim, ativar todos os efeitos 🎃",
     fxPromoKeep: "Manter efeito atual",
     fxPromoPs: "P.S. Você pode alterar isso mais tarde nas Configurações.",
-    weatherChoiceTitle: "Selecionar Clima",
-    wClear: "Céu limpo", wClouds: "Nuvens e Chuva", wAutumn: " Chuva de Outono Nova", wRandom: "Aleatório",
-    soundSoon: "Este som estará disponível em breve!"
+    weatherChoiceTitle: "Selecionar Atmosfera 🎃",
+    wClear: "Noite de Névoa 🌕", wClouds: "Chuva Tóxica ☁️", wAutumn: "Chuva de Abóboras 🎃", wRandom: "Aleatório 🎲",
+    soundSoon: "Este som assustador estará disponível em breve! 🎃"
   },
   uk: { 
-    code: "UK", customBtn: "Налаштування", title: "ВІДРО АСМР v.1.2", play: "Грати", pause: "Пауза", repair: "ЛАГОДИТИ", sleep: "Сон", tabFeatures: "Функції", tabGuide: "Інструкція", 
+    code: "UK", customBtn: "Налаштування ⚙️", title: "🎃 ВІДРО АСМР v.1.2", play: "Грати 🎃", pause: "Пауза 🦇", repair: "ЛАГОДИТИ 🧙‍♂️", sleep: "Сон 🌙", tabFeatures: "Магія та Закляття", tabGuide: "Інструкція", 
     features: [
-      "<span>✦</span> <b>Виправлено:</b> кнопка «Посилання» була виправлена; тепер вона працює без збоїв (онов. 18.10.26)", 
-      "<span>✦</span> <b>Без Сну:</b> Екран не згасає автоматично.", 
-      "<span>✦</span> <b>Міксер:</b> Грайте кілька звуків одночасно.", 
-      "<span>✦</span> <b>Не працює?:</b> Вимкніть беззвучний режим."
+      "<span>🎃</span> <b>Хелловін Спешл:</b> Привиди, кажани, гарбузи та моторошні ефекти!", 
+      "<span>✦</span> <b>Виправлено:</b> Посилання працюють стабільно (онов. 18.10.26).", 
+      "<span>✦</span> <b>Без Сну:</b> Екран не згасає під час сеансу.", 
+      "<span>✦</span> <b>Міксер:</b> Грайте кілька звуків одночасно."
     ], 
     guide: [
-      "<b>1. Ручний:</b> Натискайте на будь-які плитки для міксу звуків.", 
+      "<b>1. Ручний:</b> Натискайте на плитки для міксу звуків.", 
       "<b>2. Авто:</b> Кнопка <b>ГРАТИ</b> запускає випадковий режим.", 
-      "<b>3. Обране:</b> Використовуйте <b>⭐ Fav</b> для вибору тригерів у авто-режимі."
+      "<b>3. Обране:</b> Використовуйте <b>⭐ Fav</b> для вибору тригерів."
     ], 
-    speeds: { slow: "Повільно", medium: "Середньо", fast: "Швидко" }, 
-    unlockTitle: "Відкрити звук", unlockDesc: "Розблокуйте цей тригер!", 
-    unlockBtn: "🔓 Розблокувати звук", closeBtn: "Закрити", idleTitle: "Запустити програвання?", idleDesc: "Ви нічого не натискали. Бажаєте увімкнути випадковий режим АСМР?", idleDisable: "Приховати нагадування",
-    settingsTitle: "Налаштування", helpBtnLabel: "Допомога / Інструкція", lblFxStyle: "Стиль ефекту", lblFxOpacity: "Прозорість / Сяйво", lblFxSpeed: "Швидкість ефекту", lblFxRandomInterval: "Інтервал зміни рандому",
-    lblTimeOfDay: "Час доби", lblWeather: "Погода",
-    todNames: { morning: "🌅 Ранок", noon: "☀️ Полдень", evening: "🌆 Вечір", night: "🌙 Ніч", full_cycle: "🔄 Повні добу (120с)" },
-    weatherNames: { clear: "☀️ Ясно", cloudy: "☁️ Хмари + Дощ", autumn_shower: "🍁 Осіння злива НОВА (upd 18.10.26)", random: "🔀 Рандомна погода (120с)" },
-    fxNames: { steam: "💨 Кольорова пара", rain: "💧 Краплі дощу", snow: "❄️ Сніжинки", comets: "☄️ Комети та астероїди", neondust: "✨ Магічні іскри", aura: "🌀 Пульсуюча аура", random: "🔀 Рандомний ефект" },
-    fxPromoTitle: "Нова функція ефекти.",
-    fxPromoDesc: "натисніть так щоб активувати автоматичну зміну ефектів",
-    fxPromoEnable: "так, активувати всі ефекти",
+    speeds: { slow: "Повільно 🐢", medium: "Середньо 👻", fast: "Швидко 🦇" }, 
+    unlockTitle: "Відкрити звук 🔓", unlockDesc: "Розблокуйте цей моторошний тригер!", 
+    unlockBtn: "🔓 Розблокувати звук 🎃", closeBtn: "Закрити", idleTitle: "Розбудити духів? 🎃", idleDesc: "Бажаєте увімкнути Хелловінський режим АСМР?", idleDisable: "Приховати нагадування",
+    settingsTitle: "Налаштування 🎃", helpBtnLabel: "Допомога / Інструкція ❓", lblFxStyle: "Стиль моторошного ефекту", lblFxOpacity: "Сяйво та Прозорість", lblFxSpeed: "Швидкість ефектів", lblFxRandomInterval: "Інтервал зміни рандому",
+    lblTimeOfDay: "Атмосфера", lblWeather: "Погода та Дощ",
+    todNames: { morning: "🌅 Моторошний Світанок", noon: "☀️ Багряний Полдень", evening: "🌆 Час Відьом", night: "🌙 Жуткий Вечір", full_cycle: "🔄 Повні добу (120с)" },
+    weatherNames: { clear: "🌕 Туманна Ніч", cloudy: "☁️ Токсичний Дощ", autumn_shower: "🎃 Гарбузова злива", random: "🔀 Рандомна погода (120с)" },
+    fxNames: { ghosts: "👻 Привиди, що літають", bats: "🦇 Моторошні кажани", steam: "💨 Примарний туман", snow: "🕸️ Павуки", comets: "☄️ Гарбузові іскри", neondust: "✨ Магічні кулі", random: "🔀 Рандомний ефект" },
+    fxPromoTitle: "Хелловінські чари",
+    fxPromoDesc: "Натисніть ТАК, щоб активувати автоматичну зміну моторошних ефектів.",
+    fxPromoEnable: "Так, активувати всі чари 🎃",
     fxPromoKeep: "Залишити поточний ефект",
     fxPromoPs: "PS: Ви зможете змінити це в розділі Налаштування.",
-    weatherChoiceTitle: "Оберіть погоду",
-    wClear: "Чисте небо", wClouds: "Хмари та Дощ", wAutumn: " Осіння злива НОВА", wRandom: "Рандом",
-    soundSoon: "Цей звук скоро буде доступний!"
+    weatherChoiceTitle: "Оберіть атмосферу 🎃",
+    wClear: "Туманна Ніч 🌕", wClouds: "Токсичний Дощ ☁️", wAutumn: "Гарбузова злива 🎃", wRandom: "Рандом 🎲",
+    soundSoon: "Цей моторошний звук скоро буде доступний! 🎃"
   },
   ru: { 
-    code: "RU", customBtn: "Настройки", title: "ВЕДРО АСМР v.1.2", play: "Играть", pause: "Пауза", repair: "ЧИНИТЬ", sleep: "Сон", tabFeatures: "Функции", tabGuide: "Инструкция", 
+    code: "RU", customBtn: "Настройки ⚙️", title: "🎃 ВЕДРО АСМР v.1.2", play: "Играть 🎃", pause: "Пауза 🦇", repair: "ЧИНИТЬ 🧙‍♂️", sleep: "Сон 🌙", tabFeatures: "Магия и Заклятия", tabGuide: "Инструкция", 
     features: [
-      "<span>✦</span> <b>Исправления:</b>Устранена проблема с кнопкой «Ссылки» ; теперь она работает стабильно. (обн. 18.10.26)", 
+      "<span>🎃</span> <b>Хэллоуин Спешл:</b> Летающие призраки, летучие мыши, тыквы и жуткая атмосфера!", 
+      "<span>✦</span> <b>Исправление:</b> Кнопка «Ссылки» работает отлично.", 
       "<span>✦</span> <b>Бодрость:</b> Экран не гаснет во время сеанса.", 
-      "<span>✦</span> <b>Микшер:</b> Запуск нескольких звуков одновременно.", 
-      "<span>✦</span> <b>Не работает?:</b> Отключите беззвучный режим."
+      "<span>✦</span> <b>Микшер:</b> Запуск нескольких звуков одновременно."
     ], 
     guide: [
       "<b>1. Ручной:</b> Нажимайте на любые плитки для микса звуков.", 
       "<b>2. Авто:</b> Кнопка <b>ИГРАТЬ</b> включит случайный автоматический режим.", 
-      "<b>3. Избранное:</b> Используйте <b>⭐ Fav</b> для отбора звуков в авто-режиме."
+      "<b>3. Избранное:</b> Используйте <b>⭐ Fav</b> для отбора звуков."
     ], 
-    speeds: { slow: "Медленно", medium: "Средне", fast: "Быстро" }, 
-    unlockTitle: "Открыть звук", unlockDesc: "Разблокируйте этот триггер!", 
-    unlockBtn: "🔓 Разблокировать звук", closeBtn: "Закрыть", idleTitle: "Запустить проигрывание?", idleDesc: "Вы ничего не нажимали. Хотите включить случайный режим АСМР?", idleDisable: "Скрыть напоминание",
-    settingsTitle: "Настройки", helpBtnLabel: "Помощь / Инструкция", lblFxStyle: "Стиль эффекта", lblFxOpacity: "Прозрачность / Свечение", lblFxSpeed: "Скорость эффекта", lblFxRandomInterval: "Интервал смены рандома",
-    lblTimeOfDay: "Время суток", lblWeather: "Погода",
-    todNames: { morning: "🌅 Утро", noon: "☀️ Полдень", evening: "🌆 Вечер", night: "🌙 Ночь", full_cycle: "🔄 Полные сутки (120 сек)" },
-    weatherNames: { clear: "☀️ Ясно", cloudy: "☁️ Тучи + Дождь", autumn_shower: "🍁 Осенний ливень НОВЫЙ (upd 18.10.26)", random: "🔀 Рандомная погода (120 сек)" },
-    fxNames: { steam: "💨 Цветной пар", rain: "💧 Капли дождя", snow: "❄️ Снежинки", comets: "☄️ Кометы и астероиды", neondust: "✨ Магические искри", aura: "🌀 Пульсирующая аура", random: "🔀 Рандом" },
-    fxPromoTitle: "Новая функция эффекты.",
-    fxPromoDesc: "нажмите да что-бы активировать автоматическую смену эффектов",
-    fxPromoEnable: "да, активировать все эффекты",
+    speeds: { slow: "Медленно 🐢", medium: "Средне 👻", fast: "Быстро 🦇" }, 
+    unlockTitle: "Открыть звук 🔓", unlockDesc: "Разблокируйте этот жуткий триггер!", 
+    unlockBtn: "🔓 Разблокировать звук 🎃", closeBtn: "Закрыть", idleTitle: "Разбудить духов? 🎃", idleDesc: "Хотите включить Хэллоуинский режим АСМР?", idleDisable: "Скрыть напоминание",
+    settingsTitle: "Настройки 🎃", helpBtnLabel: "Помощь / Инструкция ❓", lblFxStyle: "Жуткий стиль эффекта", lblFxOpacity: "Свечение и Прозрачность", lblFxSpeed: "Скорость эффекта", lblFxRandomInterval: "Интервал смены рандома",
+    lblTimeOfDay: "Атмосфера", lblWeather: "Погода и Дождь",
+    todNames: { morning: "🌅 Жуткий Рассвет", noon: "☀️ Багровый Полдень", evening: "🌆 Час Ведьм", night: "🌙 Ночь Ужасов", full_cycle: "🔄 Полные сутки (120 сек)" },
+    weatherNames: { clear: "🌕 Туманная Ночь", cloudy: "☁️ Токсичный Дождь", autumn_shower: "🎃 Тыквенный ливень", random: "🔀 Рандомная погода (120 сек)" },
+    fxNames: { ghosts: "👻 Летающие призраки", bats: "🦇 Летучие мыши", steam: "💨 Призрачный туман", snow: "🕸️ Ползучие пауки", comets: "☄️ Тыквенные искры", neondust: "✨ Магические шары", random: "🔀 Рандом" },
+    fxPromoTitle: "Хэллоуинские чары",
+    fxPromoDesc: "Нажмите ДА, чтобы активировать автоматическую смену жутких эффектов.",
+    fxPromoEnable: "Да, активировать все чары 🎃",
     fxPromoKeep: "Оставить текущий эффект",
     fxPromoPs: "PS: Вы сможете изменить это в разделе Настройки.",
-    weatherChoiceTitle: "Выберите погоду",
-    wClear: "Чистое небо", wClouds: "Тучи и Дождь", wAutumn: " Осенний ливень НОВЫЙ", wRandom: "Рандом",
-    soundSoon: "Этот звук скоро будет доступен!"
+    weatherChoiceTitle: "Выберите атмосферу 🎃",
+    wClear: "Туманная Ночь 🌕", wClouds: "Токсичный Дождь ☁️", wAutumn: "Тыквенный ливень 🎃", wRandom: "Рандом 🎲",
+    soundSoon: "Этот жуткий звук скоро будет доступен! 🎃"
   }
 };
 
@@ -784,7 +917,7 @@ let weatherTimerId = null;
 function showSoonToast() {
   const toast = document.getElementById('soonToast');
   const t = uiTL[langOrder[langIdx]];
-  toast.innerText = t.soundSoon || "This sound will be available soon!";
+  toast.innerText = t.soundSoon || "This spooky sound will be available soon! 🎃";
   toast.classList.add('show');
   setTimeout(() => {
     toast.classList.remove('show');
@@ -827,11 +960,12 @@ function selectWeatherMode(mode) {
   resetIdleTimer();
 }
 
+/* Изменено на 'ghosts' по умолчанию */
 let fxConfig = {
-  style: 'comets',
-  activeStyle: 'comets', 
-  opacity: 0.4,
-  speed: 0.5,
+  style: 'ghosts',
+  activeStyle: 'ghosts', 
+  opacity: 0.5,
+  speed: 0.4,
   randomInterval: 14 
 };
 
@@ -845,7 +979,7 @@ let cycleAnimationReq = null;
 let cycleStartTime = null;
 
 let randomFxTimer = null;
-const availableEffects = ['steam', 'snow', 'comets', 'neondust'];
+const availableEffects = ['ghosts', 'bats', 'steam', 'snow', 'comets', 'neondust'];
 
 function pickRandomEffect() {
   const otherFx = availableEffects.filter(e => e !== fxConfig.activeStyle);
@@ -880,10 +1014,6 @@ function loadAudio(el) {
     el.loaded = true;
     el.btn.classList.add('ready');
   }
-}
-
-function preloadImage(el) {
-  // Картинки теперь загружаются через тег <img> в HTML
 }
 
 sounds.forEach((s, idx) => {
@@ -922,7 +1052,7 @@ sounds.forEach((s, idx) => {
   };
 
   btn.onclick = () => {
-    const cleanSoundName = state.fileName.replace('.mp3', '');
+    const cleanSoundName = state.fileName ? state.fileName.replace('.mp3', '') : 'soon';
     if (state.locked) {
         logButtonClick('sound_locked_' + cleanSoundName);
         openUnlockModal(state);
@@ -1204,20 +1334,20 @@ function applyEnvironmentSettings() {
 
   if (envConfig.timeOfDay === 'morning') {
     body.classList.add('tod-morning');
-    stars.style.opacity = '0.2';
-    overlay.style.background = 'rgba(255, 150, 100, 0.15)';
+    stars.style.opacity = '0.3';
+    overlay.style.background = 'rgba(70, 20, 80, 0.2)';
   } else if (envConfig.timeOfDay === 'noon') {
     body.classList.add('tod-noon');
-    stars.style.opacity = '0';
-    overlay.style.background = 'rgba(255, 255, 255, 0.05)';
+    stars.style.opacity = '0.1';
+    overlay.style.background = 'rgba(120, 20, 50, 0.25)';
   } else if (envConfig.timeOfDay === 'evening') {
     body.classList.add('tod-evening');
-    stars.style.opacity = '0.4';
-    overlay.style.background = 'rgba(200, 50, 50, 0.2)';
+    stars.style.opacity = '0.5';
+    overlay.style.background = 'rgba(150, 40, 0, 0.3)';
   } else if (envConfig.timeOfDay === 'night') {
     body.classList.add('tod-night');
     stars.style.opacity = '1';
-    overlay.style.background = 'rgba(0, 0, 0, 0.4)';
+    overlay.style.background = 'rgba(10, 0, 20, 0.45)';
   } else if (envConfig.timeOfDay === 'full_cycle') {
     cycleStartTime = performance.now();
     runFullCycleAnimation();
@@ -1243,11 +1373,11 @@ function runFullCycleAnimation() {
   const overlay = document.getElementById('envOverlay');
 
   const keyframes = [
-    { pct: 0.00, color1: [5, 5, 5], color2: [10, 10, 31], stars: 1.0, overlay: [0, 0, 0, 0.4] },       
-    { pct: 0.25, color1: [255, 154, 158], color2: [161, 196, 253], stars: 0.2, overlay: [255, 150, 100, 0.15] },       
-    { pct: 0.50, color1: [79, 172, 254], color2: [0, 242, 254], stars: 0.0, overlay: [255, 255, 255, 0.05] },         
-    { pct: 0.75, color1: [44, 62, 80], color2: [255, 130, 53], stars: 0.4, overlay: [200, 50, 50, 0.2] },              
-    { pct: 1.00, color1: [5, 5, 5], color2: [10, 10, 31], stars: 1.0, overlay: [0, 0, 0, 0.4] }        
+    { pct: 0.00, color1: [15, 2, 25], color2: [5, 2, 10], stars: 1.0, overlay: [10, 0, 20, 0.45] },       
+    { pct: 0.25, color1: [74, 21, 75], color2: [255, 121, 63], stars: 0.3, overlay: [70, 20, 80, 0.2] },       
+    { pct: 0.50, color1: [45, 19, 44], color2: [238, 69, 64], stars: 0.1, overlay: [120, 20, 50, 0.25] },         
+    { pct: 0.75, color1: [15, 5, 29], color2: [255, 82, 0], stars: 0.5, overlay: [150, 40, 0, 0.3] },              
+    { pct: 1.00, color1: [15, 2, 25], color2: [5, 2, 10], stars: 1.0, overlay: [10, 0, 20, 0.45] }        
   ];
 
   function interpolate(start, end, factor) {
@@ -1366,14 +1496,39 @@ function updateConnections() {
     }
 }
 
-document.getElementById('speedTrigger').onclick = (e) => { e.stopPropagation(); favDropdown.classList.remove('open'); document.getElementById('speedDropdown').classList.toggle('open'); };
-document.getElementById('favBtn').onclick = (e) => { 
-    e.stopPropagation(); 
-    logButtonClick('ui_fav_menu');
-    document.getElementById('speedDropdown').classList.remove('open'); 
-    favDropdown.classList.toggle('open'); 
+document.getElementById('speedTrigger').onclick = (e) => { 
+  e.stopPropagation(); 
+  document.getElementById('favDropdown').classList.remove('open'); 
+  document.getElementById('linksOptions').classList.remove('open'); 
+  document.getElementById('speedDropdown').classList.toggle('open'); 
 };
-document.addEventListener('click', () => { document.getElementById('speedDropdown').classList.remove('open'); favDropdown.classList.remove('open'); });
+
+document.getElementById('favBtn').onclick = (e) => { 
+  e.stopPropagation(); 
+  logButtonClick('ui_fav_menu');
+  document.getElementById('speedDropdown').classList.remove('open'); 
+  document.getElementById('linksOptions').classList.remove('open'); 
+  document.getElementById('favDropdown').classList.toggle('open'); 
+};
+
+const linksTrigger = document.getElementById('linksTrigger');
+const linksOptions = document.getElementById('linksOptions');
+
+if (linksTrigger) {
+  linksTrigger.addEventListener('click', (e) => {
+    e.stopPropagation();
+    logButtonClick('ui_social_links_menu');
+    document.getElementById('speedDropdown').classList.remove('open');
+    document.getElementById('favDropdown').classList.remove('open');
+    linksOptions.classList.toggle('open');
+  });
+}
+
+document.addEventListener('click', () => { 
+  document.getElementById('speedDropdown').classList.remove('open'); 
+  document.getElementById('favDropdown').classList.remove('open'); 
+  document.getElementById('linksOptions').classList.remove('open'); 
+});
 
 document.getElementById('repairBtn').onclick = () => {
     logButtonClick('ui_repair');
@@ -1414,6 +1569,15 @@ document.getElementById('sleepBtn').onclick = () => {
     }
     updateUI();
 };
+
+function switchTab(evt, tabName) {
+    const tabs = document.querySelectorAll('.tab-btn');
+    const sections = document.querySelectorAll('.help-section');
+    tabs.forEach(t => t.classList.remove('active'));
+    sections.forEach(s => s.classList.remove('active'));
+    evt.currentTarget.classList.add('active');
+    document.getElementById(tabName).classList.add('active');
+}
 
 function resetIdleTimer() {
   if (!isIdleSystemEnabled || randomActive || sleepMode || document.getElementById('unlockModal').style.display === 'flex' || document.getElementById('settingsModal').style.display === 'flex' || document.getElementById('fxPromoModal').style.display === 'flex' || document.getElementById('weatherChoiceModal').style.display === 'flex') {
@@ -1526,16 +1690,26 @@ window.onresize = resize; resize();
 
 const starsArr = Array.from({length: 70}, () => ({ x: Math.random() * innerWidth, y: Math.random() * innerHeight, r: Math.random() * 1.5, a: Math.random(), s: Math.random() * 0.01 }));
 
-// --- Функция отрисовки точной формы реалистичных осенних листьев ---
+// --- Функция отрисовки Хэллоуинских листьев и Тыкв ---
 function drawLeafShape(ctx, type, size, color, alpha) {
   ctx.save();
   ctx.fillStyle = color;
-  ctx.strokeStyle = '#3d1c02';
+  ctx.strokeStyle = '#2b0500';
   ctx.lineWidth = 1;
   ctx.globalAlpha = alpha;
 
   ctx.beginPath();
   if (type === 0) {
+    // Маленькая мини-тыква!
+    ctx.arc(0, 0, size, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+    // Хвостик
+    ctx.fillStyle = '#39ff14';
+    ctx.fillRect(-size * 0.15, -size * 1.3, size * 0.3, size * 0.4);
+    ctx.restore();
+    return;
+  } else if (type === 1) {
     // Кленовый лист
     ctx.moveTo(0, -size);
     ctx.lineTo(size * 0.3, -size * 0.4);
@@ -1552,39 +1726,21 @@ function drawLeafShape(ctx, type, size, color, alpha) {
     ctx.lineTo(-size * 0.9, -size * 0.5);
     ctx.lineTo(-size * 0.3, -size * 0.4);
     ctx.closePath();
-  } else if (type === 1) {
-    // Березовый лист (удлиненный с заостренным кончиком)
-    ctx.moveTo(0, -size * 1.3);
-    ctx.bezierCurveTo(size * 0.7, -size * 1.0, size * 0.8, -size * 0.2, size * 0.6, size * 0.4);
-    ctx.bezierCurveTo(size * 0.4, size * 0.9, size * 0.2, size * 1.1, 0, size * 1.4);
-    ctx.bezierCurveTo(-0.2, size * 1.1, -size * 0.4, size * 0.9, -size * 0.6, size * 0.4);
-    ctx.bezierCurveTo(-size * 0.8, -size * 0.2, -size * 0.7, -size * 1.0, 0, -size * 1.3);
-    ctx.closePath();
-  } else if (type === 2) {
-    // Округлая листва (липа / осина)
-    ctx.moveTo(0, -size * 1.1);
-    ctx.bezierCurveTo(size * 1.1, -size * 1.1, size * 1.3, size * 0.2, size * 0.8, size * 0.8);
-    ctx.bezierCurveTo(size * 0.3, size * 1.2, -size * 0.3, size * 1.2, -size * 0.8, size * 0.8);
-    ctx.bezierCurveTo(-size * 1.3, size * 0.2, -size * 1.1, -size * 1.1, 0, -size * 1.1);
-    ctx.closePath();
   } else {
-    // Дуб (резной фигурный)
+    // Заостренная летучая мышка-листок
     ctx.moveTo(0, -size * 1.2);
-    ctx.bezierCurveTo(size * 0.5, -size * 1.2, size * 1.1, -size * 0.7, size * 0.7, -size * 0.3);
-    ctx.bezierCurveTo(size * 1.2, -size * 0.1, size * 1.1, size * 0.5, size * 0.6, size * 0.7);
-    ctx.bezierCurveTo(size * 0.9, size * 1.0, size * 0.3, size * 1.3, 0, size * 1.1);
-    ctx.bezierCurveTo(-size * 0.3, size * 1.3, -size * 0.9, size * 1.0, -size * 0.6, size * 0.7);
-    ctx.bezierCurveTo(-size * 1.1, size * 0.5, -size * 1.2, -size * 0.1, -size * 0.7, -size * 0.3);
-    ctx.bezierCurveTo(-size * 1.1, -size * 0.7, -size * 0.5, -size * 1.2, 0, -size * 1.2);
+    ctx.bezierCurveTo(size * 0.8, -size * 0.8, size * 1.1, 0, size * 0.7, size * 0.7);
+    ctx.bezierCurveTo(size * 0.3, size * 1.2, -size * 0.3, size * 1.2, -size * 0.7, size * 0.7);
+    ctx.bezierCurveTo(-size * 1.1, 0, -size * 0.8, -size * 0.8, 0, -size * 1.2);
     ctx.closePath();
   }
 
   ctx.fill();
   ctx.stroke();
 
-  // Рисуем прожилки для большей детализации
+  // Прожилки
   ctx.beginPath();
-  ctx.strokeStyle = '#5c2805';
+  ctx.strokeStyle = '#4a0b00';
   ctx.lineWidth = 0.6;
   ctx.moveTo(0, size * 0.9);
   ctx.lineTo(0, -size * 0.8);
@@ -1621,30 +1777,31 @@ function spawnCloudRain() {
         let startY = rect.bottom - 10;
 
         if (isAutumn) {
-          if (Math.random() < 0.93) {
+          if (Math.random() < 0.92) {
             weatherParticles.push({
               x: startX,
               y: startY,
               vy: (Math.random() * 10 + 14) * 1.5,
               vx: (Math.random() - 0.5) * 1.0,
               length: Math.random() * 15 + 10,
-              alpha: Math.random() * 0.4 + 0.3
+              alpha: Math.random() * 0.4 + 0.3,
+              color: '#39ff14' // Токсично-зеленый дождь
             });
           } else {
-            const autumnPalettes = [
-              '#e67e22', '#d35400', '#c0392b', '#f39c12', 
-              '#8e44ad', '#d32f2f', '#f57c00', '#827717'
+            const halloweenPalettes = [
+              '#ff6600', '#ff8800', '#d44000', '#9d00ff', 
+              '#39ff14', '#ff0055', '#ffaa00'
             ];
             autumnParticles.push({
               x: startX,
               y: startY,
-              vy: (Math.random() * 0.8 + 0.6) * 0.65, // Уменьшили множитель с 1.3 до 0.65
-              vx: (Math.random() - 0.5) * 0.1,         // Уменьшили множитель с 0.6 до 0.3
+              vy: (Math.random() * 0.8 + 0.6) * 0.65,
+              vx: (Math.random() - 0.5) * 0.3,
               angle: Math.random() * Math.PI * 2,
-              vAngle: (Math.random() - 0.5) * 0.015,   // Уменьшили скорость вращения с 0.03 до 0.015
+              vAngle: (Math.random() - 0.5) * 0.015,
               size: Math.random() * 9 + 8,
-              type: Math.floor(Math.random() * 4),
-              color: autumnPalettes[Math.floor(Math.random() * autumnPalettes.length)],
+              type: Math.floor(Math.random() * 3),
+              color: halloweenPalettes[Math.floor(Math.random() * halloweenPalettes.length)],
               alpha: Math.random() * 0.2 + 0.8
             });
           }
@@ -1655,7 +1812,8 @@ function spawnCloudRain() {
             vy: (Math.random() * 6 + 10) * 1.5,
             vx: (Math.random() - 0.5) * 1.5,
             length: Math.random() * 12 + 8,
-            alpha: Math.random() * 0.4 + 0.3
+            alpha: Math.random() * 0.4 + 0.3,
+            color: '#a855f7' // Фиолетовые капли
           });
         }
       }
@@ -1672,427 +1830,348 @@ function spawnSteam() {
   audioElements.forEach(el => {
     if (el.active && !el.locked) {
       const rect = el.btn.getBoundingClientRect();
+
+      // Расширенная область генерации частиц вокруг кнопки
+      const margin = 35; 
+      const spawnWidth = rect.width + margin * 2;
+      const spawnHeight = rect.height + margin * 2;
+      const spawnLeft = rect.left - margin;
+      const spawnTop = rect.top - margin;
       
-      if (activeFx === 'steam') {
-        if (Math.random() < 0.15) { 
+      if (activeFx === 'bats') {
+        if (Math.random() < 0.16) {
+          const angle = Math.random() * Math.PI * 2;
+          const speedMag = (Math.random() * 3.5 + 2.0) * fxConfig.speed;
+          steamParticles.push({
+            type: 'bat',
+            x: rect.left + rect.width / 2 + (Math.random() - 0.5) * 30,
+            y: rect.top + rect.height / 2 + (Math.random() - 0.5) * 30,
+            vx: Math.cos(angle) * speedMag,
+            vy: Math.sin(angle) * speedMag - 1.2 * fxConfig.speed,
+            size: Math.random() * 12 + 8,
+            wingAngle: Math.random() * Math.PI,
+            alpha: (Math.random() * 0.4 + 0.6) * fxConfig.opacity
+          });
+        }
+      }
+      else if (activeFx === 'ghosts') {
+        if (Math.random() < 0.12) {
+          steamParticles.push({
+            type: 'ghost',
+            x: spawnLeft + Math.random() * spawnWidth,
+            y: spawnTop + spawnHeight * 0.8,
+            vx: (Math.random() - 0.5) * 1.8 * fxConfig.speed,
+            vy: -(Math.random() * 1.6 + 0.8) * fxConfig.speed,
+            size: Math.random() * 16 + 10,
+            alpha: (Math.random() * 0.4 + 0.5) * fxConfig.opacity,
+            wobble: Math.random() * Math.PI * 2
+          });
+        }
+      }
+      else if (activeFx === 'steam') {
+        if (Math.random() < 0.2) { 
           steamParticles.push({
             type: 'steam',
-            x: rect.left + Math.random() * rect.width,
-            y: rect.top + rect.height * 0.7,
-            vx: (Math.random() - 0.5) * 0.4 * fxConfig.speed,
-            vy: -(Math.random() * 0.3 + 0.2) * fxConfig.speed,
-            size: Math.random() * 15 + 10,
-            alpha: (Math.random() * 0.3 + 0.2) * fxConfig.opacity,
-            growth: (Math.random() * 0.1 + 0.05) * fxConfig.speed,
+            x: spawnLeft + Math.random() * spawnWidth,
+            y: spawnTop + spawnHeight * 0.8,
+            vx: (Math.random() - 0.5) * 1.2 * fxConfig.speed,
+            vy: -(Math.random() * 0.8 + 0.4) * fxConfig.speed,
+            size: Math.random() * 22 + 12,
+            alpha: (Math.random() * 0.35 + 0.2) * fxConfig.opacity,
+            growth: (Math.random() * 0.18 + 0.08) * fxConfig.speed,
             hue: steamHue 
           });
         }
       }
-      else if (activeFx === 'snow') {
-        if (Math.random() < 0.2) {
+      else if (activeFx === 'snow') { // Пауки
+        if (Math.random() < 0.14) {
           steamParticles.push({
-            type: 'snow',
-            x: rect.left + Math.random() * rect.width,
-            y: rect.bottom,
-            vx: (Math.random() - 0.5) * 0.5 * fxConfig.speed,
-            vy: (Math.random() * 0.8 + 0.5) * fxConfig.speed,
-            size: Math.random() * 3 + 2,
+            type: 'spider',
+            x: spawnLeft + Math.random() * spawnWidth,
+            y: spawnTop - 10,
+            vx: (Math.random() - 0.5) * 0.8 * fxConfig.speed,
+            vy: (Math.random() * 1.4 + 0.6) * fxConfig.speed,
+            size: Math.random() * 7 + 5,
             alpha: (Math.random() * 0.5 + 0.4) * fxConfig.opacity
           });
         }
       }
-      else if (activeFx === 'comets') {
-        if (Math.random() < 0.067) { 
-          const isAst = Math.random() < 0.4;
-          const palettes = ['#ffb400', '#00e5ff', '#8a2be2'];
+      else if (activeFx === 'comets') { // Тыквенные искры
+        if (Math.random() < 0.18) { 
+          const palettes = ['#ff6600', '#ff9900', '#9d00ff', '#39ff14'];
           const chosenColor = palettes[Math.floor(Math.random() * palettes.length)];
 
           const angle = Math.random() * Math.PI * 2;
-          const speedMag = (Math.random() * 1.5 + 0.5) * fxConfig.speed;
+          const speedMag = (Math.random() * 4.0 + 1.2) * fxConfig.speed;
           const vx = Math.cos(angle) * speedMag;
           const vy = Math.sin(angle) * speedMag;
 
-          if (isAst) {
-            const sides = Math.floor(Math.random() * 3) + 5;
-            const radius = Math.random() * 6 + 4;
-            const vertices = [];
-            for (let i = 0; i < sides; i++) {
-              const a = (i / sides) * Math.PI * 2;
-              const r = radius * (0.7 + Math.random() * 0.6);
-              vertices.push({ x: Math.cos(a) * r, y: Math.sin(a) * r });
-            }
-
-            steamParticles.push({
-              type: 'comet_ast',
-              x: rect.left + Math.random() * rect.width,
-              y: rect.top + Math.random() * rect.height,
-              vx: vx,
-              vy: vy,
-              rot: Math.random() * Math.PI * 2,
-              vRot: (Math.random() - 0.5) * 0.05 * fxConfig.speed,
-              vertices: vertices,
-              alpha: 0.9 * fxConfig.opacity
-            });
-          } else {
-            steamParticles.push({
-              type: 'comet_tail',
-              x: rect.left + Math.random() * rect.width,
-              y: rect.top + Math.random() * rect.height,
-              vx: vx,
-              vy: vy,
-              size: Math.random() * 2.5 + 1.5,
-              color: chosenColor,
-              alpha: 0.95 * fxConfig.opacity,
-              history: []
-            });
-          }
-        }
-      }
-      else if (activeFx === 'neondust') {
-        if (Math.random() < 0.25) {
           steamParticles.push({
-            type: 'neondust',
-            x: rect.left + Math.random() * rect.width,
-            y: rect.top + Math.random() * rect.height,
-            vx: (Math.random() - 0.5) * 1.2 * fxConfig.speed,
-            vy: -(Math.random() * 1.5 + 0.5) * fxConfig.speed,
-            size: Math.random() * 2.5 + 1,
-            alpha: fxConfig.opacity,
-            hue: steamHue
+            type: 'spark',
+            x: rect.left + rect.width / 2,
+            y: rect.top + rect.height / 2,
+            vx: vx,
+            vy: vy,
+            size: Math.random() * 5 + 2,
+            color: chosenColor,
+            alpha: (Math.random() * 0.4 + 0.6) * fxConfig.opacity
           });
         }
       }
-      
+      else if (activeFx === 'neondust') {
+        if (Math.random() < 0.22) {
+          const angle = Math.random() * Math.PI * 2;
+          const dist = Math.random() * (margin + rect.width / 2);
+          steamParticles.push({
+            type: 'neondust',
+            x: rect.left + rect.width / 2 + Math.cos(angle) * dist,
+            y: rect.top + rect.height / 2 + Math.sin(angle) * dist,
+            vx: (Math.random() - 0.5) * 1.2 * fxConfig.speed,
+            vy: (Math.random() - 0.5) * 1.2 * fxConfig.speed,
+            size: Math.random() * 4 + 1.5,
+            alpha: (Math.random() * 0.6 + 0.4) * fxConfig.opacity,
+            pulse: Math.random() * Math.PI * 2,
+            hue: Math.random() > 0.5 ? 280 : 35
+          });
+        }
+      }
     }
   });
 }
 
-function draw() {
-  if(!sleepMode) {
-    ctx.clearRect(0,0,innerWidth,innerHeight);
-    starsArr.forEach(s => {
-      s.a += s.s; if(s.a > 1 || s.a < 0) s.s *= -1;
-      ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
-      ctx.fillStyle = `rgba(255,255,255,${Math.abs(s.a)})`; ctx.fill();
-    });
-  } else { ctx.clearRect(0,0,innerWidth,innerHeight); }
+function drawBat(ctx, p) {
+  ctx.save();
+  ctx.translate(p.x, p.y);
+  ctx.fillStyle = `rgba(15, 5, 25, ${p.alpha})`;
+  ctx.strokeStyle = `rgba(255, 102, 0, ${p.alpha * 0.8})`;
+  ctx.lineWidth = 1;
 
+  p.wingAngle += 0.15 * fxConfig.speed;
+  const wingY = Math.sin(p.wingAngle) * (p.size * 0.4);
+
+  // Тело и крылья летучей мыши
+  ctx.beginPath();
+  ctx.moveTo(0, 0);
+  ctx.quadraticCurveTo(p.size * 0.5, -p.size * 0.5 + wingY, p.size, -p.size * 0.1 + wingY);
+  ctx.quadraticCurveTo(p.size * 0.5, p.size * 0.2, 0, p.size * 0.4);
+  ctx.quadraticCurveTo(-p.size * 0.5, p.size * 0.2, -p.size, -p.size * 0.1 + wingY);
+  ctx.quadraticCurveTo(-p.size * 0.5, -p.size * 0.5 + wingY, 0, 0);
+  ctx.fill();
+  ctx.stroke();
+
+  // Глазки
+  ctx.fillStyle = `rgba(255, 102, 0, ${p.alpha})`;
+  ctx.fillRect(-2, -2, 1.5, 1.5);
+  ctx.fillRect(1, -2, 1.5, 1.5);
+
+  ctx.restore();
+}
+
+function drawGhost(ctx, p) {
+  ctx.save();
+  ctx.translate(p.x, p.y);
+  p.wobble += 0.05;
+  const xOffset = Math.sin(p.wobble) * 3;
+
+  ctx.fillStyle = `rgba(240, 230, 255, ${p.alpha * 0.75})`;
+  ctx.shadowColor = 'rgba(157, 0, 255, 0.6)';
+  ctx.shadowBlur = 10;
+
+  ctx.beginPath();
+  ctx.arc(xOffset, 0, p.size * 0.6, Math.PI, 0, false);
+  ctx.lineTo(xOffset + p.size * 0.6, p.size * 1.2);
+  ctx.quadraticCurveTo(xOffset + p.size * 0.3, p.size * 0.9, xOffset, p.size * 1.2);
+  ctx.quadraticCurveTo(xOffset - p.size * 0.3, p.size * 0.9, xOffset - p.size * 0.6, p.size * 1.2);
+  ctx.closePath();
+  ctx.fill();
+
+  // Глаза призрака
+  ctx.fillStyle = `rgba(15, 5, 25, ${p.alpha})`;
+  ctx.beginPath();
+  ctx.arc(xOffset - 3, -2, 2, 0, Math.PI * 2);
+  ctx.arc(xOffset + 3, -2, 2, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.restore();
+}
+
+function drawSpider(ctx, p) {
+  ctx.save();
+  ctx.translate(p.x, p.y);
+  
+  // Паутинка
+  ctx.strokeStyle = `rgba(255, 255, 255, ${p.alpha * 0.3})`;
+  ctx.lineWidth = 0.8;
+  ctx.beginPath();
+  ctx.moveTo(0, 0);
+  ctx.lineTo(0, -50);
+  ctx.stroke();
+
+  // Тельце паучка
+  ctx.fillStyle = `rgba(20, 5, 30, ${p.alpha})`;
+  ctx.strokeStyle = `rgba(255, 102, 0, ${p.alpha * 0.8})`;
+  ctx.lineWidth = 0.8;
+  
+  ctx.beginPath();
+  ctx.arc(0, 0, p.size * 0.5, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.stroke();
+
+  // Ножки
+  ctx.strokeStyle = `rgba(20, 5, 30, ${p.alpha})`;
+  for (let i = -1; i <= 1; i += 2) {
+    for (let j = 0; j < 3; j++) {
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(i * (p.size + j * 2), (j - 1) * 3);
+      ctx.stroke();
+    }
+  }
+
+  ctx.restore();
+}
+
+function animate() {
+  ctx.clearRect(0, 0, innerWidth, innerHeight);
   wCtx.clearRect(0, 0, innerWidth, innerHeight);
-  if (!sleepMode) {
-    spawnCloudRain();
-    
-    const targetWeatherState = (envConfig.weather === 'random') ? activeWeatherState : envConfig.weather;
-    if (targetWeatherState === 'cloudy' || targetWeatherState === 'autumn_shower') {
-      const buttons = document.querySelectorAll('.sound-button');
-      const buttonRects = Array.from(buttons).map(b => b.getBoundingClientRect());
-
-      for (let i = weatherParticles.length - 1; i >= 0; i--) {
-        let p = weatherParticles[i];
-        p.x += p.vx;
-        p.y += p.vy;
-
-        let hitButton = false;
-        for (let rect of buttonRects) {
-          if (p.x >= rect.left && p.x <= rect.right && p.y >= rect.top && p.y <= rect.top + 6) {
-            hitButton = true;
-            if (Math.random() < 0.5) {
-              buttonRipples.push({
-                x: p.x,
-                y: rect.top + Math.random() * (rect.height * 0.5),
-                radius: Math.random() * 2 + 1,
-                alpha: 0.8
-              });
-            } else {
-              buttonRipples.push({
-                x: p.x,
-                y: rect.bottom,
-                radius: Math.random() * 2.5 + 1.5,
-                alpha: 0.9,
-                fallAfter: true,
-                vy: Math.random() * 4 + 4
-              });
-            }
-            break;
-          }
-        }
-
-        if (hitButton) {
-          weatherParticles.splice(i, 1);
-          continue;
-        }
-
-        if (p.y > innerHeight - 90) {
-          if (accumulatedWater.length < MAX_ACCUMULATED_ITEMS) {
-            accumulatedWater.push({
-              x: p.x,
-              y: innerHeight - (Math.random() * 70 + 20),
-              radius: Math.random() * 3 + 2,
-              alpha: 0.7
-            });
-          }
-          weatherParticles.splice(i, 1);
-          continue;
-        }
-
-        wCtx.beginPath();
-        wCtx.strokeStyle = `rgba(180, 210, 255, ${p.alpha})`;
-        wCtx.lineWidth = 1.2;
-        wCtx.moveTo(p.x, p.y);
-        wCtx.lineTo(p.x + p.vx * 2, p.y + p.length);
-        wCtx.stroke();
-      }
-    }
-
-    for (let i = buttonRipples.length - 1; i >= 0; i--) {
-      let r = buttonRipples[i];
-      if (r.fallAfter) {
-        r.y += r.vy;
-        if (r.y > innerHeight - 90) {
-          if (accumulatedWater.length < MAX_ACCUMULATED_ITEMS) {
-            accumulatedWater.push({
-              x: r.x,
-              y: innerHeight - (Math.random() * 70 + 20),
-              radius: Math.random() * 3 + 2,
-              alpha: 0.7
-            });
-          }
-          buttonRipples.splice(i, 1);
-          continue;
-        }
-      } else {
-        r.alpha -= 0.02;
-        if (r.alpha <= 0) {
-          buttonRipples.splice(i, 1);
-          continue;
-        }
-      }
-
-      wCtx.beginPath();
-      wCtx.fillStyle = `rgba(180, 210, 255, ${r.alpha})`;
-      wCtx.arc(r.x, r.y, r.radius, 0, Math.PI * 2);
-      wCtx.fill();
-    }
-
-    for (let i = autumnParticles.length - 1; i >= 0; i--) {
-      let leaf = autumnParticles[i];
-      leaf.x += leaf.vx + Math.sin(leaf.y * 0.02) * 0.5;
-      leaf.y += leaf.vy;
-      leaf.angle += leaf.vAngle;
-
-      if (leaf.y > innerHeight - 90) {
-        if (accumulatedLeaves.length < MAX_ACCUMULATED_ITEMS) {
-          accumulatedLeaves.push({
-            x: leaf.x,
-            y: innerHeight - (Math.random() * 75 + 20),
-            size: leaf.size,
-            angle: leaf.angle,
-            type: leaf.type,
-            color: leaf.color,
-            alpha: 0.95
-          });
-        }
-        autumnParticles.splice(i, 1);
-        continue;
-      }
-
-      wCtx.save();
-      wCtx.translate(leaf.x, leaf.y);
-      wCtx.rotate(leaf.angle);
-      drawLeafShape(wCtx, leaf.type, leaf.size, leaf.color, leaf.alpha);
-      wCtx.restore();
-    }
-
-    for (let i = accumulatedWater.length - 1; i >= 0; i--) {
-      let w = accumulatedWater[i];
-      w.alpha -= 0.0004; 
-
-      if (w.alpha <= 0) {
-        accumulatedWater.splice(i, 1);
-        continue;
-      }
-
-      wCtx.beginPath();
-      wCtx.fillStyle = `rgba(180, 210, 255, ${w.alpha})`;
-      wCtx.arc(w.x, w.y, w.radius, 0, Math.PI * 2);
-      wCtx.fill();
-    }
-
-    for (let i = accumulatedLeaves.length - 1; i >= 0; i--) {
-      let l = accumulatedLeaves[i];
-      l.alpha -= 0.0004; 
-
-      if (l.alpha <= 0) {
-        accumulatedLeaves.splice(i, 1);
-        continue;
-      }
-
-      wCtx.save();
-      wCtx.translate(l.x, l.y);
-      wCtx.rotate(l.angle);
-      drawLeafShape(wCtx, l.type, l.size, l.color, l.alpha);
-      wCtx.restore();
-    }
-  }
-
   sCtx.clearRect(0, 0, innerWidth, innerHeight);
+
+  // Звезды
   if (!sleepMode) {
-    spawnSteam();
-    
-    for (let i = steamParticles.length - 1; i >= 0; i--) {
-      let p = steamParticles[i];
+    starsArr.forEach(st => {
+      st.a += st.s;
+      ctx.fillStyle = `rgba(255, 170, 100, ${Math.abs(Math.sin(st.a)) * 0.8})`;
+      ctx.beginPath();
+      ctx.arc(st.x, st.y, st.r, 0, Math.PI * 2);
+      ctx.fill();
+    });
+  }
 
-      if (p.type === 'steam') {
-        p.x += p.vx; p.y += p.vy; p.size += p.growth; p.alpha -= 0.0005 * fxConfig.speed;
-        if (p.alpha <= 0) { steamParticles.splice(i, 1); continue; }
+  // Спавн частичек
+  spawnCloudRain();
+  spawnSteam();
 
-        sCtx.beginPath();
-        let gradient = sCtx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size);
-        gradient.addColorStop(0, `hsla(${p.hue}, 80%, 60%, ${p.alpha})`);
-        gradient.addColorStop(0.5, `hsla(${p.hue}, 80%, 60%, ${p.alpha * 0.4})`);
-        gradient.addColorStop(1, `hsla(${p.hue}, 80%, 60%, 0)`);
-        sCtx.fillStyle = gradient;
-        sCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        sCtx.fill();
-      }
-      else if (p.type === 'rain') {
-        p.y += p.vy;
-        p.alpha -= 0.005 * fxConfig.speed;
-        if (p.alpha <= 0 || p.y > innerHeight) { steamParticles.splice(i, 1); continue; }
+  // Отрисовка Дождя
+  for (let i = weatherParticles.length - 1; i >= 0; i--) {
+    let p = weatherParticles[i];
+    p.y += p.vy * fxConfig.speed;
+    p.x += p.vx * fxConfig.speed;
 
-        sCtx.beginPath();
-        sCtx.strokeStyle = `rgba(180, 210, 255, ${p.alpha})`;
-        sCtx.lineWidth = 1.5;
-        sCtx.moveTo(p.x, p.y);
-        sCtx.lineTo(p.x, p.y + p.length);
-        sCtx.stroke();
-      }
-      else if (p.type === 'snow') {
-        p.x += p.vx + Math.sin(p.y * 0.05) * 0.3;
-        p.y += p.vy;
-        p.alpha -= 0.002 * fxConfig.speed;
-        if (p.alpha <= 0 || p.y > innerHeight) { steamParticles.splice(i, 1); continue; }
+    wCtx.beginPath();
+    wCtx.strokeStyle = p.color || `rgba(180, 100, 255, ${p.alpha})`;
+    wCtx.lineWidth = 1.2;
+    wCtx.moveTo(p.x, p.y);
+    wCtx.lineTo(p.x + p.vx * 2, p.y + p.length);
+    wCtx.stroke();
 
-        sCtx.beginPath();
-        sCtx.fillStyle = `rgba(220, 235, 255, ${p.alpha})`;
-        sCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        sCtx.fill();
-      }
-      else if (p.type === 'comet_ast') {
-        p.x += p.vx;
-        p.y += p.vy;
-        p.rot += p.vRot;
-        p.alpha -= 0.004 * fxConfig.speed;
-
-        if (p.alpha <= 0 || p.x < 0 || p.x > innerWidth || p.y < 0 || p.y > innerHeight) { steamParticles.splice(i, 1); continue; }
-
-        sCtx.save();
-        sCtx.translate(p.x, p.y);
-        sCtx.rotate(p.rot);
-        sCtx.beginPath();
-        p.vertices.forEach((v, idx) => {
-          if (idx === 0) sCtx.moveTo(v.x, v.y);
-          else sCtx.lineTo(v.x, v.y);
-        });
-        sCtx.closePath();
-        sCtx.fillStyle = `rgba(160, 160, 180, ${p.alpha})`;
-        sCtx.strokeStyle = `rgba(210, 210, 230, ${p.alpha})`;
-        sCtx.lineWidth = 1;
-        sCtx.fill();
-        sCtx.stroke();
-        sCtx.restore();
-      }
-      else if (p.type === 'comet_tail') {
-        p.history.push({ x: p.x, y: p.y });
-        if (p.history.length > 10) p.history.shift();
-
-        p.x += p.vx;
-        p.y += p.vy;
-        p.alpha -= 0.005 * fxConfig.speed;
-
-        if (p.alpha <= 0 || p.x < 0 || p.x > innerWidth || p.y < 0 || p.y > innerHeight) { steamParticles.splice(i, 1); continue; }
-
-        if (p.history.length > 1) {
-          sCtx.beginPath();
-          sCtx.moveTo(p.history[0].x, p.history[0].y);
-          for (let h = 1; h < p.history.length; h++) {
-            sCtx.lineTo(p.history[h].x, p.history[h].y);
-          }
-          sCtx.lineTo(p.x, p.y);
-          sCtx.strokeStyle = p.color;
-          sCtx.globalAlpha = p.alpha * 0.6;
-          sCtx.lineWidth = p.size;
-          sCtx.stroke();
-          sCtx.globalAlpha = 1.0;
-        }
-
-        sCtx.beginPath();
-        sCtx.fillStyle = '#ffffff';
-        sCtx.shadowBlur = 6;
-        sCtx.shadowColor = p.color;
-        sCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        sCtx.fill();
-        sCtx.shadowBlur = 0;
-      }
-      else if (p.type === 'neondust') {
-        p.x += p.vx; p.y += p.vy;
-        p.alpha -= 0.012 * fxConfig.speed;
-        if (p.alpha <= 0) { steamParticles.splice(i, 1); continue; }
-
-        sCtx.beginPath();
-        sCtx.fillStyle = `hsla(${p.hue}, 100%, 65%, ${p.alpha})`;
-        sCtx.shadowBlur = 8;
-        sCtx.shadowColor = `hsl(${p.hue}, 100%, 50%)`;
-        sCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        sCtx.fill();
-        sCtx.shadowBlur = 0;
-      }
-      else if (p.type === 'aura') {
-        p.radius += p.growth;
-        p.alpha -= 0.008 * fxConfig.speed;
-        if (p.alpha <= 0 || p.radius >= p.maxRadius) { steamParticles.splice(i, 1); continue; }
-
-        sCtx.beginPath();
-        sCtx.strokeStyle = p.color;
-        sCtx.globalAlpha = p.alpha;
-        sCtx.lineWidth = 2;
-        sCtx.arc(p.cx, p.cy, p.radius, 0, Math.PI * 2);
-        sCtx.stroke();
-        sCtx.globalAlpha = 1;
-      }
+    if (p.y > innerHeight) {
+      weatherParticles.splice(i, 1);
     }
   }
 
-  requestAnimationFrame(draw);
+  // Отрисовка Хэллоуинских Листьев & Тыкв
+  for (let i = autumnParticles.length - 1; i >= 0; i--) {
+    let p = autumnParticles[i];
+    p.y += p.vy * fxConfig.speed;
+    p.x += Math.sin(p.y * 0.02) * 0.8 + p.vx * fxConfig.speed;
+    p.angle += p.vAngle * fxConfig.speed;
+
+    wCtx.save();
+    wCtx.translate(p.x, p.y);
+    wCtx.rotate(p.angle);
+    drawLeafShape(wCtx, p.type, p.size, p.color, p.alpha);
+    wCtx.restore();
+
+    if (p.y > innerHeight + 20) {
+      autumnParticles.splice(i, 1);
+    }
+  }
+
+  // Отрисовка Эффектов Кнопок
+  for (let i = steamParticles.length - 1; i >= 0; i--) {
+    let p = steamParticles[i];
+
+    if (p.type === 'bat') {
+      p.x += p.vx;
+      p.y += p.vy;
+      drawBat(sCtx, p);
+      p.alpha -= 0.003;
+      if (p.alpha <= 0 || p.y < -50 || p.x < -50 || p.x > innerWidth + 50) steamParticles.splice(i, 1);
+    }
+    else if (p.type === 'ghost') {
+      p.x += p.vx;
+      p.y += p.vy;
+      drawGhost(sCtx, p);
+      p.alpha -= 0.003;
+      if (p.alpha <= 0 || p.y < -50) steamParticles.splice(i, 1);
+    }
+    else if (p.type === 'spider') {
+      p.x += p.vx;
+      p.y += p.vy;
+      drawSpider(sCtx, p);
+      p.alpha -= 0.004;
+      if (p.alpha <= 0 || p.y > innerHeight) steamParticles.splice(i, 1);
+    }
+    else if (p.type === 'steam') {
+      p.x += p.vx;
+      p.y += p.vy;
+      p.size += p.growth;
+      p.alpha -= 0.0025;
+
+      sCtx.save();
+      sCtx.fillStyle = `hsla(${p.hue}, 80%, 60%, ${p.alpha})`;
+      sCtx.shadowColor = `hsla(${p.hue}, 80%, 60%, 0.5)`;
+      sCtx.shadowBlur = 12;
+      sCtx.beginPath();
+      sCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      sCtx.fill();
+      sCtx.restore();
+
+      if (p.alpha <= 0) steamParticles.splice(i, 1);
+    }
+    else if (p.type === 'spark') {
+      p.x += p.vx;
+      p.y += p.vy;
+      p.alpha -= 0.008;
+
+      sCtx.save();
+      sCtx.fillStyle = p.color;
+      sCtx.shadowColor = p.color;
+      sCtx.shadowBlur = 8;
+      sCtx.beginPath();
+      sCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      sCtx.fill();
+      sCtx.restore();
+
+      if (p.alpha <= 0) steamParticles.splice(i, 1);
+    }
+    else if (p.type === 'neondust') {
+      p.x += p.vx;
+      p.y += p.vy;
+      p.pulse += 0.05;
+      p.alpha -= 0.003;
+
+      let currentAlpha = Math.max(0, p.alpha + Math.sin(p.pulse) * 0.15);
+
+      sCtx.save();
+      sCtx.fillStyle = `hsla(${p.hue}, 100%, 60%, ${currentAlpha})`;
+      sCtx.shadowColor = `hsla(${p.hue}, 100%, 60%, 0.8)`;
+      sCtx.shadowBlur = 10;
+      sCtx.beginPath();
+      sCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      sCtx.fill();
+      sCtx.restore();
+
+      if (p.alpha <= 0) steamParticles.splice(i, 1);
+    }
+  }
+
+  requestAnimationFrame(animate);
 }
 
-draw();
-
-document.getElementById('welcomeModal').style.display = 'flex';
-updateUI();
 applyEnvironmentSettings();
-
-function switchTab(event, tabId) {
-    logButtonClick('ui_welcome_tab_switch_' + tabId);
-    document.querySelectorAll('.help-section').forEach(s => s.classList.remove('active'));
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById(tabId).classList.add('active');
-}
-
-const linksTrigger = document.getElementById('linksTrigger');
-const linksOptions = document.getElementById('linksOptions');
-const speedDropdown = document.getElementById('speedDropdown');
-
-linksTrigger.addEventListener('click', (e) => {
-  e.stopPropagation();
-  logButtonClick('ui_social_links_menu');
-  if (speedDropdown) speedDropdown.classList.remove('open');
-  linksOptions.classList.toggle('open');
-});
-
-window.addEventListener('click', () => {
-  linksOptions.classList.remove('open');
-});
-
+updateUI();
+animate();
 </script>
 </body>
 </html>
