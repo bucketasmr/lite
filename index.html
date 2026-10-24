@@ -366,7 +366,7 @@
     height: 100%; 
     pointer-events: none; 
     z-index: 3; 
-    filter: blur(0px); /* По умолчанию выключено (0px) */
+    filter: blur(3px); /* По умолчанию выключено (0px) */
     transition: filter 0.3s ease;
   }
   #steamCanvas { z-index: 4; }
@@ -678,7 +678,7 @@
 
     <!-- Переключатель Blur Background вместо ползунка -->
     <div class="settings-group">
-      <input type="checkbox" id="blurToggleInput">
+      <input type="checkbox" id="blurToggleInput"checked>
       <label for="blurToggleInput" class="blur-toggle-container">
         <span class="blur-toggle-label" id="lblBlurBackground">Blur Background</span>
         <div class="blur-toggle-switch"></div>
@@ -901,6 +901,9 @@ blurToggleInput.onchange = (e) => {
   
   logButtonClick('ui_weather_blur_toggle_' + (isChecked ? 'on' : 'off'));
 };
+
+// Принудительно применяем активное состояние при загрузке страницы
+blurToggleInput.checked = true;
 
 document.addEventListener('visibilitychange', async () => {
   if (document.visibilityState === 'visible') {
