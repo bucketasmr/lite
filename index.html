@@ -778,6 +778,19 @@ async function requestWakeLock() {
 updateConnections();
 requestWakeLock();
 
+// Автоматический перезапрос WakeLock при возврате на вкладку
+document.addEventListener('visibilitychange', async () => {
+  if (document.visibilityState === 'visible') {
+    requestWakeLock();
+    // Принудительное возобновление аудиопотоков при разблокировке
+    audioElements.forEach(el => {
+      if (el.active && el.audio.paused) {
+        el.audio.play().catch(() => {});
+      }
+    });
+  }
+});
+
 const sounds = [
   { "file": "purplebrush.mp3", "img": "purplebrush.png", "name": { "en": "Purple Brush 🧹", "pt": "Pincel Roxo 🧹", "ru": "Фиолетовая кисть 🧹", "uk": "Фіолетовий пензель 🧹" }, "color": "#9d00ff", "locked": false },
   { "file": "wax.mp3", "img": "wax.png", "name": { "en": "Witch Wax 🕯️", "pt": "Cera das Bruxas 🕯️", "ru": "Воск ведьмы 🕯️", "uk": "Віск відьми 🕯️" }, "color": "#ff6600", "locked": false },
@@ -1056,6 +1069,7 @@ sounds.forEach((s, idx) => {
   audio.loop = true;
   audio.crossOrigin = "anonymous";
   audio.setAttribute('playsinline', '');
+  audio.setAttribute('webkit-playsinline', '');
   
   const state = { 
     audio, 
@@ -1265,7 +1279,6 @@ function updateUI() {
   const titleEl = document.getElementById('title');
   titleEl.innerText = t.title;
   
-  // Для RU/UK переключаем стиль шрифта заголовка
   if (currentLang === 'ru' || currentLang === 'uk') {
     titleEl.classList.add('cyrillic-title');
   } else {
