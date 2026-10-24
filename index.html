@@ -14,7 +14,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Signika:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
-  /* Основной интерфейс - Halloween Theme */
   :root {
     --halloween-orange: #ff6600;
     --halloween-purple: #9d00ff;
@@ -31,7 +30,6 @@
     touch-action: manipulation; -webkit-user-select: none; user-select: none;
   }
   
-  /* Хэллоуинские градиенты времени суток */
   body.tod-morning { background: linear-gradient(180deg, #4a154b 0%, #ff5252 50%, #ff793f 100%); }
   body.tod-noon { background: linear-gradient(180deg, #2d132c 0%, #801336 60%, #ee4540 100%); }
   body.tod-evening { background: linear-gradient(180deg, #0f051d 0%, #290025 50%, #ff5200 100%); }
@@ -43,7 +41,6 @@
     transition: background 1.5s ease;
   }
   
-  /* Контейнер для жутких туманных облаков */
   .clouds-container {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     pointer-events: none; z-index: 2; overflow: hidden;
@@ -91,7 +88,6 @@
     100% { transform: translateX(calc(100vw + 450px)); }
   }
 
-  /* Жуткая Луна */
   .spooky-moon {
     position: fixed;
     top: 30px;
@@ -115,7 +111,6 @@
     box-shadow: 25px 10px 0 3px rgba(180, 100, 0, 0.2), 10px 30px 0 -2px rgba(180, 100, 0, 0.25);
   }
 
-  /* Паутина по углам */
   .cobweb {
     position: fixed;
     width: 120px;
@@ -143,7 +138,6 @@
     flex-grow: 1;
   }
 
-  /* Аккуратный стиль заголовка для кириллицы (RU / UK) */
   h1.cyrillic-title {
     font-family: 'Signika', sans-serif;
     font-weight: 700;
@@ -162,7 +156,6 @@
   .live-dot { width: 6px; height: 6px; background: #ff6600; border-radius: 50%; box-shadow: 0 0 8px #ff6600; animation: blink 1.5s infinite; }
   @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
-  /* Настройки: Шестерёнка строгая в один ряд со словом */
   #settingsBtn {
     background: rgba(40, 10, 60, 0.5);
     border: 1px solid rgba(255, 102, 0, 0.4);
@@ -208,18 +201,19 @@
 
   .controls { margin-bottom:12px; display:flex; gap:8px; flex-wrap: wrap; justify-content: center; align-items: center; z-index: 10; transition: opacity 0.5s; width: 100%; max-width: 600px; }
   .controls > button, .controls .select-trigger { 
-    padding:8px 12px; 
-    border:1px solid rgba(255, 102, 0, 0.3); 
-    border-radius:12px; 
+    padding: 8px 12px; 
+    border: 1px solid rgba(255, 102, 0, 0.3); 
+    border-radius: 12px; 
     background: rgba(25, 5, 40, 0.6); 
-    color:#e0d0ff; 
-    cursor:pointer; 
-    font-weight:bold; 
+    color: #e0d0ff; 
+    cursor: pointer; 
+    font-weight: bold; 
     backdrop-filter: blur(5px); 
     font-size: 13px; 
     transition: all 0.3s; 
     box-shadow: 0 2px 8px rgba(0,0,0,0.4); 
-    white-space: nowrap;
+    white-space: nowrap; 
+    flex-shrink: 0;      
   }
   .controls > button:hover, .controls .select-trigger:hover {
     border-color: #ff6600;
@@ -230,9 +224,11 @@
   #randomBtn { 
     background: linear-gradient(135deg, rgba(157, 0, 255, 0.6) 0%, rgba(255, 102, 0, 0.6) 100%); 
     border: 1px solid rgba(255, 102, 0, 0.6); 
-    min-width: 80px; 
+    min-width: 105px; 
+    text-align: center;
     color: #fff;
     text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+    flex-shrink: 0;
   }
   #randomBtn:hover {
     box-shadow: 0 0 15px rgba(255, 102, 0, 0.8);
@@ -365,7 +361,6 @@
   #weatherCanvas { z-index: 3; }
   #steamCanvas { z-index: 4; }
   
-  /* --- HALLOWEEN GLASS MODALS --- */
   .modal { 
     display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
     background: rgba(5, 0, 15, 0.65); z-index: 10001; justify-content: center; align-items: center; 
@@ -410,7 +405,6 @@
   }
   .modal-btn:active { transform: scale(0.98); }
 
-  /* Элементы управления в Настройках */
   .settings-group { margin-bottom: 18px; }
   .settings-group label { display: block; font-size: 13px; font-weight: bold; color: #ff9900; margin-bottom: 8px; text-shadow: 0 0 8px rgba(255,102,0,0.5); }
   .settings-select, .settings-range {
@@ -436,9 +430,6 @@
     color: #fff;
   }
 
-  .mute-btn { display: none !important; pointer-events: none !important; }
-
-  /* Стиль кнопок выбора погоды */
   .weather-option-btn {
     background: rgba(30, 10, 45, 0.6);
     border: 1px solid rgba(255, 102, 0, 0.3);
@@ -466,7 +457,6 @@
     font-size: 20px;
   }
 
-  /* Liquid Glass уведомление для Soon */
   #soonToast {
     position: fixed;
     bottom: 35px;
@@ -492,11 +482,66 @@
     transform: translateX(-50%) translateY(0);
     opacity: 1;
   }
+  
+  .button-creature {
+    position: fixed;
+    z-index: 999999;
+    font-size: 55px;
+    pointer-events: none;
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.2);
+    transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease;
+  }
+  
+  .button-creature.show {
+    opacity: 0.98;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  .button-creature.creature-ghost.hide-anim {
+    transition: transform 1.2s ease-in, opacity 1s ease-out;
+    transform: translate(-50%, -140px) scale(1.2) rotate(-10deg);
+    opacity: 0;
+  }
+  
+  .button-creature.creature-bat.hide-anim {
+    transition: transform 0.8s cubic-bezier(0.55, 0.055, 0.675, 0.19), opacity 0.6s ease-out;
+    transform: translate(-140px, -150px) scale(0.6) rotate(-25deg);
+    opacity: 0;
+  }
+
+  .button-creature.creature-spider.hide-anim {
+    transition: transform 1s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.8s ease-out;
+    transform: translate(80px, -120px) scale(0.7);
+    opacity: 0;
+  }
+
+  .button-creature.creature-pumpkin.hide-anim {
+    transition: transform 0.9s cubic-bezier(0.6, -0.28, 0.735, 0.045), opacity 0.7s ease-out;
+    transform: translate(-50%, 150px) scale(0.8) rotate(45deg);
+    opacity: 0;
+  }
+
+  .button-creature.creature-wizard.hide-anim {
+    transition: transform 1.1s ease-in-out, opacity 1s ease-out;
+    transform: translate(-50%, 50px) scale(0.1) rotate(180deg);
+    opacity: 0;
+  }
+
+  .button-creature.creature-skeleton.hide-anim {
+    transition: transform 0.9s ease-in, opacity 0.7s ease-out;
+    transform: translate(-50%, 90px) scale(0.6);
+    opacity: 0;
+  }
+
+  .sound-button, .controls > button, #settingsBtn, .select-trigger {
+    position: relative;
+    box-sizing: border-box;
+  }
 </style>
 </head>
 <body class="tod-night">
 
-<!-- Хэллоуинские декоративные элементы -->
 <div class="spooky-moon"></div>
 <svg class="cobweb cobweb-top-left" viewBox="0 0 100 100" fill="none" stroke="#ff6600">
   <path d="M0,0 L100,0 M0,0 L0,100 M0,0 L100,100 M0,0 L50,100 M0,0 L100,50" stroke-width="1"/>
@@ -520,10 +565,8 @@
 <canvas id="steamCanvas"></canvas>
 <div class="overlay" id="envOverlay"></div>
 
-<!-- Кастомное всплывающее уведомление с эффектом Liquid Glass -->
 <div id="soonToast">This sound will be available soon! 🎃</div>
 
-<!-- Настройки -->
 <div id="settingsModal" class="modal">
   <div class="modal-content">
     <h2 style="color: #ff6600; margin: 0 0 18px 0; font-size: 20px; font-family: 'Creepster', cursive; letter-spacing: 1px; text-shadow: 0 0 10px rgba(255,102,0,0.6);" id="settingsTitle">Settings ⚙️</h2>
@@ -532,7 +575,6 @@
       <span>❓</span> <span id="helpBtnLabel">Help / Guide</span>
     </button>
 
-    <!-- Выпадающее меню: Время суток -->
     <div class="settings-group">
       <label id="lblTimeOfDay">Time of Day</label>
       <select id="timeOfDaySelect" class="settings-select">
@@ -544,7 +586,6 @@
       </select>
     </div>
 
-    <!-- Выпадающее меню: Погода -->
     <div class="settings-group">
       <label id="lblWeather">Weather</label>
       <select id="weatherSelect" class="settings-select">
@@ -598,7 +639,6 @@
   </div>
 </div>
 
-<!-- Модальное окно выбора погоды -->
 <div id="weatherChoiceModal" class="modal">
   <div class="modal-content" style="text-align: center;">
     <h2 style="color: #ff6600; margin: 0 0 15px 0; font-size: 22px; font-family: 'Creepster', cursive; letter-spacing: 1px; text-shadow: 0 0 10px rgba(255,102,0,0.6);" id="weatherChoiceTitle">Select Weather</h2>
@@ -623,7 +663,6 @@
   </div>
 </div>
 
-<!-- Уведомление: Случайные эффекты -->
 <div id="fxPromoModal" class="modal">
   <div class="modal-content" style="text-align: center;">
     <h2 style="color: #ff6600; margin: 0 0 10px 0; font-size: 22px; font-family: 'Creepster', cursive; letter-spacing: 1px; text-shadow: 0 0 10px rgba(255,102,0,0.6);" id="fxPromoTitle">Halloween Spells: Effects</h2>
@@ -653,7 +692,6 @@
   </div>
 </div>
 
-<!-- Приветственное модальное окно -->
 <div id="welcomeModal" class="modal" style="display: flex;">
   <div class="modal-content">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
@@ -681,7 +719,6 @@
       <div class="live-dot"></div>
       <span id="online-count">—</span> LIVE
     </div>
-    <!-- Кнопка Settings: Настройки и Шестерёнка строгой строкой рядом -->
     <div id="settingsBtn" onclick="openSettings()">
       <span id="settingsBtnText">Settings</span> ⚙️
     </div>
@@ -705,7 +742,6 @@
         <div class="fav-dropdown" id="favDropdown"></div>
     </div>
 
-    <!-- Кнопка Sleep, Repair и Скорость (Medium) в одном общем блоке controls -->
     <button id="sleepBtn">Sleep: OFF</button>
     <button id="repairBtn">REPAIR 🧙‍♂️</button>
     
@@ -778,11 +814,9 @@ async function requestWakeLock() {
 updateConnections();
 requestWakeLock();
 
-// Автоматический перезапрос WakeLock при возврате на вкладку
 document.addEventListener('visibilitychange', async () => {
   if (document.visibilityState === 'visible') {
     requestWakeLock();
-    // Принудительное возобновление аудиопотоков при разблокировке
     audioElements.forEach(el => {
       if (el.active && el.audio.paused) {
         el.audio.play().catch(() => {});
@@ -795,7 +829,7 @@ const sounds = [
   { "file": "purplebrush.mp3", "img": "purplebrush.png", "name": { "en": "Purple Brush 🧹", "pt": "Pincel Roxo 🧹", "ru": "Фиолетовая кисть 🧹", "uk": "Фіолетовий пензель 🧹" }, "color": "#9d00ff", "locked": false },
   { "file": "wax.mp3", "img": "wax.png", "name": { "en": "Witch Wax 🕯️", "pt": "Cera das Bruxas 🕯️", "ru": "Воск ведьмы 🕯️", "uk": "Віск відьми 🕯️" }, "color": "#ff6600", "locked": false },
   { "file": "choko.mp3", "img": "choko.png", "name": { "en": "Spooky Choco 🍫", "pt": "Chocolate Assustador 🍫", "ru": "Жуткий шоколад 🍫", "uk": "Моторошний шоколад 🍫" }, "color": "#8b4513", "locked": false },
-  { "file": "strawberry.mp3", "img": "strawberry.png", "name": { "en": "Vampire Potion 🧪", "pt": "Poção Vampira 🧪", "ru": "Зелье вампира 🧪", "uk": "Зілля вампіра 🧪" }, "color": "#ff0055", "locked": false },
+  { "file": "strawberry.mp3", "img": "strawberry.png", "name": { "en": "Vampire Potion 🧪", "pt": "Poção Vampira 🧪", "ru": "Зелье вампира 🧪", "uk": "Зілля вампира 🧪" }, "color": "#ff0055", "locked": false },
   { "file": "oldphone.mp3", "img": "oldphone.png", "name": { "en": "Haunted Phone ☎️", "pt": "Telefone Assombrado ☎️", "ru": "Призрачный телефон ☎️", "uk": "Примарний телефон ☎️" }, "color": "#4a0e4e", "locked": false },
   { "file": "carrot.mp3", "img": "carrot.png", "name": { "en": "Jack Carrot 🎃", "pt": "Cenoura Jack 🎃", "ru": "Тыквенный хруст 🎃", "uk": "Гарбузовий хрустіт 🎃" }, "color": "#ff8c00", "locked": false },
   { "file": "greybrush.mp3", "img": "greybrush.png", "name": { "en": "Ghost Brush 👻", "pt": "Pincel Fantasma 👻", "ru": "Призрачная кисть 👻", "uk": "Примарний пензель 👻" }, "color": "#8c8c8c", "locked": false },
@@ -971,7 +1005,7 @@ function triggerFirstAudioPlay() {
     fxTimerId = setTimeout(() => {
       if (fxConfig.style !== 'random') {
         logButtonClick('ui_fx_promo_modal_shown');
-        document.getElementById('fxPromoModal').style.display = 'flex';
+        openModalWithCreatures('fxPromoModal');
       }
     }, 600000);
   }
@@ -980,7 +1014,7 @@ function triggerFirstAudioPlay() {
     weatherTimerStarted = true;
     weatherTimerId = setTimeout(() => {
       logButtonClick('ui_weather_choice_modal_shown');
-      document.getElementById('weatherChoiceModal').style.display = 'flex';
+      openModalWithCreatures('weatherChoiceModal');
     }, 300000);
   }
 }
@@ -1129,7 +1163,7 @@ function openUnlockModal(el) {
     
     document.getElementById('unlockTriggerBtn').disabled = false;
     document.getElementById('unlockTriggerBtn').style.opacity = "1";
-    document.getElementById('unlockModal').style.display = 'flex';
+    openModalWithCreatures('unlockModal');
 }
 
 document.getElementById('cancelUnlock').onclick = () => {
@@ -1635,7 +1669,7 @@ function resetIdleTimer() {
 function showIdleModal() {
   if (document.getElementById('welcomeModal').style.display !== 'flex' && !randomActive && document.getElementById('unlockModal').style.display !== 'flex' && document.getElementById('settingsModal').style.display !== 'flex' && document.getElementById('fxPromoModal').style.display !== 'flex' && document.getElementById('weatherChoiceModal').style.display !== 'flex') {
     logButtonClick('ui_idle_modal_shown');
-    document.getElementById('idleModal').style.display = 'flex';
+    openModalWithCreatures('idleModal');
   }
 }
 
@@ -1662,28 +1696,52 @@ document.addEventListener('click', () => {
   resetIdleTimer();
 });
 
-function openSettings() {
-  logButtonClick('ui_settings_open');
-  document.getElementById('settingsModal').style.display = 'flex';
-  clearTimeout(idleTimer);
+function openModalWithCreatures(modalId) {
+  const modal = document.getElementById(modalId);
+  if (modal) {
+    modal.style.display = 'flex';
+    const content = modal.querySelector('.modal-content');
+    if (content) {
+      initElementCreature(content);
+    }
+  }
 }
 
 document.getElementById('closeSettings').onclick = () => {
   logButtonClick('ui_settings_close');
-  document.getElementById('settingsModal').style.display = 'none';
+  const modal = document.getElementById('settingsModal');
+  modal.style.display = 'none';
+  // Уничтожаем существ сразу при закрытии
+  if (modal._activeCreatureCleanup) modal._activeCreatureCleanup();
   resetIdleTimer();
+};
+
+document.getElementById('closeWelcome').onclick = () => { 
+    logButtonClick('ui_welcome_close');
+    const modal = document.getElementById('welcomeModal');
+    modal.style.display = 'none'; 
+    if (modal._activeCreatureCleanup) modal._activeCreatureCleanup();
+    resetIdleTimer(); 
 };
 
 document.getElementById('openHelpFromSettings').onclick = () => {
   logButtonClick('ui_settings_open_help');
-  document.getElementById('settingsModal').style.display = 'none';
+  const sModal = document.getElementById('settingsModal');
+  sModal.style.display = 'none';
+  if (sModal._activeCreatureCleanup) sModal._activeCreatureCleanup();
   showHelp();
 };
 
 function showHelp() { 
     logButtonClick('ui_help_question_btn');
-    document.getElementById('welcomeModal').style.display = 'flex'; 
+    openModalWithCreatures('welcomeModal');
     clearTimeout(idleTimer); 
+}
+
+function openSettings() {
+  logButtonClick('ui_settings_open');
+  openModalWithCreatures('settingsModal');
+  clearTimeout(idleTimer);
 }
 
 document.getElementById('fxStyleSelect').onchange = (e) => {
@@ -2199,7 +2257,173 @@ applyEnvironmentSettings();
 updateUI();
 animate();
 
-document.getElementById('welcomeModal').style.display = 'flex';
+openModalWithCreatures('welcomeModal');
 </script>
+
+<script>
+const creaturesList = [
+  { icon: '👻', class: 'creature-ghost' },
+  { icon: '🦇', class: 'creature-bat' },
+  { icon: '🕷️', class: 'creature-spider' },
+  { icon: '🎃', class: 'creature-pumpkin' },
+  { icon: '🧙‍♂️', class: 'creature-wizard' },
+  { icon: '💀', class: 'creature-skeleton' }
+];
+
+function initElementCreature(element) {
+  if (!element) return;
+
+  // Если у элемента уже запущен процесс, не перезапускаем заново, чтобы не дергать анимацию
+  if (element._activeCreatureRunning) return;
+  element._activeCreatureRunning = true;
+
+  let creatureSpan = document.createElement('span');
+  creatureSpan.className = 'button-creature';
+  document.body.appendChild(creatureSpan);
+
+  let currentSide = 'top';
+  let timeoutId = null;
+  let isRunning = true;
+
+  function isElementStillActive() {
+    if (!document.body.contains(element)) return false;
+
+    // Проверяем модальное окно
+    const modalParent = element.closest('.modal');
+    if (modalParent) {
+      const computedDisplay = window.getComputedStyle(modalParent).display;
+      if (computedDisplay === 'none') return false;
+    }
+
+    // Если это звуковая кнопка, проверяем, активна ли она в данный момент
+    if (element.classList.contains('sound-button')) {
+      if (!element.classList.contains('active')) return false;
+    }
+
+    return true;
+  }
+
+  function cleanup() {
+    isRunning = false;
+    if (timeoutId) clearTimeout(timeoutId);
+    if (creatureSpan) creatureSpan.remove();
+    element._activeCreatureRunning = false;
+    element._activeCreatureCleanup = null;
+  }
+
+  element._activeCreatureCleanup = cleanup;
+
+  function updatePosition() {
+    const rect = element.getBoundingClientRect();
+    let x = rect.left + rect.width / 2;
+    let y = rect.top;
+
+    if (currentSide === 'top') {
+      x = rect.left + Math.random() * rect.width;
+      y = rect.top - 20;
+    } else if (currentSide === 'bottom') {
+      x = rect.left + Math.random() * rect.width;
+      y = rect.bottom + 25;
+    } else if (currentSide === 'left') {
+      x = rect.left - 25;
+      y = rect.top + Math.random() * rect.height;
+    } else if (currentSide === 'right') {
+      x = rect.right + 25;
+      y = rect.top + Math.random() * rect.height;
+    }
+
+    creatureSpan.style.left = x + 'px';
+    creatureSpan.style.top = y + 'px';
+  }
+
+  const sides = ['top', 'bottom', 'left', 'right'];
+
+  function runCreatureCycle() {
+    if (!isRunning || !isElementStillActive()) {
+      cleanup();
+      return;
+    }
+
+    currentSide = sides[Math.floor(Math.random() * sides.length)];
+
+    timeoutId = setTimeout(() => {
+      if (!isRunning || !isElementStillActive()) {
+        cleanup();
+        return;
+      }
+      
+      const creatureObj = creaturesList[Math.floor(Math.random() * creaturesList.length)];
+      creatureSpan.className = 'button-creature ' + creatureObj.class;
+      creatureSpan.innerText = creatureObj.icon;
+      
+      updatePosition();
+      creatureSpan.classList.add('show');
+
+      timeoutId = setTimeout(() => {
+        if (!isRunning || !isElementStillActive()) {
+          cleanup();
+          return;
+        }
+        
+        creatureSpan.classList.remove('show');
+        creatureSpan.classList.add('hide-anim');
+
+        timeoutId = setTimeout(() => {
+          if (isRunning && isElementStillActive()) {
+            runCreatureCycle();
+          } else {
+            cleanup();
+          }
+        }, 1800); 
+
+      }, 3500);
+
+    }, 800); 
+  }
+
+  runCreatureCycle();
+}
+
+// Функция для синхронизации персонажей со всеми активными кнопками (включая режим PLAY)
+function syncSoundCreatures() {
+  audioElements.forEach(el => {
+    if (el.active && !el.locked) {
+      // Если звук активен, запускаем персонажей на этой кнопке
+      initElementCreature(el.btn);
+    } else {
+      // Если звук выключился (в том числе при смене в PLAY), сразу убираем существ
+      if (el.btn._activeCreatureCleanup) {
+        el.btn._activeCreatureCleanup();
+      }
+    }
+  });
+}
+
+// Модифицируем стандартный runRandom, чтобы он вызывал синхронизацию
+const originalRunRandom = window.runRandom;
+window.runRandom = function() {
+  if (typeof originalRunRandom === 'function') {
+    originalRunRandom();
+  }
+  syncSoundCreatures();
+};
+
+// Также перехватываем fadeIn и fadeOut, чтобы персонажи появлялись/пропадали мгновенно при ручном или авто-клике
+const originalFadeIn = window.fadeIn;
+window.fadeIn = function(el) {
+  originalFadeIn(el);
+  setTimeout(syncSoundCreatures, 50);
+};
+
+const originalFadeOut = window.fadeOut;
+window.fadeOut = function(el) {
+  originalFadeOut(el);
+  setTimeout(syncSoundCreatures, 50);
+};
+
+// Запуск персонажей для приветственного окна при загрузке
+openModalWithCreatures('welcomeModal');
+</script>
+
 </body>
 </html>
