@@ -2009,7 +2009,8 @@ function draw() {
               x: p.x,
               y: innerHeight - (Math.random() * 70 + 20),
               radius: Math.random() * 3 + 2,
-              alpha: 0.7
+              alpha: 0.8,
+              fadeSpeed: Math.random() * 0.0005 + 0.0002 // <-- Обязательно должно быть здесь
             });
           }
           weatherParticles.splice(i, 1);
@@ -2036,7 +2037,7 @@ function draw() {
               y: innerHeight - (Math.random() * 70 + 20),
               radius: Math.random() * 3 + 2,
               alpha: 0.8,
-              fadeSpeed: Math.random() * 0.0005 + 0.0002 // Замедленное индивидуальное растаивание (~25 секунд)
+              fadeSpeed: Math.random() * 0.0005 + 0.0002 // <-- ДОБАВЛЕНО: индивидуальный плавный таймер таяния (~25 секунд)
             });
           }
           buttonRipples.splice(i, 1);
