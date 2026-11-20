@@ -153,7 +153,6 @@
                 inset 0 -1px 1px rgba(0, 0, 0, 0.3);
   }
 
-  /* Стиль для закругленной картинки внутри кнопки масштабом 88% */
   .button-img {
     position: absolute;
     width: 88%;
@@ -167,7 +166,6 @@
     pointer-events: none;
   }
   
-  /* Тонкая настройка активного состояния для сохранения стекла */
   .sound-button::before {
     content: ''; 
     position: absolute; 
@@ -235,7 +233,6 @@
   #weatherCanvas { z-index: 3; }
   #steamCanvas { z-index: 4; }
   
-  /* --- IOS 26 LIQUID GLASS NOTIFICATIONS & MODALS --- */
   .modal { 
     display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
     background: rgba(0, 0, 0, 0.45); z-index: 10001; justify-content: center; align-items: center; 
@@ -276,7 +273,6 @@
   }
   .modal-btn:active { transform: scale(0.98); }
 
-  /* Элементы управления в Настройках */
   .settings-group { margin-bottom: 18px; }
   .settings-group label { display: block; font-size: 13px; font-weight: bold; color: #ffb400; margin-bottom: 8px; text-shadow: 0 0 8px rgba(255,180,0,0.4); }
   .settings-select, .settings-range {
@@ -297,9 +293,6 @@
     backdrop-filter: blur(10px); box-shadow: inset 0 1px 1px rgba(255,255,255,0.2);
   }
 
-  .mute-btn { display: none !important; pointer-events: none !important; }
-
-  /* Стиль кнопок выбора погоды */
   .weather-option-btn {
     background: rgba(255, 255, 255, 0.06);
     border: 1px solid rgba(255, 180, 0, 0.25);
@@ -327,7 +320,6 @@
     font-size: 20px;
   }
 
-  /* Красивое кастомное Liquid Glass уведомление для Soon */
   #soonToast {
     position: fixed;
     bottom: 35px;
@@ -370,10 +362,8 @@
 <canvas id="steamCanvas"></canvas>
 <div class="overlay" id="envOverlay"></div>
 
-<!-- Кастомное всплывающее уведомление с эффектом Liquid Glass -->
 <div id="soonToast">This sound will be available soon!</div>
 
-<!-- Настройки -->
 <div id="settingsModal" class="modal">
   <div class="modal-content">
     <h2 style="color: #ffb400; margin: 0 0 18px 0; font-size: 20px; text-shadow: 0 0 10px rgba(255,180,0,0.4);" id="settingsTitle">Settings</h2>
@@ -382,7 +372,6 @@
       <span>❓</span> <span id="helpBtnLabel">Help / Guide</span>
     </button>
 
-    <!-- Выпадающее меню: Время суток -->
     <div class="settings-group">
       <label id="lblTimeOfDay">Time of Day</label>
       <select id="timeOfDaySelect" class="settings-select">
@@ -394,7 +383,6 @@
       </select>
     </div>
 
-    <!-- Выпадающее меню: Погода -->
     <div class="settings-group">
       <label id="lblWeather">Weather</label>
       <select id="weatherSelect" class="settings-select">
@@ -447,7 +435,6 @@
   </div>
 </div>
 
-<!-- Модальное окно выбора погоды -->
 <div id="weatherChoiceModal" class="modal">
   <div class="modal-content" style="text-align: center;">
     <h2 style="color: #ffb400; margin: 0 0 15px 0; font-size: 20px; text-shadow: 0 0 10px rgba(255,180,0,0.4);" id="weatherChoiceTitle">Select Weather</h2>
@@ -475,7 +462,6 @@
   </div>
 </div>
 
-<!-- Новое уведомление: Случайные эффекты -->
 <div id="fxPromoModal" class="modal">
   <div class="modal-content" style="text-align: center;">
     <h2 style="color: #ffb400; margin: 0 0 10px 0; font-size: 20px; text-shadow: 0 0 10px rgba(255,180,0,0.4);" id="fxPromoTitle">New Feature: Effects</h2>
@@ -641,7 +627,7 @@ const uiTL = {
   en: { 
     code: "EN", customBtn: "Settings", title: "BUCKET ASMR❄️v.1.4", play: "Play", pause: "Pause", repair: "REPAIR", sleep: "Sleep", tabFeatures: "Functions", tabGuide: "Guide", 
     features: [
-      "<span>✦</span>  <b>Update v1.4 (04.11.26):</b> Added new weather -❄️ Snow and Blizzard with smooth wind intensity shifts!", 
+      "<span>✦</span>  <b>Update v1.4 (20.11.26):</b> Added real snow -❄️ Snow and Blizzard with smooth wind intensity shifts!", 
       "<span>✦</span> <b>Stay Awake:</b> Screen won't turn off automatically.", 
       "<span>✦</span> <b>Mixer:</b> Play multiple sounds at the same time.", 
       "<span>✦</span> <b>Not Working?:</b> Turn off Silent Mode."
@@ -671,7 +657,7 @@ const uiTL = {
   pt: { 
     code: "PT", customBtn: "Personalizar", title: "BALDE ASMR❄️v.1.4", play: "Tocar", pause: "Pausa", repair: "REPARAR", sleep: "Dormir", tabFeatures: "Funções", tabGuide: "Guia", 
     features: [
-      "<span>✦</span> <b>Atualização v1.4 (04.11.26):</b> Novo clima adicionado -❄️ Neve e Ventania com variação dinâmica!", 
+      "<span>✦</span> <b>Atualização v1.4 (20.11.26):</b> Novo clima adicionado -❄️ Neve e Ventania com variação dinâmica!", 
       "<span>✦</span> <b>Sempre Ativo:</b> A tela não apaga durante o uso.", 
       "<span>✦</span> <b>Mixer:</b> Toque vários sons ao mesmo tempo.", 
       "<span>✦</span> <b>Não funcionou?:</b> Desative o modo silencioso."
@@ -701,7 +687,7 @@ const uiTL = {
   uk: { 
     code: "UK", customBtn: "Налаштування", title: "ВІДРО АСМР❄️v.1.4", play: "Грати", pause: "Пауза", repair: "ЛАГОДИТИ", sleep: "Сон", tabFeatures: "Функції", tabGuide: "Інструкція", 
     features: [
-      "<span>✦</span> <b>Оновлення v1.4 (04.11.26):</b> Додано нову погоду -❄️Сніг та Завірюха з динамічною зміною вітру!", 
+      "<span>✦</span> <b>Оновлення v1.4 (20.11.26):</b> Додано нову погоду -❄️Сніг та Завірюха з динамічною зміною вітру!", 
       "<span>✦</span> <b>Без Сну:</b> Екран не згасає автоматично.", 
       "<span>✦</span> <b>Міксер:</b> Грайте кілька звуків одночасно.", 
       "<span>✦</span> <b>Не працює?:</b> Вимкніть беззвучний режим."
@@ -731,7 +717,7 @@ const uiTL = {
   ru: { 
     code: "RU", customBtn: "Настройки", title: "ВЕДРО АСМР❄️v.1.4", play: "Играть", pause: "Пауза", repair: "ЧИНИТЬ", sleep: "Сон", tabFeatures: "Функции", tabGuide: "Инструкция", 
     features: [
-      "<span>✦</span> <b>Обновление v1.4 (04.11.26):</b> Добавлена новая погода -❄️Снег и вьюга с плавным динамическим изменением ветра!", 
+      "<span>✦</span> <b>Обновление v1.4 (20.11.26):</b> Добавлена новая погода -❄️Снег и вьюга с плавным динамическим изменением ветра!", 
       "<span>✦</span> <b>Бодрость:</b> Экран не гаснет во время сеанса.", 
       "<span>✦</span> <b>Микшер:</b> Запуск нескольких звуков одновременно.", 
       "<span>✦</span> <b>Не работает?:</b> Отключите беззвучный режим."
@@ -756,7 +742,7 @@ const uiTL = {
     fxPromoPs: "PS: Вы сможете изменить это в разделе Настройки.",
     weatherChoiceTitle: "Выберите погоду",
     wWinter: "Зимняя метель", wClear: "Чистое небо", wClouds: "Тучи и Дождь", wAutumn: "Осенний ливень", wRandom: "Рандом",
-    soundSoon: "Этот звук скоро будет доступен!"
+    soundSoon: "Этот звук скоро будет доступний!"
   }
 };
 
@@ -784,9 +770,11 @@ let fxTimerId = null;
 let weatherTimerStarted = false;
 let weatherTimerId = null;
 
-let windTime = 0;
-let blizzardCycleDuration = 18; // Временной цикл для перехода снег <-> вьюга (от 10 до 25 сек)
-let currentBlizzardIntensity = 0; // Плавное значение интенсивности (0 - легкий снег, 1 - сильная вьюга)
+/* --- НОВЫЕ ПЕРЕМЕННЫЕ ДЛЯ РЕАЛИСТИЧНОГО СНЕГА --- */
+let weatherTime = 0;
+let currentSnowDensity = 0.3;   
+let currentWindSpeed = 0;       
+let windGust = 0;               
 
 function showSoonToast() {
   const toast = document.getElementById('soonToast');
@@ -1531,7 +1519,6 @@ window.onresize = resize; resize();
 
 const starsArr = Array.from({length: 70}, () => ({ x: Math.random() * innerWidth, y: Math.random() * innerHeight, r: Math.random() * 1.5, a: Math.random(), s: Math.random() * 0.01 }));
 
-// --- Функция отрисовки точной формы реалистичных осенних листьев ---
 function drawLeafShape(ctx, type, size, color, alpha) {
   ctx.save();
   ctx.fillStyle = color;
@@ -1541,7 +1528,6 @@ function drawLeafShape(ctx, type, size, color, alpha) {
 
   ctx.beginPath();
   if (type === 0) {
-    // Кленовый лист
     ctx.moveTo(0, -size);
     ctx.lineTo(size * 0.3, -size * 0.4);
     ctx.lineTo(size * 0.9, -size * 0.5);
@@ -1558,7 +1544,6 @@ function drawLeafShape(ctx, type, size, color, alpha) {
     ctx.lineTo(-size * 0.3, -size * 0.4);
     ctx.closePath();
   } else if (type === 1) {
-    // Березовый лист
     ctx.moveTo(0, -size * 1.3);
     ctx.bezierCurveTo(size * 0.7, -size * 1.0, size * 0.8, -size * 0.2, size * 0.6, size * 0.4);
     ctx.bezierCurveTo(size * 0.4, size * 0.9, size * 0.2, size * 1.1, 0, size * 1.4);
@@ -1566,14 +1551,12 @@ function drawLeafShape(ctx, type, size, color, alpha) {
     ctx.bezierCurveTo(-size * 0.8, -size * 0.2, -size * 0.7, -size * 1.0, 0, -size * 1.3);
     ctx.closePath();
   } else if (type === 2) {
-    // Округлая листва
     ctx.moveTo(0, -size * 1.1);
     ctx.bezierCurveTo(size * 1.1, -size * 1.1, size * 1.3, size * 0.2, size * 0.8, size * 0.8);
     ctx.bezierCurveTo(size * 0.3, size * 1.2, -size * 0.3, size * 1.2, -size * 0.8, size * 0.8);
     ctx.bezierCurveTo(-size * 1.3, size * 0.2, -size * 1.1, -size * 1.1, 0, -size * 1.1);
     ctx.closePath();
   } else {
-    // Дуб
     ctx.moveTo(0, -size * 1.2);
     ctx.bezierCurveTo(size * 0.5, -size * 1.2, size * 1.1, -size * 0.7, size * 0.7, -size * 0.3);
     ctx.bezierCurveTo(size * 1.2, -size * 0.1, size * 1.1, size * 0.5, size * 0.6, size * 0.7);
@@ -1597,7 +1580,6 @@ function drawLeafShape(ctx, type, size, color, alpha) {
   ctx.restore();
 }
 
-// --- Функция отрисовки красивой детальной снежинки ---
 function drawSnowflake(ctx, size, alpha) {
   ctx.save();
   ctx.strokeStyle = `rgba(240, 248, 255, ${alpha})`;
@@ -1632,6 +1614,40 @@ function drawSnowflake(ctx, size, alpha) {
   ctx.restore();
 }
 
+function organicNoise(t) {
+  return (
+    Math.sin(t * 0.7) * 0.45 +
+    Math.sin(t * 1.63 + 1.2) * 0.35 +
+    Math.sin(t * 3.17 + 2.5) * 0.2
+  );
+}
+
+function createSnowflake(x, y, density, wind) {
+  const depthRand = Math.random();
+  let layer = 1;
+  if (depthRand < 0.45) layer = 0;      
+  else if (depthRand > 0.88) layer = 2; 
+
+  const layerScale = layer === 0 ? 0.55 : (layer === 1 ? 1.0 : 1.75);
+  const baseSpeedY = (Math.random() * 1.4 + 0.9) * layerScale;
+
+  return {
+    x: x,
+    y: y,
+    layer: layer,
+    vy: baseSpeedY + density * 1.4 * layerScale,
+    vx: wind * layerScale + (Math.random() - 0.5) * 0.8,
+    size: (Math.random() * 2.5 + 1.5) * layerScale,
+    alpha: layer === 0 
+      ? (Math.random() * 0.25 + 0.15) 
+      : (layer === 1 ? (Math.random() * 0.4 + 0.4) : (Math.random() * 0.3 + 0.65)),
+    swayPhase: Math.random() * Math.PI * 2,
+    swaySpeed: Math.random() * 0.03 + 0.015,
+    swayAmp: (Math.random() * 0.8 + 0.3) * layerScale,
+    isDetailed: layer === 1 && Math.random() < 0.22
+  };
+}
+
 function spawnCloudRain() {
   if (sleepMode) return;
   const targetState = (envConfig.weather === 'random') ? activeWeatherState : envConfig.weather;
@@ -1639,10 +1655,47 @@ function spawnCloudRain() {
 
   const isWinter = (targetState === 'winter');
   const isAutumn = (targetState === 'autumn_shower');
-  
-  // При вьюге частота спавна снежинок плавно возрастает с 0.45 до 0.98
-  const spawnRate = isWinter ? (0.45 + currentBlizzardIntensity * 0.53) : (isAutumn ? 0.9 : 0.8); 
 
+  if (isWinter) {
+    const spawnAttempts = Math.ceil(1 + currentSnowDensity * 4);
+    const spawnChance = 0.18 + currentSnowDensity * 0.78;
+
+    const cloudsArr = [
+      document.getElementById('cloudEl1'),
+      document.getElementById('cloudEl2'),
+      document.getElementById('cloudEl3'),
+      document.getElementById('cloudEl4'),
+      document.getElementById('cloudEl5'),
+      document.getElementById('cloudEl6')
+    ];
+
+    for (let s = 0; s < spawnAttempts; s++) {
+      if (Math.random() > spawnChance) continue;
+
+      let startX, startY;
+      if (Math.random() < 0.35) {
+        const cloudEl = cloudsArr[Math.floor(Math.random() * cloudsArr.length)];
+        if (cloudEl) {
+          const rect = cloudEl.getBoundingClientRect();
+          if (rect.right > 0 && rect.left < innerWidth) {
+            startX = rect.left + Math.random() * rect.width;
+            startY = rect.bottom - 10;
+          }
+        }
+      }
+
+      if (startX === undefined) {
+        const windMargin = 250;
+        startX = -windMargin + Math.random() * (innerWidth + windMargin * 2);
+        startY = -15;
+      }
+
+      winterParticles.push(createSnowflake(startX, startY, currentSnowDensity, currentWindSpeed));
+    }
+    return;
+  }
+
+  const spawnRate = isAutumn ? 0.9 : 0.8; 
   if (Math.random() < spawnRate) {
     const cloudsArr = [
       document.getElementById('cloudEl1'),
@@ -1662,23 +1715,7 @@ function spawnCloudRain() {
         let startX = rect.left + Math.random() * rect.width;
         let startY = rect.bottom - 10;
 
-        if (isWinter) {
-          // Динамический ветер и вертикальная скорость в зависимости от фазы вьюги
-          const baseWind = Math.sin(windTime * 0.5) * (1.5 + currentBlizzardIntensity * 6.0); 
-          const vertSpeed = (Math.random() * 2.0 + 1.2) + currentBlizzardIntensity * 3.5;
-
-          winterParticles.push({
-            x: startX,
-            y: startY,
-            vy: vertSpeed,
-            vx: baseWind + (Math.random() - 0.2) * (1.5 + currentBlizzardIntensity * 3.0),
-            size: Math.random() * (4 + currentBlizzardIntensity * 3) + 2,
-            alpha: Math.random() * 0.5 + 0.3 + currentBlizzardIntensity * 0.2,
-            oscSpeed: Math.random() * 0.04 + 0.01,
-            oscAmp: (Math.random() * 1.5 + 0.5) * (1.0 - currentBlizzardIntensity * 0.5),
-            isDetailed: Math.random() < (0.35 - currentBlizzardIntensity * 0.2) 
-          });
-        } else if (isAutumn) {
+        if (isAutumn) {
           if (Math.random() < 0.93) {
             weatherParticles.push({
               x: startX,
@@ -1825,14 +1862,19 @@ function spawnSteam() {
 }
 
 function draw() {
-  windTime += 0.012;
+  weatherTime += 0.004; 
 
-  // Рассчитываем плавный цикл перехода метели каждые 10-25 секунд (синусоидальная волна)
-  // Время полного цикла плавно меняется
-  blizzardCycleDuration = 17.5 + Math.sin(windTime * 0.15) * 7.5; // Диапазон длительности: 10с..25с
-  const cyclePhase = (windTime % blizzardCycleDuration) / blizzardCycleDuration;
-  // Плавное значение от 0.0 (тихий снег) до 1.0 (сильная вьюга)
-  currentBlizzardIntensity = (Math.sin(cyclePhase * Math.PI * 2 - Math.PI / 2) + 1) / 2;
+  const rawDensity = (organicNoise(weatherTime * 0.85) + 1) / 2; 
+  const targetDensity = Math.pow(rawDensity, 1.35) * 0.95 + 0.05;
+  currentSnowDensity += (targetDensity - currentSnowDensity) * 0.01;
+
+  const baseWind = organicNoise(weatherTime * 0.45 + 10) * 3.2;
+  if (Math.random() < 0.008) {
+    windGust = (baseWind >= 0 ? 1 : -1) * (Math.random() * 3.5 + 1.0);
+  }
+  windGust *= 0.985; 
+  const targetWind = baseWind + windGust * currentSnowDensity;
+  currentWindSpeed += (targetWind - currentWindSpeed) * 0.015;
 
   if(!sleepMode) {
     ctx.clearRect(0,0,innerWidth,innerHeight);
@@ -1849,33 +1891,34 @@ function draw() {
     
     const targetWeatherState = (envConfig.weather === 'random') ? activeWeatherState : envConfig.weather;
 
-    // --- ЗИМНИЙ РЕЖИМ (СНЕГ / ВЬЮГА С ПЛАВНОЙ СМЕНОЙ ИНТЕНСИВНОСТИ) ---
     if (targetWeatherState === 'winter') {
-      const targetWind = Math.sin(windTime * 0.8) * (2.0 + currentBlizzardIntensity * 8.0);
-
-      // Визуальный туман/порыв метели при сильном ветре
-      if (currentBlizzardIntensity > 0.4) {
+      if (currentSnowDensity > 0.55) {
         wCtx.save();
-        wCtx.fillStyle = `rgba(220, 235, 255, ${(currentBlizzardIntensity - 0.4) * 0.08})`;
+        wCtx.fillStyle = `rgba(215, 230, 250, ${(currentSnowDensity - 0.55) * 0.14})`;
         wCtx.fillRect(0, 0, innerWidth, innerHeight);
         wCtx.restore();
       }
 
       for (let i = winterParticles.length - 1; i >= 0; i--) {
         let flake = winterParticles[i];
-        flake.x += flake.vx + Math.sin(flake.y * flake.oscSpeed) * flake.oscAmp;
+        const layerScale = flake.layer === 0 ? 0.55 : (flake.layer === 1 ? 1.0 : 1.75);
+
+        flake.swayPhase += flake.swaySpeed;
+        const swayOffset = Math.sin(flake.swayPhase) * flake.swayAmp;
+
+        const targetFlakeVx = currentWindSpeed * layerScale;
+        flake.vx += (targetFlakeVx - flake.vx) * 0.025;
+
+        flake.x += flake.vx + swayOffset;
         flake.y += flake.vy;
 
-        // Плавная подстройка горизонтальной скорости под текущий порыв ветра
-        flake.vx += (targetWind - flake.vx) * 0.03;
-
-        if (flake.y > innerHeight - 80 || flake.x > innerWidth + 100 || flake.x < -100) {
-          if (flake.y > innerHeight - 80 && accumulatedSnow.length < MAX_ACCUMULATED_ITEMS) {
+        if (flake.y > innerHeight - 75 || flake.x > innerWidth + 300 || flake.x < -300) {
+          if (flake.y > innerHeight - 75 && flake.x >= 0 && flake.x <= innerWidth && accumulatedSnow.length < MAX_ACCUMULATED_ITEMS) {
             accumulatedSnow.push({
               x: flake.x,
-              y: innerHeight - (Math.random() * 60 + 15),
-              radius: Math.random() * 4 + 2,
-              alpha: 0.85
+              y: innerHeight - (Math.random() * 55 + 15),
+              radius: Math.random() * 3.5 + 1.5,
+              alpha: 0.75
             });
           }
           winterParticles.splice(i, 1);
@@ -1885,23 +1928,29 @@ function draw() {
         if (flake.isDetailed) {
           wCtx.save();
           wCtx.translate(flake.x, flake.y);
+          wCtx.rotate(flake.swayPhase * 0.4);
           drawSnowflake(wCtx, flake.size, flake.alpha);
           wCtx.restore();
         } else {
           wCtx.beginPath();
-          wCtx.fillStyle = `rgba(240, 248, 255, ${flake.alpha})`;
-          wCtx.shadowBlur = 3 + currentBlizzardIntensity * 4;
-          wCtx.shadowColor = 'rgba(255, 255, 255, 0.8)';
-          wCtx.arc(flake.x, flake.y, flake.size * 0.5, 0, Math.PI * 2);
+          if (flake.layer === 2) {
+            const grad = wCtx.createRadialGradient(flake.x, flake.y, 0, flake.x, flake.y, flake.size);
+            grad.addColorStop(0, `rgba(255, 255, 255, ${flake.alpha})`);
+            grad.addColorStop(0.6, `rgba(240, 248, 255, ${flake.alpha * 0.5})`);
+            grad.addColorStop(1, `rgba(240, 248, 255, 0)`);
+            wCtx.fillStyle = grad;
+            wCtx.arc(flake.x, flake.y, flake.size, 0, Math.PI * 2);
+          } else {
+            wCtx.fillStyle = `rgba(240, 248, 255, ${flake.alpha})`;
+            wCtx.arc(flake.x, flake.y, flake.size * 0.55, 0, Math.PI * 2);
+          }
           wCtx.fill();
-          wCtx.shadowBlur = 0;
         }
       }
 
-      // Накопление снега / сугробов
       for (let i = accumulatedSnow.length - 1; i >= 0; i--) {
         let sn = accumulatedSnow[i];
-        sn.alpha -= 0.0003; 
+        sn.alpha -= 0.00025; 
 
         if (sn.alpha <= 0) {
           accumulatedSnow.splice(i, 1);
