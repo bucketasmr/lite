@@ -759,7 +759,7 @@ let accumulatedLeaves = [];
 let accumulatedSnow = [];
 let buttonRipples = []; 
 
-const MAX_ACCUMULATED_ITEMS = 240;
+const MAX_ACCUMULATED_ITEMS = 3680;
 let pendingUnlockElement = null;
 let adTimerInterval = null;
 let steamHue = 270;
@@ -2035,7 +2035,8 @@ function draw() {
               x: r.x,
               y: innerHeight - (Math.random() * 70 + 20),
               radius: Math.random() * 3 + 2,
-              alpha: 0.7
+              alpha: 0.8,
+              fadeSpeed: Math.random() * 0.0005 + 0.0002 // Замедленное индивидуальное растаивание (~25 секунд)
             });
           }
           buttonRipples.splice(i, 1);
@@ -2086,7 +2087,7 @@ function draw() {
 
     for (let i = accumulatedWater.length - 1; i >= 0; i--) {
       let w = accumulatedWater[i];
-      w.alpha -= 0.0004; 
+      w.alpha -= w.fadeSpeed; // Каждая капля тает в своем темпе
 
       if (w.alpha <= 0) {
         accumulatedWater.splice(i, 1);
